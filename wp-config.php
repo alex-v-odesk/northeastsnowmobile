@@ -49,7 +49,7 @@ if (WP_ENV === 'development') {
     define('DB_NAME', 'db200894_ne_snowmobile');
     define('DB_USER', '1clk_wp_DOgHzjK');
     define('DB_PASSWORD', 'G7gfYBwi');
-    define('DB_HOST', '$_ENV{DATABASE_SERVER};');
+    define('DB_HOST', $_ENV{DATABASE_SERVER});
 
     // Disable Debugging
     define('WP_DEBUG', false);
