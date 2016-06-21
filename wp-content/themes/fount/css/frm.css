@@ -1,0 +1,43 @@
+/* Custom Funky Rabbit Media Styles */
+
+.pricing-table {
+	width: 100%;
+	margin: 15px 0;
+	border-spacing: 0;
+}
+
+.pricing-table th, .pricing-table td {
+	text-align: center;
+	border: 0px solid #ccc;
+	padding: 5px;
+	margin: 0;
+}
+
+.table-heading {
+	color: #fff;
+}
+
+.pricing-table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.pricing-table tr:nth-child(odd) {
+	background-color: #ccc;
+}
+
+.special {
+	font-weight: bold;
+}
+
+.btn-large a {
+	font-size: 1.5em !important;
+	padding: 1.25em !important;
+}
+
+.text-widget .theme_button a:hover {
+	font-color: #fff !important;
+}
+
+.white-text .zero_color h1 {
+	color: white !important; 
+}

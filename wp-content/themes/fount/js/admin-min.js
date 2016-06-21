@@ -1,0 +1,1 @@
+jQuery(document).ready(function(){jQuery(document).ajaxComplete(function(e,n,t){jQuery(".seven_icon_selector").length&&jQuery(".wpb_edit_form_elements").addClass("prkadmin-theme-icon")})});

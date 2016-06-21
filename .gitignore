@@ -1,0 +1,32 @@
+# WordPress
+/license.txt
+/readme.html
+/wp-config-sample.php
+/wp-content/*
+!/wp-content/mu-plugins
+!/wp-content/plugins
+!/wp-content/themes
+!/wp-content/uploads/.htaccess
+!/wp-content/uploads
+
+# Project Theme (change directory name)
+!/wp-content/themes/fount
+!/wp-content/themes/fount-child
+
+# System & Development
+node_modules
+robots.txt
+sitemap.xml
+sitemap.xml.gz
+/google*.html
+/.htaccess
+/.htaccess.orig
+.DS_Store
+.gitattributes
+Thumbs.db
+error_log
+._*
+*.ini
+*.log
+*.map
+*~
