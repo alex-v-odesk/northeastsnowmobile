@@ -43,7 +43,7 @@ class rc_scm_walker extends Walker_Nav_Menu
             $item_output .= '<a'. $attributes .'><span>';
             $item_output .= $args->link_before .$prepend.apply_filters( 'the_title', $item->title, $item->ID ).$append;
             //$item_output .= $description.$args->link_after;
-            $item_output .= '</span></a>';
+            $item_output .= '</span><div class="fnt_title">'.apply_filters( 'the_title', $item->title, $item->ID ).'</div></a>';
             $item_output .= $args->after;
 
             $output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );

@@ -6,9 +6,8 @@ function convert_links($status,$targetBlank=true,$linkMaxLen=250){
 	// the target
 		$target=$targetBlank ? " target=\"_blank\" " : "";
 	 
-	// convert link to url
-		$status = preg_replace("/((http:\/\/|https:\/\/)[^ )
-]+)/e", "'<a href=\"$1\" title=\"$1\" $target >'. ((strlen('$1')>=$linkMaxLen ? substr('$1',0,$linkMaxLen).'...':'$1')).'</a>'", $status);
+	// convert link to url								
+		$status = preg_replace('/\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[A-Z0-9+&@#\/%=~_|]/i', '<a href="\0" target="_blank">\0</a>', $status);
 	 
 	// convert @ to follow
 		$status = preg_replace("/(@([_a-z0-9\-]+))/i","<a href=\"http://twitter.com/$2\" title=\"Follow $2\" $target >$1</a>",$status);
@@ -138,19 +137,19 @@ function relative_time($a) {
 								$instance['username'] = ''; 
 							} 
 							else { 
-								$instance['username'] = icl_translate( 'fount_lang', 'twitter_widget_username', $instance['username'] ); 
+								$instance['username'] = icl_translate( 'fount', 'twitter_widget_username', $instance['username'] ); 
 							}
 							if (!isset($instance['image_path'])) { 
 								$instance['image_path'] = ''; 
 							} 
 							else { 
-								$instance['image_path'] = icl_translate( 'fount_lang', 'twitter_widget_image_path', $instance['image_path'] ); 
+								$instance['image_path'] = icl_translate( 'fount', 'twitter_widget_image_path', $instance['image_path'] ); 
 							}
 							if (!isset($instance['follow_text'])) { 
 								$instance['follow_text'] = ''; 
 							} 
 							else { 
-								$instance['follow_text'] = icl_translate( 'fount_lang', 'twitter_widget_follow_text', $instance['follow_text'] ); 
+								$instance['follow_text'] = icl_translate( 'fount', 'twitter_widget_follow_text', $instance['follow_text'] ); 
 							}
 						} else {
 							if (!isset($instance['username'])) { 
@@ -208,10 +207,10 @@ function relative_time($a) {
 				$instance['image_path'] = strip_tags( $new_instance['image_path'] );
 				$instance['tweetstoshow'] = strip_tags( $new_instance['tweetstoshow'] );
 				if (function_exists('icl_translate')) { 
-					icl_translate('fount_lang', 'widget_title', $instance['title']); 
-				 	icl_translate('fount_lang', 'twitter_widget_username', $instance['username']);
-				 	icl_translate('fount_lang', 'twitter_widget_image_path', $instance['image_path']);
-				 	icl_translate('fount_lang', 'twitter_widget_follow_text', $instance['follow_text']);
+					icl_translate('fount', 'widget_title', $instance['title']); 
+				 	icl_translate('fount', 'twitter_widget_username', $instance['username']);
+				 	icl_translate('fount', 'twitter_widget_image_path', $instance['image_path']);
+				 	icl_translate('fount', 'twitter_widget_follow_text', $instance['follow_text']);
 				}
 
 				if($old_instance['username'] != $new_instance['username']){

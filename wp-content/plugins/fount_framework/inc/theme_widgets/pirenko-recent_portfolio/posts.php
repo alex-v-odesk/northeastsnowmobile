@@ -1,9 +1,9 @@
 <?php
 	/*
-		Plugin Name: Pirenko Recent Portfolio
+		Plugin Name: Pirenko Recent Custom Post Types
 		Plugin URI: http://www.pirenko.com
-		Description: A widget to show recent portfolios
-		Version: 1.1
+		Description: A widget to show recent custom post types
+		Version: 1.0
 		Author: Pirenko
 		Author URI: http://www.pirenko.com
 	*/
@@ -15,14 +15,12 @@
 		register_widget( 'pirenko_recent_portfolio_widget' );
 	}
 	//CREATE CLASS TO CONTROL EVERYTHING
-	class pirenko_recent_portfolio_widget extends WP_Widget 
-	{
+	class pirenko_recent_portfolio_widget extends WP_Widget {
 		//SET UP WIDGET
-		function pirenko_recent_portfolio_widget() 
-		{
-			$widget_ops = array( 'classname' => 'pirenko-recent_portfolios-widget', 'description' => ('A widget to show recent portfolios.') );
+		function __construct() {
+			$widget_ops = array( 'classname' => 'pirenko-recent_portfolios-widget', 'description' => ('A widget to show recent custom post types.') );
 			$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'pirenko-recent_portfolios-widget' );
-			$this->WP_Widget( 'pirenko-recent_portfolios-widget', __('Fount : Recent Portfolios', 'pirenko-recent_portfolios-widget'), $widget_ops, $control_ops );
+			parent::__construct( 'pirenko-recent_portfolios-widget', __('Fount : Recent Custom Post Types', 'pirenko-recent_portfolios-widget'), $widget_ops, $control_ops );
 		}
 
 		//SET UP WIDGET OUTPUT
@@ -58,7 +56,11 @@
 							$lightboxed = $instance['lightboxed'];
 						else
 							$lightboxed="";
-							$args = array (	'post_type' => 'pirenko_portfolios', 
+						if (isset($instance['wdg_post_type']))
+							$wdg_post_type = $instance['wdg_post_type'] ;
+						else
+							$wdg_post_type='pirenko_portfolios';
+							$args = array (	'post_type' => $wdg_post_type, 
 										'showposts' => 99,
 										'pirenko_skills'=>$prk_filter
 										);
@@ -155,10 +157,29 @@
 				$layout_type = $instance['layout_type'] ;
 			else
 				$layout_type="thumbnail_lay";
+			if (isset($instance['wdg_post_type']))
+				$wdg_post_type = $instance['wdg_post_type'] ;
+			else
+				$wdg_post_type='pirenko_portfolios';
 			?>
 			<p>
 				<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'spw'); ?>:</label><br />
 				<input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $title; ?>" class="pct_89" />
+			</p>
+			<p>
+				<label for="<?php echo $this->get_field_id('wdg_post_type'); ?>"><?php _e('Post type?', 'spw'); ?></label><br />
+				<select id="<?php echo $this->get_field_id('wdg_post_type'); ?>" name="<?php echo $this->get_field_name('wdg_post_type'); ?>" class="possibly_hider pct_69">
+				<?php
+					$post_types=get_post_types('', 'names'); 
+					foreach ($post_types as $post_type) {
+						if ($wdg_post_type==$post_type) {
+							echo '<option selected="selected" value='.$post_type.'>'.$post_type.'</option>';
+						}
+						else
+							echo '<option value='.$post_type.'>'.$post_type.'</option>';
+					}
+				?>
+				</select>
 			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id('layout_type'); ?>"><?php _e('Show thumbnail or title and date?', 'spw'); ?></label><br />

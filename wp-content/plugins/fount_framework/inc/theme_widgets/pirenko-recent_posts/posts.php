@@ -15,14 +15,12 @@
 		register_widget( 'pirenko_recent_posts_widget' );
 	}
 	//CREATE CLASS TO CONTROL EVERYTHING
-	class pirenko_recent_posts_widget extends WP_Widget 
-	{
+	class pirenko_recent_posts_widget extends WP_Widget {
 		//SET UP WIDGET
-		function pirenko_recent_posts_widget() 
-		{
+		function __construct() {
 			$widget_ops = array( 'classname' => 'pirenko-recent_posts-widget', 'description' => ('A widget to show Recent Posts.') );
 			$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'pirenko-recent_posts-widget' );
-			$this->WP_Widget( 'pirenko-recent_posts-widget', __('Fount : Recent Posts', 'pirenko-recent_posts-widget'), $widget_ops, $control_ops );
+			parent::__construct( 'pirenko-recent_posts-widget', __('Fount : Recent Posts', 'pirenko-recent_posts-widget'), $widget_ops, $control_ops );
 		}
 
 		//SET UP WIDGET OUTPUT

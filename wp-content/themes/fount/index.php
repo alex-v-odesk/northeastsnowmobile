@@ -158,7 +158,7 @@
                                         { 
                                             echo $test->slug;echo " ";
                                         }  ?>" data-id="id-<?php echo $post_counter; ?>" data-color="<?php echo $featured_color; ?>">
-                                        <div class="masonry_inner boxed_shadow">
+                                        <div class="masonry_inner">
                                             <?php 
                                                 $less_size="";
                                                 if (has_post_thumbnail( $post->ID ) ):
@@ -230,7 +230,7 @@
                                                 <div class="clearfix"></div>
                                             </div>
                                             <div class="entry_title">
-                                                <h4 class="bd_headings_text_shadow prk_heavier_700 big">
+                                                <h4 class="bd_headings_text_shadow prk_heavier_700 big header_font">
                                                     <a href="<?php the_permalink(); ?>" class="fade_anchor zero_color prk_break_word" data-color="<?php echo $featured_color; ?>">
                                                         <?php the_title(); ?>
                                                     </a>
@@ -244,7 +244,7 @@
                                                         ?>
                                                      <div class="clearfix"></div>
                                                 </div>
-                                                <div class="blog_lower header_font row prk_heavier_500">
+                                                <div class="blog_lower header_font prk_heavier_500">
                                                     <div class="small-12 columns">
                                                         <?php 
                                                             if ($prk_fount_options['categoriesby_blog']=="1")
@@ -464,7 +464,7 @@
                                         <?php 
                                            $vt_image = vt_resize( get_post_thumbnail_id( $post->ID ), '' , $imgs_width, 0, false , $retina_flag );
                                         ?>
-                                        <img src="<?php echo $vt_image['url']; ?>" width="<?php echo $vt_image['width']; ?>" height="<?php echo $vt_image['height']; ?>" id="home_fader-<?php the_ID(); ?>" class="custom-img grid_image boxed_shadow" alt="" />
+                                        <img class="lazyOwl" src="#" data-src="<?php echo $vt_image['url']; ?>" width="<?php echo $vt_image['width']; ?>" height="<?php echo $vt_image['height']; ?>" id="home_fader-<?php the_ID(); ?>" class="custom-img grid_image boxed_shadow" alt="" />
                                     </div>
                                 </div>
                                 <?php
@@ -478,7 +478,7 @@
                                     echo "<div class='item'>";
                                             $in_image=wp_get_attachment_image_src(get_field('image_'.$count),'full');
                                             $vt_image = vt_resize( '', $in_image[0] , $imgs_width, 0, false , $retina_flag);
-                                            echo '<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" />';
+                                            echo '<img class="lazyOwl" src="#" data-src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" />';
                                     echo "</div>";
                                 }
                                 //OTHER MEDIA SUPPORT

@@ -720,13 +720,13 @@ class acf_field_group
 			case "post_status" :
 				
 				$choices = array(
-					'publish'	=> __( 'Publish' ,'fount_lang'),
-					'pending'	=> __( 'Pending Review','fount_lang' ),
-					'draft'		=> __( 'Draft','fount_lang' ),
-					'future'	=> __( 'Future','fount_lang' ),
-					'private'	=> __( 'Private','fount_lang' ),
-					'inherit'	=> __( 'Revision','fount_lang' ),
-					'trash'		=> __( 'Trash' ,'fount_lang')
+					'publish'	=> __( 'Publish' ,'fount'),
+					'pending'	=> __( 'Pending Review','fount' ),
+					'draft'		=> __( 'Draft','fount' ),
+					'future'	=> __( 'Future','fount' ),
+					'private'	=> __( 'Private','fount' ),
+					'inherit'	=> __( 'Revision','fount' ),
+					'trash'		=> __( 'Trash' ,'fount')
 				);
 								
 				break;
@@ -739,7 +739,7 @@ class acf_field_group
 
 				if( is_multisite() )
 				{
-					$choices['super_admin'] = __('Super Admin','fount_lang');
+					$choices['super_admin'] = __('Super Admin','fount');
 				}
 								
 				break;

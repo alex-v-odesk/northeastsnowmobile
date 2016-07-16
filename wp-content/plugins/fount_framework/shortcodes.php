@@ -19,6 +19,177 @@ function prk_fount_scodes() {
 	    }
 	}
 	//SHORTCODES MANAGEMENT
+	//INTAGRAM FEED
+	//According to https://gist.github.com/cosmocatalano/4544576
+	function fnt_instafeed( $username, $slice = 9 ) {
+
+	    $username = strtolower( $username );
+
+	    if ( false === ( $instagram = get_transient( 'instagram-media-new-'.sanitize_title_with_dashes( $username ) ) ) ) {
+
+	        $remote = wp_remote_get( 'http://instagram.com/'.trim( $username ) );
+
+	        if ( is_wp_error( $remote ) )
+	            return new WP_Error( 'site_down', esc_html__( 'Unable to communicate with Instagram.', 'fount_theme' ) );
+
+	        if ( 200 != wp_remote_retrieve_response_code( $remote ) )
+	            return new WP_Error( 'invalid_response', esc_html__( 'Instagram did not return a 200.', 'fount_theme' ) );
+
+	        $shards = explode( 'window._sharedData = ', $remote['body'] );
+	        $insta_json = explode( ';</script>', $shards[1] );
+	        $insta_array = json_decode( $insta_json[0], TRUE );
+
+	        if ( !$insta_array )
+	            return new WP_Error( 'bad_json', esc_html__( 'Instagram has returned invalid data.', 'fount_theme' ) );
+
+	        // old style
+	        if ( isset( $insta_array['entry_data']['UserProfile'][0]['userMedia'] ) ) {
+	            $images = $insta_array['entry_data']['UserProfile'][0]['userMedia'];
+	            $type = 'old';
+	        // new style
+	        } else if ( isset( $insta_array['entry_data']['ProfilePage'][0]['user']['media']['nodes'] ) ) {
+	            $images = $insta_array['entry_data']['ProfilePage'][0]['user']['media']['nodes'];
+	            $type = 'new';
+	        } else {
+	            return new WP_Error( 'bad_json_2', esc_html__( 'Instagram has returned invalid data.', 'fount_theme' ) );
+	        }
+
+	        if ( !is_array( $images ) )
+	            return new WP_Error( 'bad_array', esc_html__( 'Instagram has returned invalid data.', 'fount_theme' ) );
+
+	        $instagram = array();
+
+	        switch ( $type ) {
+	            case 'old':
+	                foreach ( $images as $image ) {
+
+	                    if ( $image['user']['username'] == $username ) {
+
+	                        $image['link']                        = preg_replace( "/^http:/i", "", $image['link'] );
+	                        $image['images']['thumbnail']          = preg_replace( "/^http:/i", "", $image['images']['thumbnail'] );
+	                        $image['images']['standard_resolution'] = preg_replace( "/^http:/i", "", $image['images']['standard_resolution'] );
+	                        $image['images']['low_resolution']    = preg_replace( "/^http:/i", "", $image['images']['low_resolution'] );
+
+	                        $instagram[] = array(
+	                            'description'   => $image['caption']['text'],
+	                            'link'          => $image['link'],
+	                            'time'          => $image['created_time'],
+	                            'comments'      => $image['comments']['count'],
+	                            'likes'         => $image['likes']['count'],
+	                            'thumbnail'     => $image['images']['thumbnail'],
+	                            'large'         => $image['images']['standard_resolution'],
+	                            'small'         => $image['images']['low_resolution'],
+	                            'type'          => $image['type']
+	                        );
+	                    }
+	                }
+	            break;
+	            default:
+	                foreach ( $images as $image ) {
+
+	                    $image['display_src'] = preg_replace( "/^http:/i", "", $image['display_src'] );
+
+	                    if ( $image['is_video']  == true ) {
+	                        $type = 'video';
+	                    } else {
+	                        $type = 'image';
+	                    }
+
+	                    $instagram[] = array(
+	                        'description'   => esc_html__( 'Instagram Image', 'fount_theme' ),
+	                        'link'          => '//instagram.com/p/' . $image['code'],
+	                        'time'          => $image['date'],
+	                        'comments'      => $image['comments']['count'],
+	                        'likes'         => $image['likes']['count'],
+	                        'thumbnail'     => $image['display_src'],
+	                        'type'          => $type
+	                    );
+	                }
+	            break;
+	        }
+
+	        // do not set an empty transient - should help catch private or empty accounts
+	        if ( ! empty( $instagram ) ) {
+	            $instagram = base64_encode( serialize( $instagram ) );
+	            set_transient( 'instagram-media-new-'.sanitize_title_with_dashes( $username ), $instagram, apply_filters( 'null_instagram_cache_time', HOUR_IN_SECONDS*2 ) );
+	        }
+	    }
+
+	    if ( ! empty( $instagram ) ) {
+
+	        $instagram = unserialize( base64_decode( $instagram ) );
+	        return array_slice( $instagram, 0, $slice );
+
+	    } else {
+	        return new WP_Error( 'no_images', esc_html__( 'Instagram did not return any images.', 'fount_theme' ) );
+
+	    }
+	}
+	function prk_instagram_func( $atts, $content = null ) {
+		$atts=shortcode_atts(array(
+			'user'    	 => '',
+			'items'    	 => '4',
+			'title'    	 => '',
+			'rows'    	 => '1',
+			'title_color' => '',
+			'gen_display' => 'fnt_insta_grid',
+			'img_margin' => '0',
+			'css_animation' => '',
+			'el_class' => '',
+		), $atts);
+		global $prk_fount_options;
+		$out="";
+		$items=$atts['items'];
+		$rows=$atts['rows'];
+		$images_count=$items*$rows;
+		if ($atts['user']!="") {
+			$media_array = fnt_instafeed($atts['user'],$images_count);
+			if ( is_wp_error( $media_array ) ) {
+			    $out.=$media_array->get_error_message();
+			} else {
+				$main_classes="fnt_insta_wrapper ".$atts['gen_display'];
+				if ($atts['css_animation']!="")
+					$main_classes.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
+				if ($atts['el_class']!="")
+					$main_classes.=" ".$atts['el_class'];
+				$out.='<div class="'.$main_classes.'">';
+				if ($atts['title']!="") {
+					if ($atts['title_color']!="") {
+						$out.='<div class="fnt_insta_title header_font prk_left_floated zero_color" style="color:'.$atts['title_color'].'"><a href="https://instagram.com/'.$atts['user'].'/" target="_blank" data-color="'.$prk_fount_options['active_color'].'" data-forced-color="'.$atts['title_color'].'" style="color:'.$atts['title_color'].'"><i class="fount_fa-instagram"></i><h4>'.$atts['title'].'</h4></a></div>';
+					}
+					else {
+						$out.='<div class="fnt_insta_title header_font prk_left_floated zero_color"><a href="https://instagram.com/'.$atts['user'].'/" target="_blank"><i class="fount_fa-instagram"></i><h4>'.$atts['title'].'</h4></a></div>'; 
+					}
+				}
+				$inline_out=$inline_in="";
+				if ($atts['gen_display']=="fnt_insta_slider") {
+					$items.=" owl-carousel";
+				}
+				else {
+					if ($atts['img_margin']!="0") {
+						$inline_out=' style="margin-left:-'.$atts['img_margin'].'px;margin-right:-'.$atts['img_margin'].'px;"';
+						$inline_in=' style="padding:'.$atts['img_margin'].'px;"';
+					}
+				}
+				$out.='<ul class="fnt_instagram unstyled cols-'.$items.'" data-autoplay="true" data-delay="3000" data-anim="fade"'.$inline_out.'>';
+				$i=0;
+	            foreach ($media_array as $item) {
+	            	//print_r ($item);
+		            $out.='<li class="item"'.$inline_in.'><a href="'. esc_url( $item['link'] ) .'" target="_blank"><div style="background-image:url('. esc_url( $item['thumbnail'] ) .');"><div class="insta_overlay"></div><i class="fount_fa-instagram"></i>';
+		            $out.='<img src="'.get_template_directory_uri().'/images/instaholder.png" width="1080" height="1080"  alt="'. esc_attr( $item['description'] ) .'" data-title="'. esc_attr( $item['description'] ).'" />';
+		            $out.='</div></a></li>';
+		            $i++;
+		            if ($i%$items==0 && $atts['gen_display']=="fnt_insta_grid") {
+		            	$out.='<li class="clearfix"></li>';
+		            }
+	            }
+	            $out.='</ul>';
+	            $out.='<div class="clearfix"></div></div>';
+			}
+		}
+		return $out;
+	}
+	add_shortcode('prk_instagram', 'prk_instagram_func');
 	//SOCIAL NETWORK LINKS
 	function pirenko_social_nets_shortcode( $atts, $content = null ) 
 	{
@@ -132,13 +303,13 @@ function prk_fount_scodes() {
 	//SPACER
 	function spacer_shortcode( $atts, $content = null ) 
 	{
-		if (isset($atts['size']))
+		if (isset($atts['size']) && $atts['size']!="")
 		{
 			$size=$atts['size'];
 		}
 		else
 		{
-			$size=0;
+			$size=10;
 		}
 		$main_classes="";
 		if (isset($atts['el_class']) && $atts['el_class']!="")
@@ -174,11 +345,12 @@ function prk_fount_scodes() {
 			}
 			$inline.='"';
 			$main_classes="";
+			$icon=str_replace('fa fa', 'fount_fa', $atts['icon']);
 			if (isset($atts['css_animation']) && $atts['css_animation']!="")
 				$main_classes.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
 			if (isset($atts['el_class']) && $atts['el_class']!="")
 				$main_classes.=" ".$atts['el_class'];
-			return '<div class="theme_icon_shortcoded'.$main_classes.'"'.$inline_wrapper.'><i class="'.$atts['icon'].'" '.$inline.'></i></div>';
+			return '<div class="theme_icon_shortcoded'.$main_classes.'"'.$inline_wrapper.'><i class="'.$icon.'" '.$inline.'></i></div>';
 		}
 		else
 		{
@@ -186,67 +358,6 @@ function prk_fount_scodes() {
 		}
 	}
 	add_shortcode('pirenko_theme_icon', 'pirenko_theme_icon_shortcode');
-	function pirenko_sh_styled_title( $atts, $content = null ) {
-		extract(shortcode_atts(array(
-			'type'    	 => '',
-		), $atts));
-		$main_classes="";
-		if ($atts['underlined']!="")
-			$main_classes.=" ".$atts['underlined'];
-		if (isset($atts['use_italic']) && $atts['use_italic']=="yes")
-			$classes="fount_italic";
-		else
-			$classes="header_font";
-
-		$inline="";
-		if (isset($atts['text_color']) && $atts['text_color']=="") 
-		{
-			$classes.=" bd_headings_text_shadow";
-		}
-		else 
-		{
-			$splitted_shadow=html2rgb($atts['text_color'],"1");
-			$inline="color:".$atts['text_color'].";";
-			$inline.="border-bottom-color:rgba(".$splitted_shadow[0].", ".$splitted_shadow[1].", ".$splitted_shadow[2].",0.9);";
-			$inline.="text-shadow:0px 0px 1px rgba(".$splitted_shadow[0].", ".$splitted_shadow[1].", ".$splitted_shadow[2].",0.2);";
-		}
-		if (isset($atts['align']) && $atts['align']=="center")
-		{
-			$main_classes.=" fount_centered_text";
-		}
-		if (isset($atts['align']) && $atts['align']=="right")
-		{
-			$main_classes.=" fount_righted_text";
-		}
-		$h_tag="h2";
-		if (isset($atts['title_size']))
-			$h_tag=$atts['title_size'];
-		if (isset($atts['css_animation']) && $atts['css_animation']!="")
-			$main_classes.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
-		if (isset($atts['el_class']) && $atts['el_class']!="")
-			$main_classes.=" ".$atts['el_class'];
-		$main_classes.=" ".$h_tag.'_sized';
-		if ($atts['fount_show_line']=="double_lined")
-			$main_classes.=" ".$atts['fount_show_line'];
-		$out='';
-		$out.='<div class="prk_shortcode-title'.$main_classes.'">';
-		if ($inline!="")
-		{
-			$out.='<div class="'.$classes.' zero_color prk_vc_title" style="'.$inline.'"><'.$h_tag.'>' . $content . '</'.$h_tag.'></div>';
-		}
-		else
-		{
-			$out.='<div class="'.$classes.' zero_color prk_vc_title"><'.$h_tag.'>' . $content . '</'.$h_tag.'></div>';
-		}
-		if ($atts['fount_show_line']!="no" && $atts['fount_show_line']!="double_lined")
-		{
-			$out.='<div class="simple_line colored '.$atts['fount_show_line'].' columns small-2 medium-1 small-centered forced_mobile"></div>';
-		}
-		$out.='<div class="clearfix"></div></div>';
-		return do_shortcode($out);
-
-	}
-	add_shortcode('prk_styled_title', 'pirenko_sh_styled_title');
 	
 	//BLOCKQUOTES
 	function blockquotes_shortcode( $atts, $content = null ) 
@@ -296,6 +407,213 @@ function prk_fount_scodes() {
 	   	return $output;
 	}
 	add_shortcode('pirenko_blockquote', 'blockquotes_shortcode');
+
+	function pirenko_sh_styled_title( $atts, $content = null ) {
+		extract(shortcode_atts(array(
+			'type' => '',
+			'align' =>''
+		), $atts));
+		$main_classes="";
+		if ($atts['underlined']!="")
+			$main_classes.=" ".$atts['underlined'];
+		if (isset($atts['use_italic']) && $atts['use_italic']=="yes")
+			$classes="fount_italic";
+		else
+			$classes="header_font";
+
+		$inline="";
+		if (isset($atts['text_color']) && $atts['text_color']=="") 
+		{
+			$classes.=" bd_headings_text_shadow";
+		}
+		else 
+		{
+			$splitted_shadow=html2rgb($atts['text_color'],"1");
+			$inline="color:".$atts['text_color'].";";
+			$inline.="border-bottom-color:rgba(".$splitted_shadow[0].", ".$splitted_shadow[1].", ".$splitted_shadow[2].",0.9);";
+			$inline.="text-shadow:0px 0px 1px rgba(".$splitted_shadow[0].", ".$splitted_shadow[1].", ".$splitted_shadow[2].",0.2);";
+		}
+		if (isset($atts['align'])) {
+			if (strtolower($atts['align'])=="left")
+			{
+				$main_classes.=" fount_lefted_text";
+			}
+			if (strtolower($atts['align'])=="center")
+			{
+				$main_classes.=" fount_centered_text";
+			}
+			if (strtolower($atts['align'])=="right")
+			{
+				$main_classes.=" fount_righted_text";
+			}
+		}
+		else {
+			$main_classes.=" fount_centered_text";
+		}
+		$h_tag="h1";
+		if (isset($atts['title_size']) && $atts['title_size']!="")
+			$h_tag=$atts['title_size'];
+		if (isset($atts['css_animation']) && $atts['css_animation']!="")
+			$main_classes.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
+		if (isset($atts['el_class']) && $atts['el_class']!="")
+			$main_classes.=" ".$atts['el_class'];
+		$main_classes.=" ".$h_tag.'_sized';
+		if ($atts['fount_show_line']=="double_lined")
+			$main_classes.=" ".$atts['fount_show_line'];
+		if (isset($atts['line_color']) && $atts['line_color']!="")
+		{
+			$inline_line=' style="border-bottom-color:'.$atts['line_color'].';"';
+		}
+		else
+		{
+			$inline_line='';
+		}
+		$out='';
+		$out.='<div class="prk_shortcode-title'.$main_classes.'">';
+		if ($atts['fount_show_line']=="above thin" || $atts['fount_show_line']=="above thick" || $atts['fount_show_line']=="above thicker")
+		{
+			$out.='<div class="simple_line colored '.$atts['fount_show_line'].' columns small-2 medium-1 small-centered forced_mobile"'.$inline_line.'></div>';
+		}
+		if ($inline!="")
+		{
+			$out.='<div class="'.$classes.' zero_color prk_vc_title" style="'.$inline.'"><'.$h_tag.'>' . $content . '</'.$h_tag.'></div>';
+		}
+		else
+		{
+			$out.='<div class="'.$classes.' zero_color prk_vc_title"><'.$h_tag.'>' . $content . '</'.$h_tag.'></div>';
+		}
+		if ($atts['fount_show_line']=="thin" || $atts['fount_show_line']=="thick" || $atts['fount_show_line']=="thicker")
+		{
+			$out.='<div class="simple_line colored '.$atts['fount_show_line'].' columns small-2 medium-1 small-centered forced_mobile"'.$inline_line.'></div>';
+		}
+		$out.='<div class="clearfix"></div></div>';
+		return do_shortcode($out);
+
+	}
+	add_shortcode('prk_styled_title', 'pirenko_sh_styled_title');
+
+	//TEXT ROTATOR
+	function pirenko_sh_prk_text_rotator( $atts, $content = null ) {
+		extract(shortcode_atts(array(
+			'type' => '',
+			'align' =>'',
+			'effect' =>'',
+		), $atts));
+		$main_classes="";
+		$inline="";
+		if (isset($atts['text_color'])) { 
+			if ($atts['text_color']=="") 
+			{
+				$main_classes.=" bd_headings_text_shadow";
+			}
+			else 
+			{
+				$splitted_shadow=html2rgb($atts['text_color'],"1");
+				$inline="color:".$atts['text_color'].";";
+				$inline.="text-shadow:0px 0px 1px rgba(".$splitted_shadow[0].", ".$splitted_shadow[1].", ".$splitted_shadow[2].",0.2);";
+			}
+		}
+		/*if (isset($atts['align'])) {
+			if (strtolower($atts['align'])=="left")
+			{
+				$main_classes.=" fount_lefted_text";
+			}
+			if (strtolower($atts['align'])=="center")
+			{
+				$main_classes.=" fount_centered_text";
+			}
+			if (strtolower($atts['align'])=="right")
+			{
+				$main_classes.=" fount_righted_text";
+			}
+		}
+		else {
+			$main_classes.=" fount_centered_text";
+		}*/
+		$h_tag="h1";
+		if (isset($atts['title_size']) && $atts['title_size']!="")
+			$h_tag=$atts['title_size'];
+		if (isset($atts['css_animation']) && $atts['css_animation']!="")
+			$main_classes.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
+		if (isset($atts['el_class']) && $atts['el_class']!="")
+			$main_classes.=" ".$atts['el_class'];
+		$main_classes.=" ".$h_tag.'_sized';
+		$out='';
+		if ($content!="") {
+			if ($inline!="")
+				$out.='<div class="prk_text_rotator'.$main_classes.'" style="'.$inline.'">';
+			else 
+				$out.='<div class="prk_text_rotator'.$main_classes.'">';
+			if (isset($effect) && $effect!="") {
+				$effect_in=$effect;
+			}
+			else {
+				$effect_in="old_timey";
+			}
+			$out.='<div class="cd-headline '.$effect_in.'">';
+			$out.='<span></span>';
+			$out.='<span class="cd-words-wrapper">';
+			$words_array=explode('+', $content);
+			if ($words_array && count($words_array)>0) {
+				$i=0;
+				foreach ($words_array as $word) {
+					if ($i==0)
+						$out.='<b class="is-visible">'.$word.'</b>';
+					else
+						$out.='<b>'.$word.'</b>';
+					$i++;
+				}
+			}
+			$out.='</span>';
+			$out.='</div>';
+			$out.='</div>';
+		}
+		/*$out.='<div class="prk_shortcode-title'.$main_classes.'">';
+		if ($inline!="")
+		{
+			$out.='<div class="'.$classes.' zero_color prk_vc_title" style="'.$inline.'"><'.$h_tag.'>' . $content . '</'.$h_tag.'></div>';
+		}
+		else
+		{
+			$out.='<div class="'.$classes.' zero_color prk_vc_title"><'.$h_tag.'>' . $content . '</'.$h_tag.'></div>';
+		}
+		$out.='<div class="clearfix"></div></div>';*/
+		return do_shortcode($out);
+
+	}
+	add_shortcode('prk_text_rotator', 'pirenko_sh_prk_text_rotator');
+
+	//COUNTDOWN
+	function pirenko_sh_prk_countdown( $atts, $content = null ) {
+		extract(shortcode_atts(array(
+			'text_color' => '',
+			'year' => '',
+			'month' => '',
+			'day' => '',
+			'hour' => '',
+			'minute' => '',
+			'css_animation' => '',
+			'el_class' => ''
+		), $atts));
+		$main_classes="";
+		$inline="";
+		if (isset($atts['text_color'])) { 
+			if ($atts['text_color']!="") {
+				//$splitted_shadow=html2rgb($atts['text_color'],"1");
+				$inline=' style="color:'.$atts['text_color'].';"';
+				//$inline.="text-shadow:0px 0px 1px rgba(".$splitted_shadow[0].", ".$splitted_shadow[1].", ".$splitted_shadow[2].",0.2);";
+			}
+		}
+		if (isset($atts['css_animation']) && $atts['css_animation']!="")
+			$main_classes.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
+		if (isset($atts['el_class']) && $atts['el_class']!="")
+			$main_classes.=" ".$atts['el_class'];
+		$out='<div class="fount_countdown'.$main_classes.'" data-year="'.$atts['year'].'" data-month="'.$atts['month'].'" data-day="'.$atts['day'].'" data-hour="'.$atts['hour'].'" data-minute="'.$atts['minute'].'"'.$inline.'></div>';
+		return do_shortcode($out);
+
+	}
+	add_shortcode('prk_countdown', 'pirenko_sh_prk_countdown');
+
 	//SLIDERS
 	function pirenko_sh_slider( $atts, $content = null ) 
 	{
@@ -423,7 +741,24 @@ function prk_fount_scodes() {
 				{
 					if (get_field('pirenko_rotating_text')!="")
 					{
-						$sl_title='<span class="js-rotating">'.get_the_title().'+'.get_field('pirenko_rotating_text').'</span>';
+						if (get_field('pirenko_rotating_effect')!="") {
+							$effect=get_field('pirenko_rotating_effect');
+						}
+						else {
+							$effect="old_timey";
+						}
+						$sl_title='<div class="cd-headline '.$effect.'">';
+						$sl_title.='<span></span>';
+						$sl_title.='<span class="cd-words-wrapper">';
+						$sl_title.='<b class="is-visible">'.get_the_title().'</b>';
+						$words_array=explode('+', get_field('pirenko_rotating_text'));
+						if ($words_array && count($words_array)>0) {
+							foreach ($words_array as $word) {
+								$sl_title.='<b>'.$word.'</b>';
+							}
+						}
+						$sl_title.='</span>';
+						$sl_title.='</div>';
 					}
 					else {
 						$sl_title=get_the_title();
@@ -484,7 +819,7 @@ function prk_fount_scodes() {
 							$out.='</div>';
 						$out.='</div>';
 					}
-					$out.='<img class="fount_vsbl" src="'. $image[0] .'" alt="" width="'.$vt_image['width'].'" height="'.$vt_image['height'].'" data-or_w="'.$vt_image['width'].'" data-or_h="'.$vt_image['height'].'" />';
+					$out.='<img class="lazyOwl fount_vsbl" src="#" data-src="'. $image[0] .'" alt="" width="'.$vt_image['width'].'" height="'.$vt_image['height'].'" data-or_w="'.$vt_image['width'].'" data-or_h="'.$vt_image['height'].'" />';
 				}
 				else
 				{
@@ -561,6 +896,264 @@ function prk_fount_scodes() {
 	  	return $out;
 	}
 	add_shortcode('prk_slider', 'pirenko_sh_slider');	
+	if (function_exists('WC')) {
+		//WOO FEATURED PORDUCTS
+		function prk_woo_featured_shortcode( $atts, $content = null ) {
+			global $prk_translations;
+			global $prk_fount_options;
+			global $prk_retina_device;
+			$retina_flag = $prk_retina_device === "prk_retina" ? true : false;
+			extract(shortcode_atts(array(
+				'category'    	=> '',
+				'columns'		=>'columns',
+			), $atts));
+			if (isset($atts['items_number']) && $atts['items_number']!="")
+				$items_number=$atts['items_number'];
+			else
+				$items_number=12;
+			//DEFAULT VALUES
+			$columns=4;
+			$fluid="small-3 columns";
+		    if ($atts['columns']==2) {
+		      $fluid="small-6 columns";
+		      $columns=$atts['columns'];
+		  	}
+		    if ($atts['columns']==3){
+		      $fluid="small-4 columns";
+		      $columns=$atts['columns'];
+		  	}
+		    if ($atts['columns']==4){
+		      $fluid="small-3 columns";
+		      $columns=$atts['columns'];
+		  	}
+		    if ($atts['columns']==6){
+		      $fluid="small-2 columns";
+		      $columns=$atts['columns'];
+		  	}
+		  	if (isset($atts['css_animation']) && $atts['css_animation']!="")
+				$fluid.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
+			if (isset($atts['el_class']) && $atts['el_class']!="")
+				$fluid.=" ".$atts['el_class'];
+			$out = '';
+			$i=0;
+			if (isset($atts['general_style']) && $atts['general_style']!="")
+				$general_style=$atts['general_style'];
+			else
+				$general_style='classic';
+			if (isset($atts['content_amount']) && $atts['content_amount']!="")
+				$content_amount=$atts['content_amount'];
+			else
+				$content_amount='compressed';
+			if (isset($atts['icons_position']) && $atts['icons_position']!="")
+				$icons_position=$atts['icons_position'];
+			else
+				$icons_position='under';
+			$args = array(
+	            'post_type' => 'product',
+				'post_status' => 'publish',
+				'ignore_sticky_posts'   => 1,
+				'posts_per_page' => $items_number,
+				'meta_query' => array(
+					array(
+						'key' => '_visibility',
+						'value' => array( 'catalog', 'visible' ),
+						'compare' => 'IN'
+					),
+				),
+	        );
+			if ($atts['order_by']=="best_sellers") {
+				$args = array(
+		            'post_type' => 'product',
+					'post_status' => 'publish',
+					'ignore_sticky_posts'   => 1,
+					'meta_key' => 'total_sales',
+					'orderby' => 'meta_value_num',
+					'posts_per_page' => $items_number,
+					'meta_query' => array(
+						array(
+							'key' => '_visibility',
+							'value' => array( 'catalog', 'visible' ),
+							'compare' => 'IN'
+						),
+					),
+		        );
+			}
+			if ($atts['order_by']=="sale_only") {
+				$product_ids_on_sale = woocommerce_get_product_ids_on_sale();
+				$args = array(
+		            'post_type' => 'product',
+					'post_status' => 'publish',
+					'ignore_sticky_posts'   => 1,
+					'meta_key' => 'total_sales',
+					'orderby' => 'meta_value_num',
+					'posts_per_page' => $items_number,
+					'post__in'		=> $product_ids_on_sale,
+					'meta_query' => array(
+						array(
+							'key' => '_visibility',
+							'value' => array( 'catalog', 'visible' ),
+							'compare' => 'IN'
+						),
+					),
+		        );
+			}
+			if ($atts['order_by']=="rating") {
+	        	add_filter('posts_clauses', array( WC()->query,'order_by_rating_post_clauses'));
+	        }
+	        $products = new WP_Query( $args );
+	        remove_filter('posts_clauses', array( WC()->query,'order_by_rating_post_clauses'));
+	        if ( $products->have_posts() ) {
+				if ($general_style=='classic')
+				{
+					$out.='<div class="row prk_row woocommerce fount_woo_grider">';
+					$out.='<ul class="products">';
+						$i=0;
+						while ( $products->have_posts() ) : $products->the_post();
+								$out.='<li class="'.$fluid.'">';
+								$out.='<ul>';
+		                    	ob_start();
+		                    	woocommerce_get_template_part( 'content', 'product' );
+		                    	$out.= ob_get_clean();
+		                    	$out.='</ul>';
+		                    	$out.='</li>';
+		                    	$i++;
+								if ($i%$columns==0)
+								{
+									$out.='<li class="columns small-12 clearfix bt_40"></li>';
+								}
+		                endwhile;
+				 	$out.='</ul></div>';
+				}
+				else 
+				{
+					$out.='<div class="row prk_row woocommerce fount_woo_grider">';
+					$touch_enable="false";
+					if (isset($prk_fount_options['touch_enable']) && $prk_fount_options['touch_enable']=="1") {
+						$touch_enable="true";
+					}
+					$out.='<ul class="products_ul_slider products" data-navigation="true" data-touch='.$touch_enable.'>';
+						while ( $products->have_posts() ) : $products->the_post();							
+							$out.='<div class="item fount_woo_slide">';
+								ob_start();
+		                    	woocommerce_get_template_part( 'content', 'product' );
+		                    	$out.= ob_get_clean();
+							$out.='</div>';
+							$i++;
+						endwhile;
+				 	$out.='</ul></div>';
+				}
+			}
+			wp_reset_query();
+		  	return $out;
+		}
+		add_shortcode('prk_woo_featured', 'prk_woo_featured_shortcode');
+
+		//WOO WIDGET PORDUCTS
+		function prk_woo_widget_shortcode( $atts, $content = null ) {
+			global $prk_translations;
+			global $prk_fount_options;
+			global $prk_retina_device;
+			$retina_flag = $prk_retina_device === "prk_retina" ? true : false;
+			extract(shortcode_atts(array(
+				'category'    	=> '',
+				'columns'		=>'columns',
+			), $atts));
+			if (isset($atts['items_number']) && $atts['items_number']!="")
+				$items_number=$atts['items_number'];
+			else
+				$items_number=12;
+			//DEFAULT VALUES
+			$columns=1;
+			$fluid="small-12 columns";
+		  	if (isset($atts['css_animation']) && $atts['css_animation']!="")
+				$fluid.=" wpb_animate_when_almost_visible wpb_".$atts['css_animation'];
+			if (isset($atts['el_class']) && $atts['el_class']!="")
+				$fluid.=" ".$atts['el_class'];
+			$out='';
+			$i=0;
+			if (isset($atts['content_amount']) && $atts['content_amount']!="")
+				$content_amount=$atts['content_amount'];
+			else
+				$content_amount='compressed';
+			if (isset($atts['icons_position']) && $atts['icons_position']!="")
+				$icons_position=$atts['icons_position'];
+			else
+				$icons_position='under';
+			$args = array(
+	            'post_type' => 'product',
+				'post_status' => 'publish',
+				'ignore_sticky_posts'   => 1,
+				'posts_per_page' => $items_number,
+				'meta_query' => array(
+					array(
+						'key' => '_visibility',
+						'value' => array( 'catalog', 'visible' ),
+						'compare' => 'IN'
+					),
+				),
+	        );
+			if ($atts['order_by']=="best_sellers") {
+				$args = array(
+		            'post_type' => 'product',
+					'post_status' => 'publish',
+					'ignore_sticky_posts'   => 1,
+					'meta_key' => 'total_sales',
+					'orderby' => 'meta_value_num',
+					'posts_per_page' => $items_number,
+					'meta_query' => array(
+						array(
+							'key' => '_visibility',
+							'value' => array( 'catalog', 'visible' ),
+							'compare' => 'IN'
+						),
+					),
+		        );
+			}
+			if ($atts['order_by']=="sale_only") {
+				$product_ids_on_sale = woocommerce_get_product_ids_on_sale();
+				$args = array(
+		            'post_type' => 'product',
+					'post_status' => 'publish',
+					'ignore_sticky_posts'   => 1,
+					'meta_key' => 'total_sales',
+					'orderby' => 'meta_value_num',
+					'posts_per_page' => $items_number,
+					'post__in'		=> $product_ids_on_sale,
+					'meta_query' => array(
+						array(
+							'key' => '_visibility',
+							'value' => array( 'catalog', 'visible' ),
+							'compare' => 'IN'
+						),
+					),
+		        );
+			}
+			$extra_class="";
+			if ($atts['order_by']=="rating") {
+	        	add_filter('posts_clauses', array( WC()->query,'order_by_rating_post_clauses'));
+	        	$extra_class=" by_rating";
+	        }
+	        $products = new WP_Query( $args );
+	        remove_filter('posts_clauses', array( WC()->query,'order_by_rating_post_clauses'));
+	        if ( $products->have_posts() ) {
+				$out.='<div class="row prk_row woocommerce fount_woo_grider fount_woo_widget'.$extra_class.'">';
+				$out.='<ul class="products">';
+					while ( $products->have_posts() ) : $products->the_post();
+						$out.='<li class="'.$fluid.'">';
+						$out.='<ul class="fount_woo_el_wrapper">';
+	                	ob_start();
+	                	woocommerce_get_template_part( 'content', 'product' );
+	                	$out.= ob_get_clean();
+	                	$out.='</ul>';
+	                	$out.='</li>';
+	                endwhile;
+			 	$out.='</ul></div>';
+			}
+			wp_reset_query();
+		  	return $out;
+		}
+		add_shortcode('prk_woo_widget', 'prk_woo_widget_shortcode');
+	}
 
 	//TEAM MEMBER
 	function prk_member_shortcode( $atts, $content = null ) 
@@ -580,8 +1173,9 @@ function prk_fount_scodes() {
 		else
 			$items_number=999;
 		//DEFAULT VALUES
-		$columns=3;
-		$fluid="small-4 columns";
+		if (!isset($atts['columns']) || (isset($atts['columns']) && $atts['columns']=="")) {
+			$atts['columns']=3;
+		}
 	    if ($atts['columns']==2) {
 	      $fluid="small-6 columns";
 	      $columns=$atts['columns'];
@@ -1417,6 +2011,9 @@ function prk_fount_scodes() {
 		$link="";
 		if (isset($atts['link']))
 			$link=$atts['link'];
+		$counter_origin=0;
+		if (isset($atts['counter_origin']) && is_numeric($atts['counter_origin']))
+			$counter_origin=$atts['counter_origin'];
 		$counter_number=100;
 		if (isset($atts['counter_number']) && is_numeric($atts['counter_number']))
 			$counter_number=$atts['counter_number'];
@@ -1464,11 +2061,12 @@ function prk_fount_scodes() {
 		}
 		else
 		{
+			$image=str_replace('fa fa', 'fount_fa', $image);
 			$imager='<i class="'.$image.' colored_link_icon"></i>';
 		}
 		$out='<div class="prk_counter_wrapper'.$align.'">';
 		$out.=$imager.'<div class="clearfix"></div>';
-		$out.='<div id="fount_counter_'. rand(1, 1000) .'" class="header_font fount_counter prk_heavier_600" data-counter="'.$counter_number.'" data-duration="3000">0</div><div class="fount_counter_desc header_font prk_heavier_600">'.$content.'</div></div>';
+		$out.='<div id="fount_counter_'. rand(1, 1000) .'" class="header_font fount_counter prk_heavier_600" data-origin="'.$counter_origin.'" data-counter="'.$counter_number.'" data-duration="3800">&nbsp;</div><div class="fount_counter_desc header_font prk_heavier_600">'.$content.'</div></div>';
 		return $out;
 	}
 	add_shortcode('prk_counter', 'prk_counter_shortcode');
@@ -1482,6 +2080,7 @@ function prk_fount_scodes() {
 		$image="";
 		if (isset($atts['image']))
 			$image=$atts['image'];
+		$image=str_replace('fa fa', 'fount_fa', $image);
 		$link="";
 		if (isset($atts['link']))
 			$link=$atts['link'];
@@ -1533,24 +2132,8 @@ function prk_fount_scodes() {
 		global $prk_retina_device;
 		if ($serv_image!="") 
 		{
-			if ($prk_retina_device=="prk_retina") {
-				$path_parts = pathinfo($serv_image);
-				$vt_image = vt_resize( '', $path_parts['dirname'] . "/".$path_parts['filename']."_@2X.".$path_parts['extension'] , 2000, 2000, false );
-				$half_width=$vt_image['width']/2;
-				$half_height=$vt_image['height']/2;
-				//CHECK IF RETINA FILE EXISTS
-				if ($half_width!=1000) {
-					$imager ="<div><img alt='' src='" . $path_parts['dirname'] . "/".$path_parts['filename']."_@2X.".$path_parts['extension']."' width='".$half_width."' height='".$half_height."'/></div>";
-				}
-				else
-				{
-					$imager='<div><img alt="" src="'.$serv_image.'" /></div>';
-				}
-			}
-			else
-			{
-				$imager='<div><img alt="" src="'.$serv_image.'" /></div>';
-			}
+			$vt_image = vt_resize('',$serv_image,2000,2000,false);
+			$imager='<div><img alt="" src="'.$serv_image.'" width="'.$vt_image['width'].'" height="'.$vt_image['height'].'" /></div>';
 		}
 		else
 		{
@@ -1591,6 +2174,7 @@ function prk_fount_scodes() {
 		{
 			$out.='<div class="simple_line shortcoded iconized'.$main_classes.'"'.$custom_color.'>';
 			$custom_icon_color=' style="color:'.$atts['icon_color'].';background-color:'.$atts['icon_bk_color'].'"';
+			$atts['icon']=str_replace('fa fa', 'fount_fa', $atts['icon']);
 			$out.='<i class="'.$atts['icon'].'"'.$custom_icon_color.'></i>';
 		}
 		else
@@ -1620,8 +2204,10 @@ function prk_fount_scodes() {
 		return '<div class="prk_ac_single">'. do_shortcode( $content ) .'</div>';
 	}
 	add_shortcode( 'prk_ac_single', 'prk_ac_single' );
-	//TOGGLE
-	function prk_accordion( $atts, $content = null ) 
+
+
+	//TOGGLE - DEPRECATED
+	/*function prk_accordion( $atts, $content = null ) 
 	{
 		$defaults = array( 'type' => '' );
 		extract( shortcode_atts( $defaults, $atts ) );
@@ -1646,7 +2232,7 @@ function prk_fount_scodes() {
 		$output .= '</div>';
 		return $output;
 	}
-	add_shortcode( 'prk_accordion', 'prk_accordion' );
+	add_shortcode( 'prk_accordion', 'prk_accordion' );*/
 	
 	//CAROUSEL
 	//CHILDNODES RETRIEVAL
@@ -1683,8 +2269,7 @@ function prk_fount_scodes() {
 	add_shortcode( 'prk_carousel', 'prk_carousel' );
 	
 	//THEME BUTTONS
-	function button_shortcode( $atts, $content = null ) 
-	{
+	function button_shortcode( $atts, $content = null ) {
 		extract(shortcode_atts(array(
 			'caption'    	 => 'This is my text',
 			'icon'		 => 'heart',
@@ -1693,20 +2278,23 @@ function prk_fount_scodes() {
 			'el_class' => '',
 			'css_animation' => ''
 		), $atts));
+		global $prk_fount_options;
 		$link="";
 		if (isset($atts['link']))
 			$link=$atts['link'];
-		$type="theme_button medium";
-		if (isset($atts['type']))
+		$type="theme_button large";
+		if (isset($atts['type']) && $atts['type']!="")
 			$type=$atts['type'];
 		$window="_self";
 		if (isset($atts['window']))
 			$window=$atts['window'];
 		$custom_style="";
-		if (isset($atts['button_bk_color']) && $atts['button_bk_color']!="") 
-		{
+		if (isset($atts['button_bk_color']) && $atts['button_bk_color']!="") {
 			$type.=" fount_custom_button";
-			$custom_style=' style="background-color:'.$atts['button_bk_color'].'" data-color="'.$atts['button_bk_color'].'"';
+			if ($prk_fount_options['buttons_style']=="solid_buttons")
+				$custom_style=' style="background-color:'.$atts['button_bk_color'].'" data-color="'.$atts['button_bk_color'].'"';
+			else
+				$custom_style=' style="background-color:'.$atts['button_bk_color'].'" data-color="'.$atts['button_bk_color'].'" data-forced-color="true"';
 		}
 		else
 		{
@@ -1724,7 +2312,8 @@ function prk_fount_scodes() {
 		$classer="";
 		if (isset($atts['button_icon']) && $atts['button_icon']!="")
 		{
-			$icon='<div class="icon_cell"><i class="'.$atts['button_icon'].'"></i></div>';
+			$icon_tweak=str_replace('fa fa', 'fount_fa', $atts['button_icon']);
+			$icon='<div class="icon_cell"><i class="'.$icon_tweak.'"></i></div>';
 			$classer=" with_icon";
 			$content='<div class="text_shifter">'.$content.'</div>';
 		}
@@ -1756,7 +2345,7 @@ function prk_fount_scodes() {
 		if (isset($atts['cols_number']) && $atts['cols_number']!="0")
 			$cols_number = $atts['cols_number'];
 		else
-			$cols_number="variable";
+			$cols_number="3";
 		if (isset($atts['items_number']) && $atts['items_number']!="")
 			$items_number = $atts['items_number'];
 		else
@@ -1768,11 +2357,11 @@ function prk_fount_scodes() {
 		if (isset($atts['show_filter']) && $atts['show_filter']!="")
 			$show_filter = $atts['show_filter'];
 		else
-			$show_filter="no";
+			$show_filter="yes";
 		if (isset($atts['layout_type_folio']) && $atts['layout_type_folio']!="")
 			$layout_type_folio = $atts['layout_type_folio'];
 		else
-			$layout_type_folio="without_titles";
+			$layout_type_folio="grid";
 		if (isset($atts['thumbs_mg']) && $atts['thumbs_mg']!="")
 			$thumbs_mg = $atts['thumbs_mg'];
 		else
@@ -1781,6 +2370,12 @@ function prk_fount_scodes() {
 			$thumbs_type_folio = $atts['thumbs_type_folio'];
 		else
 			$thumbs_type_folio="overlayed";
+		if (!isset($atts['icons_display']) || (isset($atts['icons_display']) && $atts['icons_display']=="")) {
+			$atts['icons_display']="both_icon";
+		}
+		if(!isset($atts['fount_show_skills']) || isset($atts['fount_show_skills']) && $atts['fount_show_skills']=="") {
+			$atts['fount_show_skills']="folio_title_and_skills";
+		}
 		switch ($thumbs_type_folio) {
             case 'aboved':
                 $anchor_type="fount_ajax_above";
@@ -1795,7 +2390,7 @@ function prk_fount_scodes() {
                 $anchor_type="fount_ajax_anchor";
             break;
         }
-		if (isset($atts['fount_show_skills']) && ($atts['fount_show_skills']=="yes" || $atts['fount_show_skills']=="folio_title_and_skills"))
+		if (isset($atts['fount_show_skills']) && ($atts['fount_show_skills']=="yes" || $atts['fount_show_skills']=="" || $atts['fount_show_skills']=="folio_title_and_skills"))
 		{
 			$fount_show_skills=true;
 		}
@@ -1838,7 +2433,7 @@ function prk_fount_scodes() {
             		$out.='<div id="folio_nav_wrapper">';
             			$out.='<div id="folio_nav_inner">';
             				$out.='<div class="squared_button left_floated">';
-            					$out.='<div id="fount_left_folio" class="fount_left_figure left_floated small_headings_color">';
+            					$out.='<div class="fount_left_folio fount_left_figure left_floated small_headings_color">';
 				  					$out.='<div class="inner_mover">';
 										$out.='<div class="mover">';
 											$out.='<i class="fount_fa-arrow-left"></i>';
@@ -1848,12 +2443,12 @@ function prk_fount_scodes() {
 								$out.='</div>';
 							$out.='</div>';
 							$out.='<div id="squared_close" class="squared_button left_floated">';
-								$out.='<div id="fount_close_folio" class="fount_close_figure left_floated small_headings_color">';
+								$out.='<div class="fount_close_folio fount_close_figure left_floated small_headings_color">';
 				  					$out.='<i class="fount_fa-times"></i>';
 								$out.='</div>';
 							$out.='</div>';
 							$out.='<div class="squared_button left_floated">';
-								$out.='<div id="fount_right_folio" class="fount_right_figure left_floated small_headings_color">';
+								$out.='<div class="fount_right_figure fount_right_folio left_floated small_headings_color">';
 								  	$out.='<div class="inner_mover">';
 										$out.='<div class="mover">';
 											$out.='<i class="fount_fa-arrow-right"></i>';
@@ -1867,7 +2462,7 @@ function prk_fount_scodes() {
             		$out.='<div class="fount_ajax_portfolio">';
 				    $out.='</div>';
             		$out.='<div class="fount_ajax_portfolio_wrapper"></div>';
-            		$out.='<div id="multi_spinner" class="spinner-icon"></div>';
+            		$out.='<div class="multi_spinner spinner-icon"></div>';
             	}
             	$shifted="";
             	$ins=0;
@@ -1877,7 +2472,6 @@ function prk_fount_scodes() {
 					$count = count($terms);
 					$filter_array=explode(",",$cat_filter);
 					$filter_array=array_filter(array_map('trim', $filter_array));
-						$out.='<div class="clearfix"></div>';
                         $out.='<div class="filter_shortcodes">';
                             $out.='<ul class="fount_folio_filter header_font fount_uppercased clearfix">';
                             	if ($show_filter=="yes")
@@ -1968,6 +2562,9 @@ function prk_fount_scodes() {
 											if (substr($href_val,0,7)!="http://")
 												$href_val="http://".$href_val;
 											$target=' target="_blank"';
+											if (get_field('new_window')=="_self") {
+											    $target=' target="_self"';
+											}
 										}
 										$out.='<a href="'.$href_val.'" class="'.$anchor_type.'" data-mfp-src="'.$magnific_image[0].'" data-title="'.get_the_title().'" data-pos="'.$ins.'"'.$target.'>';
 	                                    
@@ -2000,26 +2597,34 @@ function prk_fount_scodes() {
 
 	                                        $out.='<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" id="home_fader-'.get_the_ID().'" class="custom-img grid_image" alt="" data-featured="no" />';
 	                                        $out.='<div class="grid_single_title fount_animated">';
-	                                    $out.='<div class="prk_ttl"><h3 class="header_font body_bk_color body_bk_text_shadow small">'.the_title("","",false).'</h3></div>';
-	                                    if ($skills_output!="" && $fount_show_skills==true)
-										{
-											$out.='<div class="inner_skills body_bk_color">';
-											$out.=$skills_output;
+			                                    $out.='<div class="prk_ttl">';
+			                                    	if (get_field('custom_logo',$my_home_query->post->ID)!="") {
+		                                				$in_image=wp_get_attachment_image_src(get_field('custom_logo',$my_home_query->post->ID),'full');
+		                                				$vt_image = vt_resize('', $in_image[0] , $forced_w, '', false , true);
+		                                				$out.='<img class="stamp_folio_th" src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" />';
+		                                			}
+		                                			else {
+		                            					$out.='<h3 class="header_font body_bk_color body_bk_text_shadow small">'.the_title("","",false).'</h3>';
+		                            				}
+			                                    $out.='</div>';
+			                                    if ($skills_output!="" && $fount_show_skills==true)
+												{
+													$out.='<div class="inner_skills body_bk_color">';
+													$out.=$skills_output;
+													$out.='</div>';
+												}
+												$out.='<div class="prk_break_word entry_content default_color">';
+													$out.=the_excerpt_dynamic(12,$my_home_query->post->ID);
+													$out.='<div class="clearfix"></div>';
 											$out.='</div>';
-										}
-										$out.='<div class="prk_break_word entry_content default_color">';
-											$out.=the_excerpt_dynamic(12,$my_home_query->post->ID);
-											$out.='<div class="clearfix"></div>';
-
-										$out.='</div>';
 	                                    $out.='</div>';
-	                               		$out.='</a>';
 	                               		$out.='<div class="revealed_link zero_color prk_heavier_700 bd_headings_text_shadow">';
 			                                $out.='<div class="left_floated">';
 			                                $out.=$prk_translations['prj_info_text'];
 			                                $out.='</div>';
 	                               			$out.='<i class="fount_fa-chevron-right"></i>';
 		                                $out.='</div>';
+		                                $out.='</a>';
 	                                    $out.='</div>';
 	                                    $out.='<div class="folio_icons_wrap">';
 	                                    if ($atts['icons_display']=="both_icon")
@@ -2036,9 +2641,9 @@ function prk_fount_scodes() {
 	                                    	$out.='</div>';
 	                                    }
 	                                    $out.='</div>';
+	                                    // FOR IE NO DISPLAY BUG
+	                                    $out.='<img src='. $vt_image['url'] .' width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" class="hide_now">';
 	                                $out.='</div>';
-	                                // FOR IE NO DISPLAY BUG
-	                                $out.='<img src='. $vt_image['url'] .' alt="" class="hide_now">';
 	                            }
 	                            else
 	                            {
@@ -2081,7 +2686,16 @@ function prk_fount_scodes() {
 
 	                                        $out.='<img data-src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" class="custom-img grid_image" alt="" data-featured="no" src="#" />';
 	                                        $out.='<div class="grid_single_title fount_animated">';
-	                                    $out.='<div class="prk_ttl"><h3 class="header_font body_bk_color body_bk_text_shadow small">'.the_title("","",false).'</h3></div>';
+	                                    	$out.='<div class="prk_ttl">';
+			                                    	if (get_field('custom_logo',$my_home_query->post->ID)!="") {
+		                                				$in_image=wp_get_attachment_image_src(get_field('custom_logo',$my_home_query->post->ID),'full');
+		                                				$vt_image = vt_resize('', $in_image[0] , $forced_w, '', false , true);
+		                                				$out.='<img class="stamp_folio_th" src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" />';
+		                                			}
+		                                			else {
+		                            					$out.='<h3 class="header_font body_bk_color body_bk_text_shadow small">'.the_title("","",false).'</h3>';
+		                            				}
+			                                    $out.='</div>';
 	                                    if ($skills_output!="" && $fount_show_skills==true)
 										{
 											$out.='<div class="inner_skills body_bk_color">';
@@ -2094,13 +2708,13 @@ function prk_fount_scodes() {
 
 										$out.='</div>';
 	                                    $out.='</div>';
-	                               		$out.='</a>';
 	                               		$out.='<div class="revealed_link zero_color prk_heavier_700 bd_headings_text_shadow">';
 			                                $out.='<div class="left_floated">';
 			                                $out.=$prk_translations['prj_info_text'];
 			                                $out.='</div>';
 	                               			$out.='<i class="fount_fa-chevron-right"></i>';
 		                                $out.='</div>';
+		                                $out.='</a>';
 	                                    $out.='</div>';
 	                                    $out.='<div class="folio_icons_wrap">';
 	                                    if ($atts['icons_display']=="both_icon")
@@ -2134,12 +2748,14 @@ function prk_fount_scodes() {
                     $out.='</div>';
                     $out.='</div>';
                 }
+                $out.='<div class="clearfix"></div>';
 			$out.='</div>';
        	}
         else
         {
 			$out.= '<h2 class="fount_shortcode_warning">No portfolio posts were found!</h2>';	
 		}
+		$out.='<div class="clearfix"></div>';
 		wp_reset_query();
 		return $out;
 	}
@@ -2171,7 +2787,7 @@ function prk_fount_scodes() {
 		if (isset($atts['rows_number']) && $atts['rows_number']!="")
 			$rows_number = $atts['rows_number'];
 		else
-			$rows_number="3";
+			$rows_number="1";
 		if (isset($atts['cat_filter']) && $atts['cat_filter']!="")
 			$cat_filter = $atts['cat_filter'];
 		else
@@ -2187,9 +2803,9 @@ function prk_fount_scodes() {
 		wp_reset_query();
 		$my_home_query = new WP_Query();
 		$args = array (	'post_type=posts', 
-					'showposts' => $items_number,
-					'category_name'=>$cat_filter,
-					);
+			'showposts' => $items_number,
+			'category_name'=>$cat_filter,
+		);
 		$my_home_query->query($args);
 		$cols_number=floor($items_number/$rows_number);
 		$columnizer=floor(12/$cols_number);
@@ -2216,6 +2832,7 @@ function prk_fount_scodes() {
 				if (isset($prk_fount_options['touch_enable']) && $prk_fount_options['touch_enable']=="1") {
 					$touch_enable="true";
 				}
+				$out.='<div class="clearfix"></div>';
 	            $out.='<div id="prk_shortcode_latest_posts_'.rand(1, 500).'" class="classy_slider recentposts_ul_wp '.$extra_a.'">';
 	                $out.='<div id="recent_blog-'.$rand_nbr.'" class="recentposts_ul_slider" data-navigation="true" data-touch='.$touch_enable.'>';
 	                    while ($my_home_query->have_posts()) : $my_home_query->the_post();
@@ -2257,7 +2874,7 @@ function prk_fount_scodes() {
 		                      	}
 							}
 							$out.='<div class="owl_classic_blog">';
-							$out.='<div class="prk_heavier_600 prk_mini_meta small_headings_color">';
+							$out.='<div class="prk_mini_meta small_headings_color header_font prk_heavier_500">';
 		            		$out.='<div class="left_floated">';
 		        			if (is_sticky())
 		                    {
@@ -2375,10 +2992,10 @@ function prk_fount_scodes() {
 		            		$out.='</h4>';
 		            		$out.='</div>';  
 		            		$out.='<div class="on_colored prk_break_word entry_content">';
-							$out.=the_excerpt_dynamic(30,$my_home_query->post->ID);
+							$out.=the_excerpt_dynamic(28,$my_home_query->post->ID);
 							$out.='<div class="clearfix"></div>';
 							$out.='</div>';
-							$out.='<div class="blog_lower header_font row prk_heavier_500">';
+							$out.='<div class="blog_lower header_font prk_heavier_500">';
 							$out.='<div class="small-12 columns">';
 							if ($prk_fount_options['categoriesby_blog']=="1")
 				            {
@@ -2460,7 +3077,7 @@ function prk_fount_scodes() {
 										$out.= "</div>";
 	                              	}
 								}
-								$out.='<div class="prk_heavier_600 prk_mini_meta small_headings_color">';
+								$out.='<div class="prk_mini_meta small_headings_color header_font prk_heavier_500">';
 	                    			if (is_sticky())
 	                                {
                                         $out.='<div class="left_floated sticky_text">';
@@ -2485,25 +3102,21 @@ function prk_fount_scodes() {
 									$out.=the_excerpt_dynamic(30,$my_home_query->post->ID);
 									$out.='<div class="clearfix"></div>';
 								$out.='</div>';
-								if (is_big_excerpt(30,$my_home_query->post->ID))
-								{
-									$out.='<div class="theme_button_inverted tiny left_floated">';
-	                                $out.='<a href="'.get_permalink().'" class="with_icon fade_anchor" data-color="'.$featured_color.'">';
-	                                $out.='<div class="text_shifter">';
-	                                $out.=$prk_translations['read_more'];
-	                                $out.='</div>';
-	                                $out.='<div class="icon_cell"><i class="fount_fa-chevron-right"></i></div>';
-	                                $out.='</a>';
-	                                $out.='</div>';
-	                                
-								}
+								$out.='<div class="theme_button_inverted tiny left_floated">';
+                                $out.='<a href="'.get_permalink().'" class="with_icon fade_anchor" data-color="'.$featured_color.'">';
+                                $out.='<div class="text_shifter">';
+                                $out.=$prk_translations['read_more'];
+                                $out.='</div>';
+                                $out.='<div class="icon_cell"><i class="fount_fa-chevron-right"></i></div>';
+                                $out.='</a>';
+                                $out.='</div>';
 								$out.='<div class="clearfix"></div>';
 	                        $out.='</li>';
 	                    }
 	                    $i++;
 						if ($i%$cols_number==0 && $i<$items_number)
 						{
-							$out.='<li class="clearfix bt_40"></li>';
+							$out.='<li class="clearfix small-12 bt_40"></li>';
 						}
 	                    endwhile;
 	                $out.='</ul>';
@@ -2531,8 +3144,7 @@ function prk_fount_scodes() {
                   	}
                 	$out.='<div class="blog_entry_li clearfix'.$featured_class.'" data-color="'.$featured_color.'">';
                 	$out.='<div class="masonry_inner boxed_shadow"'.$bg_color.'>';
-                	if (has_post_thumbnail())
-					{
+                	if (has_post_thumbnail()) {
 						$image = wp_get_attachment_image_src( get_post_thumbnail_id(), '' );
                     	$out.='<a href="'.get_permalink().'" class="fade_anchor blog_hover">';
                             $out.='<div class="masonr_img_wp boxed_shadow">';
@@ -2578,10 +3190,10 @@ function prk_fount_scodes() {
             		$out.='</h4>';
             		$out.='</div>';  
             		$out.='<div class="on_colored prk_break_word entry_content">';
-					$out.=the_excerpt_dynamic(30,$my_home_query->post->ID);
+					$out.=the_excerpt_dynamic(28,$my_home_query->post->ID);
 					$out.='<div class="clearfix"></div>';
 					$out.='</div>';
-					$out.='<div class="blog_lower header_font row prk_heavier_500">';
+					$out.='<div class="blog_lower header_font prk_heavier_500">';
 					$out.='<div class="small-12 columns">';
 					if ($prk_fount_options['categoriesby_blog']=="1")
 		            {
@@ -2633,9 +3245,178 @@ function prk_fount_scodes() {
 	}
 	add_shortcode('pirenko_last_posts', 'pirenko_last_posts_shortcode');
 
+	//LAST CPT's
+	function pirenko_last_cpts_shortcode( $atts, $content = null ) {
+		global $prk_fount_options;
+		global $prk_retina_device;
+		global $prk_translations;
+		$retina_flag = $prk_retina_device === "prk_retina" ? true : false;
+		extract(shortcode_atts(array(
+			'type'    	=> '',
+			'thumbs_mg'	=> '',
+			'images' => '',
+			'cpt' => ''
+		), $atts));
+		if (isset($atts['items_number']) && $atts['items_number']!="")
+			$items_number = $atts['items_number'];
+		else
+			$items_number="3";
+		if (isset($atts['cpt']) && $atts['cpt']!="")
+			$wdg_post_type=$atts['cpt'] ;
+		else
+			$wdg_post_type='post';
+		if (isset($atts['cols_number']) && $atts['cols_number']!="0")
+			$cols_number = $atts['cols_number'];
+		else
+			$cols_number="3";
+		if (isset($atts['thumbs_mg']) && $atts['thumbs_mg']!="")
+			$thumbs_mg = $atts['thumbs_mg'];
+		else
+			$thumbs_mg="10";
+		if (isset($atts['layout_type_folio']) && $atts['layout_type_folio']!="")
+			$layout_type_folio = $atts['layout_type_folio'];
+		else
+			$layout_type_folio="masonry";
+		if (isset($atts['thumbs_type_folio']) && $atts['thumbs_type_folio']!="")
+			$thumbs_type_folio = $atts['thumbs_type_folio'];
+		else
+			$thumbs_type_folio="lightboxed";
+		if ($atts['thumbs_low_type']=="");
+			$atts['thumbs_low_type']="fount_low_both";
+		if ($atts['thumbs_roll_type']=="");
+			$atts['thumbs_roll_type']="fount_roll_both";
+		switch ($thumbs_type_folio) {
+            case 'lightboxed':
+                $anchor_type="lightboxed";
+            break;
+            case 'classiqued':
+                $anchor_type="classiqued";
+            break;
+        }
+		$titles_class="";
+		wp_reset_query();
+		$my_home_query = new WP_Query();
+		$args = array(
+			'post_type' => $wdg_post_type,
+			'showposts' => 9999,
+		);
+		$my_home_query->query($args);
+		if ($my_home_query->have_posts()) {
+			$rand_nbr=rand(1, 5000);
+			$out = '';
+            $out.='<div class="small-12 fount_cpts '.$anchor_type.' '.$atts['thumbs_roll_type'].' '.$atts['thumbs_low_type'].' cpt-'.$wdg_post_type.'" data-items="'.$items_number.'">';
+	                $out.='<div id="iso_gallery-'.$rand_nbr.'" class="iso_folio shortcoded per_init fount_iso_gallery'.$titles_class.'" data-columns="'.$cols_number.'" style="margin-right:-'.$thumbs_mg.'px;" data-margin='.$thumbs_mg.'>';
+	                	$ins=0;
+	                	$alt_flag=true;
+                        while ($my_home_query->have_posts()) : $my_home_query->the_post();
+                        	if ($ins<$items_number) {
+	                        	if (has_post_thumbnail()) {
+	                                $magnific_image=$image=wp_get_attachment_image_src( get_post_thumbnail_id(),'full' );
+									$extra_mfp="";
+	                                $out.='<div class="portfolio_entry_li without_skills" style="margin-bottom:'.$thumbs_mg.'px;" data-mfp-src="'.$magnific_image[0].'" data-title="'.get_the_title().'">';
+	                                    $out.='<div class="grid_image_wrapper">';
+	                                    	$out.='<a href="'.get_permalink().'" data-mfp-src="'.$magnific_image[0].'" data-title="'.get_the_title().'">';
+	                                        $out.='<div class="grid_single_title zero_color bd_headings_text_shadow">';
+	                                        $out.='<div class="prk_ttl"><h3 class="header_font body_bk_color body_bk_text_shadow small">'.get_the_title().'</h3></div> ';
+	                                        $out.='</div>';
+	                                            $out.='<div class="grid_colored_block">';
+	                                           $out.='</div>';
+												$forced_w=480;
+												if ($layout_type_folio=="masonry") {
+													$forced_h=0;
+													$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, false , $retina_flag );
+												}
+												else if ($layout_type_folio=="squares")
+												{
+													$forced_h=480;
+													$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
+												}
+												else 
+												{
+													$forced_h=300;
+													$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
+												}
+	                                            $out.='<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" class="custom-img grid_image" alt="" data-featured="no" />';
+	                                            $out.='</a>';
+	                                    $out.='</div>';
+	                                    $out.='<a href="'.get_permalink().'">';
+	                                    	$out.='<div class="ft_lower_title zero_color bd_headings_text_shadow"><h3 class="header_font small">'.get_the_title().'</h3></div> ';
+	                                    $out.='</a>';
+	                                    $out.='<div class="ft_lower_excerpt">'.the_excerpt_dynamic(30,$my_home_query->post->ID).'</div> ';
+	                                $out.='</div>';
+	                                $ins++;
+	                            }
+                        }
+                        else {
+                        	if ($alt_flag==true) {
+                        		$out.='</div>';
+                        		$out.='<div class="folio_appender">';
+                        		$alt_flag=false;
+                        	}
+                        	if (has_post_thumbnail()) {
+                                $magnific_image=$image=wp_get_attachment_image_src( get_post_thumbnail_id(),'full' );
+								$extra_mfp="";
+                                $out.='<div class="portfolio_entry_li without_skills hidden_by_css" style="margin-bottom:'.$thumbs_mg.'px;" data-mfp-src="'.$magnific_image[0].'" data-title="'.get_the_title().'">';
+                                    $out.='<div class="grid_image_wrapper">';
+                                    	$out.='<a href="'.get_permalink().'" data-mfp-src="'.$magnific_image[0].'" data-title="'.get_the_title().'">';
+                                        $out.='<div class="grid_single_title zero_color bd_headings_text_shadow">';
+                                        $out.='<div class="prk_ttl"><h3 class="header_font body_bk_color body_bk_text_shadow small">'.get_the_title().'</h3></div> ';
+                                        $out.='</div>';
+                                            $out.='<div class="grid_colored_block">';
+                                           $out.='</div>';
+											$forced_w=480;
+											if ($layout_type_folio=="masonry") {
+												$forced_h=0;
+												$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, false , $retina_flag );
+											}
+											else if ($layout_type_folio=="squares")
+											{
+												$forced_h=480;
+												$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
+											}
+											else 
+											{
+												$forced_h=300;
+												$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
+											}
+                                            $out.='<img data-src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" class="custom-img grid_image" alt="" data-featured="no" src="#" />';
+                                            $out.='</a>';
+                                    $out.='</div>';
+                                    $out.='<a href="'.get_permalink().'">';
+                                    	$out.='<div class="ft_lower_title zero_color bd_headings_text_shadow"><h3 class="header_font small">'.get_the_title().'</h3></div> ';
+                                    $out.='</a>';
+                                    $out.='<div class="ft_lower_excerpt">'.the_excerpt_dynamic(30,$my_home_query->post->ID).'</div> ';
+                                $out.='</div>';
+                                $ins++;
+                            }
+                        }
+                        endwhile;
+	            $out.='</div>';
+	            if ($alt_flag==false) {
+            		$out.='<div class="pf_load_more_wrapper">';
+            		$out.='<div class="pf_load_more theme_button with_arrow wpb_animate_when_almost_visible wpb_fount_fade_waypoint">';
+                    $out.='<a href="#" class="pf_link fade_anchor">';
+                    $out.=$prk_translations['load_more'];
+                    $out.='</a>';
+                    $out.='<i class="fount_button_arrow fount_fa-chevron-down"></i>';
+                    $out.='<div id="folio_spinner" class="spinner-icon"></div>';
+                    $out.='</div>';
+                    $out.='</div>';
+                }
+			$out.='</div>';
+			$out.='<div class="clearfix"></div>';
+       	}
+        else
+        {
+			$out.= '<h2 class="fount_shortcode_warning">No content was found!</h2>';		
+		}
+		wp_reset_query();
+		return $out;
+	}
+	add_shortcode('pirenko_last_cpts', 'pirenko_last_cpts_shortcode'); 
+
 	//THEME GALLERY
-	function pirenko_gallery_shortcode( $atts, $content = null ) 
-	{
+	function pirenko_gallery_shortcode( $atts, $content = null ) {
 		global $prk_fount_options;
 		global $prk_retina_device;
 		global $prk_translations;
@@ -2661,44 +3442,48 @@ function prk_fount_scodes() {
 		else
 			$thumbs_mg="10";
 		if (isset($atts['show_titles']) && $atts['show_titles']=="no")
-			$titles_class = ' no_titles_gallery';
+			$titles_class=' no_titles_gallery';
 		else
 			$titles_class="";
+		if (isset($atts['onclick']) && $atts['onclick']!="")
+			$onclick=$atts['onclick'];
+		else
+			$onclick="fount_link_image";
 		$arr=explode(",",$images);
     	if (count($arr)>0)
 		{
 			$rand_nbr=rand(1, 5000);
 			$out = '';
-            $out.='<div class="small-12 fount_gallery">';	
+            $out.='<div class="small-12 fount_gallery '.$onclick.'">';	
 	                $out.='<div id="iso_gallery-'.$rand_nbr.'" class="iso_folio shortcoded per_init fount_iso_gallery'.$titles_class.'" data-columns="'.$cols_number.'" style="margin-right:-'.$thumbs_mg.'px;" data-margin='.$thumbs_mg.'>';
 	                        foreach ($arr as $single) {
-	                                $magnific_image=$image = wp_get_attachment_image_src( $single,'full' );
-									$extra_mfp="";
-	                                $out.='<div class="portfolio_entry_li without_skills" style="margin-bottom:'.$thumbs_mg.'px;" data-mfp-src="'.$magnific_image[0].'" data-title="'.get_post($single)->post_title.'">';
-	                                    $out.='<div class="grid_image_wrapper">';
-	                                        $out.='<div class="grid_single_title zero_color bd_headings_text_shadow">';
-	                                        $out.='<div class="prk_ttl"><h3 class="header_font body_bk_color body_bk_text_shadow small">'.get_post($single)->post_title.'</h3></div> ';
-	                                        $out.='</div>';
-	                                            $out.='<div class="grid_colored_block">';
-	                                           $out.='</div>';
-												$forced_w=480;
-												if ($layout_type_folio=="masonry") {
-													$forced_h=0;
-													$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, false , $retina_flag );
-												}
-												else if ($layout_type_folio=="squares")
-												{
-													$forced_h=480;
-													$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
-												}
-												else 
-												{
-													$forced_h=300;
-													$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
-												}
-	                                            $out.='<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" class="custom-img grid_image" alt="" data-featured="no" />';
-	                                    $out.='</div>';
-	                                $out.='</div>';
+                                $magnific_image=$image = wp_get_attachment_image_src( $single,'full' );
+								$extra_mfp="";
+                                $out.='<div class="portfolio_entry_li without_skills" style="margin-bottom:'.$thumbs_mg.'px;" data-mfp-src="'.$magnific_image[0].'" data-title="'.get_post($single)->post_title.'">';
+                                    $out.='<div class="grid_image_wrapper">';
+                                        $out.='<div class="grid_single_title zero_color bd_headings_text_shadow">';
+                                        $out.='<div class="prk_ttl"><h3 class="header_font body_bk_color body_bk_text_shadow small">'.get_post($single)->post_title.'</h3></div> ';
+                                        $out.='</div>';
+                                            $out.='<div class="grid_colored_block">';
+                                           $out.='</div>';
+											$forced_w=480;
+											if ($layout_type_folio=="masonry") {
+												$forced_h=0;
+												$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, false , $retina_flag );
+											}
+											else if ($layout_type_folio=="squares")
+											{
+												$forced_h=480;
+												$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
+											}
+											else 
+											{
+												$forced_h=300;
+												$vt_image = vt_resize( '', $image[0] , $forced_w, $forced_h, true , $retina_flag );
+											}
+                                            $out.='<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" class="custom-img grid_image" alt="" data-featured="no" />';
+                                    $out.='</div>';
+                                $out.='</div>';
 	                            
 	                        }
 	            $out.='</div>';
@@ -2715,8 +3500,7 @@ function prk_fount_scodes() {
 	add_shortcode('pirenko_gallery', 'pirenko_gallery_shortcode'); 
 
 	//LATEST COMMENTS
-	function pirenko_comments_shortcode( $atts, $content = null ) 
-	{
+	function pirenko_comments_shortcode( $atts, $content = null ) {
 		extract(shortcode_atts(array(
 			'title'    	 => 'Latest Work',
 			'items_number'		 => ''
@@ -2742,8 +3526,7 @@ function prk_fount_scodes() {
 	add_shortcode('pirenko_comments', 'pirenko_comments_shortcode');
 
 	//TESTIMONIALS
-	function pirenko_testimonials_shortcode( $atts, $content = null ) 
-	{
+	function pirenko_testimonials_shortcode( $atts, $content = null ) {
 		extract(shortcode_atts(array(
 			'items_number' => '',
 			'category' =>'',
@@ -2774,6 +3557,12 @@ function prk_fount_scodes() {
 					);
 		$loop = new WP_Query( $args );
 		$out = '';
+		if (isset($atts['layout']) && $atts['layout']=="testimonials_stack") {
+			$mainer="testimonials_stack";
+		}
+		else {
+			$mainer="per_init owl-carousel testimonials_slider";
+		}
 		if (isset($atts['autoplay']) && $atts['autoplay']=="no")
 			$autoplay="false";
 		else
@@ -2807,28 +3596,40 @@ function prk_fount_scodes() {
 		if (isset($prk_fount_options['touch_enable']) && $prk_fount_options['touch_enable']=="1") {
 			$touch_enable="true";
 		}
-		$out.='<div class="per_init owl-carousel testimonials_slider'.$extra_class.'" data-autoplay="'.$autoplay.'" data-delay="'.$delay.'" data-pagination="'.$navigation.'"  data-touch='.$touch_enable.'>';
+		$out.='<div class="'.$mainer.$extra_class.'" data-autoplay="'.$autoplay.'" data-delay="'.$delay.'" data-pagination="'.$navigation.'"  data-touch='.$touch_enable.'>';
 		while ( $loop->have_posts() ) : $loop->the_post();
         $out.='<div class="item"'.$inline.'>';
-        if (has_post_thumbnail( get_the_ID() ) )
-        {
-        	$image = wp_get_attachment_image_src( get_post_thumbnail_id(), '' );
-            $vt_image = vt_resize( '', $image[0] , 100 , 100, false , $retina_flag );
+        if (has_post_thumbnail(get_the_ID())) {
+        	$image = wp_get_attachment_image_src(get_post_thumbnail_id(),'');
+            $vt_image = vt_resize('', $image[0] , '' , '', false , $retina_flag );
             $out.='<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" class="testimonial_image" alt="" />';
         }
-        else
-        {
+        else {
 			$out.='<div class="icon-users"></div>';
 		}
 		$out.='<div class="tm_content">';
 		$out.='<h4>'.get_the_content().'</h4>';
 		$out.='<div class="tm_title not_zero_color header_font prk_heavier_600">';
-		$out.=get_the_title();
+		if (get_field('testimonial_link')!="") {
+			$out.='<a href="'.get_field('testimonial_link').'" target=_blank">'.get_the_title().'</a>';
+		}
+		else {
+			$out.=get_the_title();
+		}
 		$out.='</div>';
-		if (get_field('testimonial_subheading')!="")
-		{
+		if (get_field('testimonial_subheading')!="") {
 			$out.='<div class="tm_subheading header_font">';
 			$out.=get_field('testimonial_subheading');
+			$out.='</div>';
+		}
+		if (get_field('rating')!="" && get_field('rating')!="none") {
+			$out.='<div class="tm_stars">';
+				for ($count=1;$count<=5;$count++) {
+					if ($count<=get_field('rating'))
+						$out.='<i class="fount_fa-star not_zero_color"></i>';
+					else
+						$out.='<i class="fount_fa-star"></i>';
+				}
 			$out.='</div>';
 		}
 		$out.='</div>';
@@ -2842,9 +3643,11 @@ function prk_fount_scodes() {
 	add_shortcode('prk_testimonials', 'pirenko_testimonials_shortcode');
 
 	//THEME CONTACT FORM
-	function prk_contact_form_shortcode( $atts, $content = null ) 
-	{
+	function prk_contact_form_shortcode( $atts, $content = null ) {
 		global $prk_translations;
+		if (!isset($atts['email_adr'])) {
+			$atts['email_adr']="sample@email.com";
+		}
         $out='<div class="prk_shorts small-12">
         <form action="#" id="contact-form" method="post" data-empty="'.esc_attr($prk_translations['empty_text_error']).'" data-invalid="'.esc_attr($prk_translations['invalid_email_error']).'" data-ok="'.esc_attr($prk_translations['contact_ok_text']).'" data-name="'.get_bloginfo('name').'">
             <div class="small-12">
@@ -2881,13 +3684,14 @@ function prk_fount_scodes() {
 	add_shortcode('prk_contact_form', 'prk_contact_form_shortcode');
 
 	//THEME VCARD
-	function prk_vcard_shortcode( $atts, $content = null ) 
-	{
+	function prk_vcard_shortcode( $atts, $content = null ) {
 		$extra_class=$inline="";
 		if (isset($atts['text_color']) && $atts['text_color']!="") {
 			$inline=' style="color:'.$atts['text_color'].'"';
 			$extra_class=" forced_color";
 		}
+		if (isset($atts['el_class']) && $atts['el_class']!="")
+			$extra_class.=" ".$atts['el_class'];
         $out='<div class="fount_vcard shortcoded'.$extra_class.'"'.$inline.'>';
 		if (isset($atts['autoplay']) && $atts['image_path']!="")
 		{

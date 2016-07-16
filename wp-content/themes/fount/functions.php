@@ -1,20 +1,6 @@
 <?php
-
-wp_enqueue_style('frm_custom_styles', get_template_directory_uri() . '/css/frm.css');
-include_once locate_template('/inc/custom-shortcodes.php');
-
-    if (!defined('__DIR__')) { define('__DIR__', dirname(__FILE__)); }
     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-    if (is_plugin_active('fount_framework/fount_framework.php'))
-    {
-        add_filter('wpb_widget_title', 'override_widget_title', 10, 2);
-        function override_widget_title($output = '', $params = array('')) {
-          $extraclass = (isset($params['extraclass'])) ? " ".$params['extraclass'] : "";
-          return '<div class="prk_shortcode-title"><div class="header_font sizer_small bd_headings_text_shadow zero_color '.$extraclass.'">'.$params['title'].'</div></div>';
-        }
-    }
-    else
-    {
+    if (!function_exists('register_field_group')) {
         include_once locate_template('/inc/modules/advanced-custom-fields/acf.php');
     }
     function fount_scripts() {
@@ -47,7 +33,7 @@ include_once locate_template('/inc/custom-shortcodes.php');
                     if ($cart_url=="")
                         $cart_url="#";
                     $cart_contents_count = $woocommerce->cart->cart_contents_count;
-                    $cart_contents = sprintf(_n('%d Item', '%d Items', $cart_contents_count, 'fount_lang'), $cart_contents_count);
+                    $cart_contents = sprintf(_n('%d Item', '%d Items', $cart_contents_count, 'fount'), $cart_contents_count);
                     $cart_total = $woocommerce->cart->get_cart_total();
                     if ($cart_contents_count>0 || $prk_fount_options['woo_cart_always_display']=="1")
                     {
@@ -93,9 +79,15 @@ include_once locate_template('/inc/custom-shortcodes.php');
         }
         wp_register_script('fount_other', get_template_directory_uri() . '/js/other-min.js', array('jquery'), $prk_theme->Version, true);
         wp_enqueue_script('fount_other');
-        wp_register_script('fount_maps','https://maps.googleapis.com/maps/api/js?v=3.exp', array('jquery'), $prk_theme->Version, true);
+        if(isset($prk_fount_options['google_maps_key']) && $prk_fount_options['google_maps_key']!="") {
+            $gapy='&key='.$prk_fount_options['google_maps_key'];
+        }
+        else {
+            $gapy="";
+        }
+        wp_register_script('fount_maps','https://maps.googleapis.com/maps/api/js?sensor=false'.$gapy, array('jquery'), $prk_theme->Version, true);
         wp_enqueue_script('fount_maps');
-
+        
         wp_localize_script('fount_main', 'ajax_var', array(
             'url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('ajax-nonce'),
@@ -124,11 +116,6 @@ include_once locate_template('/inc/custom-shortcodes.php');
         $custom_opacity=floatval($prk_fount_options['custom_opacity']/100);
         $custom_opacity_folio=floatval($prk_fount_options['custom_opacity_folio']/100);
         $custom_shadow=floatval($prk_fount_options['custom_shadow']/100);      
-        
-        //INCLUDE SCRIPT FROM WORDPRESS CORE
-        wp_enqueue_script('jquery-ui-accordion');
-        wp_enqueue_script('jquery-ui-tabs');
-        wp_enqueue_script('jquery-ui-button');
 
         //FONT MANAGEMENT
         $options = $prk_fount_options;
@@ -295,13 +282,7 @@ include_once locate_template('/inc/custom-shortcodes.php');
         if (!isset($prk_fount_options['active_skin']) ) 
             $prk_fount_options['active_skin'] = '';
 
-        if (PRK_FOUNT_FRAMEWORK=="true") {
-            $sharrre_dir_prk=plugins_url("fount_framework");
-        }
-        else {
-            $sharrre_dir_prk="";
-        }
-        $prk_fount_options['active_visual_composer']=PRK_FOUNT_FRAMEWORK;
+        $prk_fount_options['active_visual_composer']=PRK_FOUNT_COMPOSER;
         if (!isset($prk_fount_options['active_skin']) ) 
             $prk_fount_options['active_skin']='';
         $prk_script_options=$prk_fount_options;
@@ -396,7 +377,9 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 }.fount_collapsed_menu #prk_responsive_menu_inner #top_form_close,.fount_collapsed_menu #prk_responsive_menu_inner #top_form_hider,.fount_collapsed_menu #fount_left_floater,.menu_at_top #fount_logo_holder,.menu_at_top #prk_responsive_menu #prk_logos,.menu_at_top #fount_left_floater,.menu_at_top #top_form_hider,.menu_at_top #top_form_close,.menu_at_top #searchform_top input,.menu_at_top #fount_top_floater,.menu_at_top #prk_menu_loupe {
                     height:".$collapsed_menu_vertical."px !important;
                     line-height:".$collapsed_menu_vertical."px !important;
-                }#bottom_bar_wrapper {
+                }.menu_at_top .fount_logo_above #centered_block {
+                    margin-top:".$collapsed_menu_vertical."px !important;}
+                #bottom_bar_wrapper {
                     height:".$collapsed_menu_vertical."px;
                     bottom:-".$collapsed_menu_vertical."px;
                     line-height:".$collapsed_menu_vertical."px;
@@ -407,7 +390,7 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 }#prk_responsive_menu.fount_hidden_menu {
                     margin-top:-".$reducer."px;}";
         //FONTS
-        $css .= "body,.search-query,.regular_font,input,textarea {
+        $css .= "body{font-size:".$options['font_size']."px;}body,.search-query,.regular_font,input,textarea {
                     font-family:".$options['body_font']['css'].";
                 }.woocommerce .summary h1,.woocommerce .related>h3,.woocommerce .related>h2,#calendar_wrap caption,.prk_composer_title,.wpb_heading,.header_font,.shortcode-title {
                     font-family:".$options['header_font']['css'].";}";
@@ -461,22 +444,34 @@ include_once locate_template('/inc/custom-shortcodes.php');
         //SET THE BODY BACKGROUND
         $css .=
         "body,#footer_mirror,#prk_ajax_container,#contact_info #contact_form {
-            background-color:".$prk_fount_options['site_background_color']."; 
-        }
-        ";
-        $path_parts = pathinfo($prk_fount_options['pattern']);
-        if (isset($path_parts['filename']) && $path_parts['filename']!="" && $path_parts['filename']!="prk_no_pattern")
-        {
-            if ($prk_retina_device=="prk_retina")
+            background-color:".$prk_fount_options['site_background_color'].";}";
+        $css .="#prk_responsive_menu_inner,.fount_logo_above #prk_logos {
+                background-color:$background_color_header;
+                background-color:rgba($splitted_background_color_header[0], $splitted_background_color_header[1], $splitted_background_color_header[2], ".$custom_opacity_header_default.");
+            }.fount_logo_above.fount_forced_menu #prk_logos,.menu_at_top.fount_forced_menu #prk_logos,.menu_at_top #prk_responsive_menu_inner,.fount_forced_menu #prk_responsive_menu_inner,.fount_collapsed_menu.fount_logo_above #prk_logos,.fount_collapsed_menu #prk_responsive_menu_inner {
+                background-color:$background_color_header;
+                background-color:rgba($splitted_background_color_header[0], $splitted_background_color_header[1], $splitted_background_color_header[2], ".$custom_opacity_header.");}";
+        if (isset($prk_fount_options['pattern'])) {
+            $path_parts = pathinfo($prk_fount_options['pattern']);
+            if (isset($path_parts['filename']) && $path_parts['filename']!="" && $path_parts['filename']!="prk_no_pattern")
             {
-                $vt_image = vt_resize( '', get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'] , 2000, 2000, false );
-                //CHECK IF RETINA PATTERN EXISTS
-                if (isset($vt_image['not_found']) && $vt_image['not_found']!="true") {
-                    $half_width=$vt_image['width']/2;
-                    $css .=
-                    "body.boxed_fount,#prk_ajax_container {
-                        background-image: url(" . get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'].");
-                        background-size:".$half_width."px auto;}";
+                if ($prk_retina_device=="prk_retina")
+                {
+                    $vt_image = vt_resize( '', get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'] , 2000, 2000, false );
+                    //CHECK IF RETINA PATTERN EXISTS
+                    if (isset($vt_image['not_found']) && $vt_image['not_found']!="true") {
+                        $half_width=$vt_image['width']/2;
+                        $css .=
+                        "body.boxed_fount,#prk_ajax_container {
+                            background-image: url(" . get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'].");
+                            background-size:".$half_width."px auto;}";
+                    }
+                    else
+                    {
+                        $css .=
+                        "body.boxed_fount,#prk_ajax_container {
+                            background-image: url(" . $prk_fount_options['pattern'].");}";
+                    }
                 }
                 else
                 {
@@ -485,32 +480,28 @@ include_once locate_template('/inc/custom-shortcodes.php');
                         background-image: url(" . $prk_fount_options['pattern'].");}";
                 }
             }
-            else
-            {
-                $css .=
-                "body.boxed_fount,#prk_ajax_container {
-                    background-image: url(" . $prk_fount_options['pattern'].");}";
-            }
+            
         }
-        $css .="#prk_responsive_menu_inner,.fount_logo_above #prk_logos {
-                background-color:$background_color_header;
-                background-color:rgba($splitted_background_color_header[0], $splitted_background_color_header[1], $splitted_background_color_header[2], ".$custom_opacity_header_default.");
-            }.fount_logo_above.fount_forced_menu #prk_logos,.menu_at_top.fount_forced_menu #prk_logos,.menu_at_top #prk_responsive_menu_inner,.fount_forced_menu #prk_responsive_menu_inner,.fount_collapsed_menu.fount_logo_above #prk_logos,.fount_collapsed_menu #prk_responsive_menu_inner {
-                background-color:$background_color_header;
-                background-color:rgba($splitted_background_color_header[0], $splitted_background_color_header[1], $splitted_background_color_header[2], ".$custom_opacity_header.");}";
+        if (isset($prk_fount_options['pattern_footer'])) {
         $path_parts = pathinfo($prk_fount_options['pattern_footer']);
-        if (isset($path_parts['filename']) && $path_parts['filename']!="" && $path_parts['filename']!="prk_no_pattern")
-        {
-            if ($prk_retina_device=="prk_retina")
+            if (isset($path_parts['filename']) && $path_parts['filename']!="" && $path_parts['filename']!="prk_no_pattern")
             {
-                $vt_image = vt_resize( '', get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'] , 2000, 2000, false );
-                //CHECK IF RETINA PATTERN EXISTS
-                if (isset($vt_image['not_found']) && $vt_image['not_found']!="true") {
-                    $half_width=$vt_image['width']/2;
-                    $css .=
-                    "#prk_footer {
-                        background-image: url(" . get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'].");
-                        background-size:".$half_width."px auto;}";
+                if ($prk_retina_device=="prk_retina")
+                {
+                    $vt_image = vt_resize( '', get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'] , 2000, 2000, false );
+                    //CHECK IF RETINA PATTERN EXISTS
+                    if (isset($vt_image['not_found']) && $vt_image['not_found']!="true") {
+                        $half_width=$vt_image['width']/2;
+                        $css .=
+                        "#prk_footer {
+                            background-image: url(" . get_template_directory_uri() . "/images/patterns/".$path_parts['filename']."_@2X.".$path_parts['extension'].");
+                            background-size:".$half_width."px auto;}";
+                    }
+                    else
+                    {
+                        $css .=
+                        "#prk_footer {background-image: url(" . $prk_fount_options['pattern_footer'].");}";
+                    }
                 }
                 else
                 {
@@ -518,15 +509,10 @@ include_once locate_template('/inc/custom-shortcodes.php');
                     "#prk_footer {background-image: url(" . $prk_fount_options['pattern_footer'].");}";
                 }
             }
-            else
-            {
-                $css .=
-                "#prk_footer {background-image: url(" . $prk_fount_options['pattern_footer'].");}";
-            }
         }
-        if ($prk_fount_options['background_image_right_bar']['url']=!"")
+        if ($prk_fount_options['background_image_right_bar']['url']!="")
         {
-            $bar_image=(wp_get_attachment_image_src($prk_fount_options['background_image_right_bar']['id'],'full'));
+            $bar_image=wp_get_attachment_image_src($prk_fount_options['background_image_right_bar']['id'],'full');
             $css .=
             "#prk_hidden_bar {background-image: url(".$bar_image['0'].");}";
         }
@@ -549,13 +535,13 @@ include_once locate_template('/inc/custom-shortcodes.php');
             color:$background_color_btns;
         }.lone_linker a:hover {
             background-color:$background_color_btns;}";   
-        $css.="a,a:hover, #prk_hidden_bar a:hover,.contact_error,#main .member_ul_slider.owl-theme .owl-controls div:hover,#main .recentposts_ul_slider.owl-theme .owl-controls div:hover,.post_meta_single #previous_button:hover .after_icon,.post_meta_single #next_button:hover .bf_icon,#nav-main.resp_mode li > a:hover,.a_colored a:hover,.recentposts_ul_shortcode .blog_meta a:hover,.classic_meta .post-categories li a:hover,.headings_top,.tiny_bullet,.not_zero_color,.prk_service:hover .colored_link_icon,#prk_footer .copy a:hover,#prk_footer #footer_bk a:hover,#fount_to_top,.fount_button_arrow,#top_bar_wrapper #fount_close.small_headings_color:hover,#top_bar_wrapper #fount_left.small_headings_color:hover .inner_mover,#top_bar_wrapper #fount_right.small_headings_color:hover .inner_mover,#folio_nav_wrapper .fount_close_folio.small_headings_color:hover,#folio_nav_wrapper .fount_left_folio.small_headings_color:hover .inner_mover,#folio_nav_wrapper .fount_right_folio.small_headings_color:hover .inner_mover,.prk_accordion.ui-accordion .ui-accordion-header.ui-state-active,.prk_accordion.ui-accordion .ui-accordion-header.ui-state-active a,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header.ui-state-active,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header.ui-state-active a,.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+        $css.="a,a:hover, #prk_hidden_bar a:hover,.contact_error,#main .member_ul_slider.owl-theme .owl-controls div:hover,#main .recentposts_ul_slider.owl-theme .owl-controls div:hover,.post_meta_single #previous_button:hover .after_icon,.post_meta_single #next_button:hover .bf_icon,#nav-main.resp_mode li > a:hover,.a_colored a:hover,.recentposts_ul_shortcode .blog_meta a:hover,.classic_meta .post-categories li a:hover,.headings_top,.tiny_bullet,.not_zero_color,.prk_service:hover .colored_link_icon,#prk_footer .copy a:hover,#prk_footer #footer_bk a:hover,#fount_to_top,.fount_button_arrow,#top_bar_wrapper #fount_close.small_headings_color:hover,#top_bar_wrapper #fount_left.small_headings_color:hover .inner_mover,#top_bar_wrapper #fount_right.small_headings_color:hover .inner_mover,#folio_nav_wrapper .fount_close_folio.small_headings_color:hover,#folio_nav_wrapper .fount_left_folio.small_headings_color:hover .inner_mover,#folio_nav_wrapper .fount_right_folio.small_headings_color:hover .inner_mover,.prk_accordion.ui-accordion .ui-accordion-header.ui-state-active,.prk_accordion.ui-accordion .ui-accordion-header.ui-state-active a,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header.ui-state-active,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header.ui-state-active a,.ui-tabs .ui-tabs-nav li.ui-tabs-active a,.fount_theme .vc_tta-container .vc_tta-tab.vc_active a {
                 color: $active_color;
             }.sod_select .sod_option.active,.sod_select,.fount_folio_filter .active a,.fount_folio_filter a:hover,#main .member_ul_slider.owl-theme .owl-controls div,#main .recentposts_ul_slider.owl-theme .owl-controls div,.titled_portfolio .grid_single_title .body_bk_color,.wpb_heading,.zero_color,.zero_color a,a.zero_color {
                 color: $bd_headings_color;
             }.sod_select {
                 border-color: $bd_headings_color;
-            }#after_widgets,#prk_footer #footer_bk .small_headings_color,#prk_footer #footer_bk .default_color,#prk_footer #footer_bk a.small_headings_color,#prk_footer #footer_bk .small_headings_color a,#prk_footer #footer_bk a.default_color,#prk_footer #footer_bk .default_color a,#prk_footer {
+            }#after_widgets,#prk_footer #footer_bk .small_headings_color,#prk_footer #footer_bk .default_color,#prk_footer #footer_bk a.small_headings_color,#prk_footer #footer_bk .small_headings_color a,#prk_footer #footer_bk a.default_color,#prk_footer #footer_bk .default_color a,#prk_footer,#footer_in .pirenko_highlighted {
                 color:$body_color_footer;
             }#prk_footer .zero_color,#prk_footer .fount_active_icon,#prk_footer .fount_address_icon,#prk_footer .prk_footer_menu a,#prk_footer .copy a,#prk_footer #footer_bk a,#footer_in .theme_button input,#footer_in .widget-title,#prk_footer #footer_bk .prk_twt_body .twt_in a.default_color {
                 color:".$prk_fount_options['titles_color_footer'].";
@@ -582,7 +568,7 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 border-color:".$prk_fount_options['lines_color_overlayer'].";
             }.summary .cart:after {
                 background-color:$lines_color;
-            }.colored_theme_button input,.colored_theme_button a,.theme_button input,.theme_button a,.theme_button_inverted input,.theme_button_inverted a,.prk_radius {
+            }#fount_wrapper .colored_theme_button input,#fount_wrapper .colored_theme_button a,#fount_wrapper .theme_button input,#fount_wrapper .theme_button a,#fount_wrapper .theme_button_inverted input,#fount_wrapper .theme_button_inverted a,#fount_wrapper .prk_radius {
                 -webkit-border-radius: ".$prk_fount_options['buttons_radius']."px;
                 border-radius: ".$prk_fount_options['buttons_radius']."px;
             }.owl-prev {
@@ -620,7 +606,7 @@ include_once locate_template('/inc/custom-shortcodes.php');
             }#prk_footer {
                 background-color:".$prk_fount_options['background_color_footer'].";
             }body,.prk_tags_ul a,.blog_meta>p>a,
-            .flexslider .headings_body,.shortcode_slider .headings_body,.padded_text a,.post_meta_single .after_icon,.post_meta_single .bf_icon,.post_meta_single a,.blog_meta a,.default_color,.default_color a,.default_color a:hover,a.default_color,a.default_color:hover,.titled_block .grid_single_title span a,.contact_address_right_single a,#fount_search,.masonr_read_more a,.blog_meta a,#nav-main.resp_mode li > a,.ui-tabs .ui-tabs-nav li a,.pirenko_highlighted,.prk_minimal_button>span,.prk_minimal_button>a,.prk_minimal_button>input,.ui-accordion .ui-accordion-header,.ui-accordion .ui-accordion-header a,.fount_folio_filter a,select {
+            .flexslider .headings_body,.shortcode_slider .headings_body,.padded_text a,.post_meta_single .after_icon,.post_meta_single .bf_icon,.post_meta_single a,.blog_meta a,.default_color,.default_color a,.default_color a:hover,a.default_color,a.default_color:hover,.titled_block .grid_single_title span a,.contact_address_right_single a,#fount_search,.masonr_read_more a,.blog_meta a,#nav-main.resp_mode li > a,.ui-tabs .ui-tabs-nav li a,.vc_tta-tab a,.pirenko_highlighted,.prk_minimal_button>span,.prk_minimal_button>a,.prk_minimal_button>input,.ui-accordion .ui-accordion-header,.ui-accordion .ui-accordion-header a,.fount_folio_filter a,select {
                 color:$inactive_color;
             }.sod_select.open:before,.sod_select .sod_option.selected:before,.sod_select.open,a.small_headings_color,.small_headings_color a,.small_headings_color {
                 color:".$prk_fount_options['bd_smallers_color'].";
@@ -717,10 +703,6 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 background-color: rgba($splitted_menu_active_color_after[0], $splitted_menu_active_color_after[1], $splitted_menu_active_color_after[2],0.88);
             }.menu_at_top #menu_section .sf-menu a:hover::after,.fount_forced_menu #menu_section .sf-menu a:hover::after,.fount_collapsed_menu #menu_section .sf-menu a:hover::after {
                 background-color:".$prk_fount_options['menu_active_color_after'].";
-            }.tooltipster-light {
-                color:".$prk_fount_options['tips_text_color'].";
-                background-color:".$tips_background_color.";
-                background-color: rgba($splitted_tips_background_color[0], $splitted_tips_background_color[1], $splitted_tips_background_color[2],".$custom_opacity_tips.");
             }#copy {
                 color: ".$prk_fount_options['body_color_footer'].";
             }.theme_button_inverted a {
@@ -747,9 +729,9 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 background-color:$active_color;
             }.theme_button_inverted.active a {
                 background-color:$active_color !important;
-            }.wpb_tour .ui-state-active,.wpb_tour .ui-widget-content .ui-state-active,.wpb_tour .ui-widget-header .ui-state-active,.wpb_tour .ui-tabs .ui-tabs-nav li.ui-state-active,.wpb_tabs .ui-tabs-nav .ui-state-hover,.wpb_tabs .ui-tabs-nav .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-content .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-header .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-tabs .ui-tabs-nav li.ui-state-active,.prk_accordion .ui-accordion-content,.wpb_accordion_content,.wpb_tour .wpb_tour_tabs_wrapper .wpb_tab,.wpb_content_element.wpb_tabs .wpb_tour_tabs_wrapper .wpb_tab,.prk_speech,.small_squared,.prk_price_table,.vc_progress_bar .vc_single_bar,.cart-collaterals table,.shop_table,.woocommerce #payment,.liner,.es-nav span,.btn-primary,.prk_minimal_button>span,.prk_minimal_button>a,.prk_minimal_button>input,.pirenko_highlighted,#nav-main.resp_mode,.prk_inner_tip,.prk_blockquote,.colored_bg {
+            }.wpb_tour .ui-state-active,.wpb_tour .ui-widget-content .ui-state-active,.wpb_tour .ui-widget-header .ui-state-active,.wpb_tour .ui-tabs .ui-tabs-nav li.ui-state-active,.fount_theme .vc_tta-container .vc_tta-tab.vc_active,.wpb_tabs .ui-tabs-nav .ui-state-hover,.wpb_tabs .ui-tabs-nav .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-content .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-header .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-tabs .ui-tabs-nav li.ui-state-active,.prk_accordion .ui-accordion-content,.wpb_accordion_content,.wpb_tour .wpb_tour_tabs_wrapper .wpb_tab,.wpb_content_element.wpb_tabs .wpb_tour_tabs_wrapper .wpb_tab,.prk_speech,.small_squared,.prk_price_table,.vc_progress_bar .vc_single_bar,.cart-collaterals table,.shop_table,.woocommerce #payment,.liner,.es-nav span,.btn-primary,.prk_minimal_button>span,.prk_minimal_button>a,.prk_minimal_button>input,.pirenko_highlighted,#nav-main.resp_mode,.prk_inner_tip,.prk_blockquote,.colored_bg,.plain .tip_top_hide,.prk_speech .tip_top_hide {
                 background-color:$background_color;
-            }.wpb_tabs .ui-tabs-nav .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-content .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-header .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-tabs .ui-tabs-nav li.ui-state-active {
+            }.wpb_tabs .ui-tabs-nav .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-content .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-widget-header .ui-state-active,.wpb_tabs .ui-tabs-nav .ui-tabs .ui-tabs-nav li.ui-state-active,.fount_theme .vc_tta-container .vc_tta-tab.vc_active {
                 border-bottom:1px solid $background_color;
             }input:focus, textarea:focus,select:focus {
                 background-color: rgba($splitted_active_color[0], $splitted_active_color[1], $splitted_active_color[2],0.1);
@@ -809,7 +791,7 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 border-left:1px solid rgba($splitted_inactive_color[0], $splitted_inactive_color[1], $splitted_inactive_color[2],0.25);
             }.prk_author_avatar img {
                 border:6px solid $site_background_color;
-            }#main .recentposts_ul_slider.msnr .blog_lower,#main .masonry_blog .blog_lower,.fount_woo_el_wrapper,#prk_nav_inner,#author_area,#single_meta_footer,.single_blog_meta_class:before, .single_blog_meta_class:after,.prk_vc_title:before, .prk_vc_title:after,.page-prk-blog-full .blog_lower,.wpb_separator, .vc_text_separator,.post_meta_single,.simple_line {
+            }#main .recentposts_ul_slider.msnr .blog_lower,#main .masonry_blog .blog_lower,#prk_nav_inner,#author_area,#single_meta_footer,.single_blog_meta_class:before, .single_blog_meta_class:after,.prk_vc_title:before, .prk_vc_title:after,.page-prk-blog-full .blog_lower,.wpb_separator, .vc_text_separator,.post_meta_single,.simple_line,.fount_theme .testimonials_stack .item {
                 border-bottom: 1px solid $lines_color;
             }#author_area img,ol.commentlist img.avatar {
                 box-shadow: 0px 0px 3px $lines_color;
@@ -831,9 +813,9 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 border-right:1px solid $lines_color;
             }.prk_prices_specs,.prk_price_header{
                 border-left:1px solid $lines_color;
-            }.sod_select:hover,.sod_select.open,.sod_select .sod_list_wrapper,.wpb_tabs .ui-tabs .ui-tabs-panel,.ui-accordion .ui-accordion-header,.ui-tabs .ui-tabs-nav li,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header,.wpb_content_element .wpb_tour_tabs_wrapper .wpb_tab,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_content,.prk_minimal_button>span,.prk_minimal_button>a,.prk_minimal_button>input,.tagcloud a,.pirenko_highlighted,.pk_contact_highlighted,.prk_cropped_blockquote:before,.prk_cropped_blockquote:after,.prk_bordered {
+            }.sod_select:hover,.sod_select.open,.sod_select .sod_list_wrapper,.wpb_tabs .ui-tabs .ui-tabs-panel,.ui-accordion .ui-accordion-header,.ui-tabs .ui-tabs-nav li,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header,.vc_tta-panel-heading,.wpb_content_element .wpb_tour_tabs_wrapper .wpb_tab,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_content,.prk_minimal_button>span,.prk_minimal_button>a,.prk_minimal_button>input,.tagcloud a,.pirenko_highlighted,.pk_contact_highlighted,.prk_cropped_blockquote:before,.prk_cropped_blockquote:after,.prk_bordered,.vc_tta-panel-body,.fount_theme .vc_tta-container .vc_tta-tab,.fount_theme .vc_tta-container .vc_tta-tabs-position-left .vc_tta-tab.vc_active {
                 border:1px solid $inputs_bordercolor;
-            }.ui-accordion .ui-accordion-header,.ui-tabs .ui-tabs-nav li,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header {
+            }.ui-accordion .ui-accordion-header,.ui-tabs .ui-tabs-nav li,.fount_theme .vc_tta-container .vc_tta-tab,.wpb_content_element .wpb_accordion_wrapper .wpb_accordion_header,.vc_tta-panel-heading {
                 background-color:$inputs_bordercolor;
                 background-color:rgba($splitted_inputs_bordercolor[0], $splitted_inputs_bordercolor[1], $splitted_inputs_bordercolor[2], 0.50);}";
             if ($prk_fount_options['prk_responsive']=="1") {
@@ -891,6 +873,7 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 color:$site_background_color;
             }.woocommerce #fount_wrapper #content div.product .woocommerce-tabs ul.tabs li.active {
                 background:$site_background_color;
+                border-bottom-color: $site_background_color;
             }.fount_woo_add_button {
                 background:".$prk_fount_options['buttons_color'].";
             }html .woocommerce .star-rating span,html .woocommerce .woocommerce-message:before {
@@ -909,13 +892,13 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 border-top-color: transparent;
             }#fount_wrapper .price del, #fount_wrapper .woocommerce .price del, .woocommerce #fount_wrapper .price del {
                 color:".$prk_fount_options['bd_smallers_color'].";
-            }#fount_wrapper #sidebar ul.product_list_widget li {
+            }.fount_woo_el_wrapper,#fount_wrapper #sidebar ul.product_list_widget li {
                 border-bottom:1px solid $lines_color;
             }.woocommerce .woocommerce-error,.woocommerce .woocommerce-info,.woocommerce #payment div.payment_box, .woocommerce-page #payment div.payment_box,.woocommerce .woocommerce-message,.woocommerce #fount_wrapper #content div.product .woocommerce-tabs ul.tabs li {
                 background:$inputs_bordercolor;
                 background:rgba($splitted_inputs_bordercolor[0], $splitted_inputs_bordercolor[1], $splitted_inputs_bordercolor[2], 0.50);}";
             //EXTRA STYLES IF VC IS OFF
-            if (PRK_FOUNT_FRAMEWORK=="false")
+            if (!PRK_FOUNT_COMPOSER)
             {
                 $css .= ".prk_no_composer {
                         margin-bottom:32px;
@@ -1025,6 +1008,12 @@ include_once locate_template('/inc/custom-shortcodes.php');
 
     }
 
+    if (!function_exists('fount_output')) {
+        function fount_output() {
+            return;
+        }
+    }
+
     //ENABLE SHORTCODES ON SIDEBARS
     add_filter('widget_text', 'do_shortcode');
 
@@ -1033,26 +1022,132 @@ include_once locate_template('/inc/custom-shortcodes.php');
     add_action('wp_ajax_nopriv_mail_before_submit', 'prk_mail_before_submit');
 
     //BETTER QTRANSLATE SUPPORT
-    function qtranslate_edit_taxonomies(){
-       $args=array(
-          'public' => true ,
-          '_builtin' => false
-       );
-       $output = 'object'; // or objects
-       $operator = 'and'; // 'and' or 'or'
+    include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+    if (is_plugin_active('qtranslate/qtranslate.php')) {
+        function qtranslate_edit_taxonomies(){
+           $args=array(
+              'public' => true ,
+              '_builtin' => false
+           );
+           $output = 'object'; // or objects
+           $operator = 'and'; // 'and' or 'or'
 
-       $taxonomies = get_taxonomies($args,$output,$operator); 
+           $taxonomies = get_taxonomies($args,$output,$operator); 
 
-       if  ($taxonomies) {
-         foreach ($taxonomies  as $taxonomy ) {
-             add_action( $taxonomy->name.'_add_form', 'qtrans_modifyTermFormFor');
-             add_action( $taxonomy->name.'_edit_form', 'qtrans_modifyTermFormFor');        
+           if  ($taxonomies) {
+             foreach ($taxonomies  as $taxonomy ) {
+                 add_action( $taxonomy->name.'_add_form', 'qtrans_modifyTermFormFor');
+                 add_action( $taxonomy->name.'_edit_form', 'qtrans_modifyTermFormFor');        
 
-         }
-       }
-
+             }
+           }
+        }
+        add_action('admin_init', 'qtranslate_edit_taxonomies');
     }
-    add_action('admin_init', 'qtranslate_edit_taxonomies');
+
+    //JETPACK RETINA SCRIPT REMOVE
+    function dequeue_devicepx() {
+        wp_dequeue_script( 'devicepx' );
+    }
+    add_action('wp_enqueue_scripts', 'dequeue_devicepx', 20);
+
+    //FACEBOOK EXTRA INFO
+    if (!defined('WPSEO_VERSION')) {
+        function prk_facebook() {
+            global $post;
+            if (!is_singular()) {
+                return;
+            }
+            echo '<meta property="og:title" content="'.get_the_title().'" />';
+            echo '<meta property="og:type" content="article"/>';
+            echo '<meta property="og:url" content="'.get_permalink().'" />';
+            echo '<meta property="og:site_name" content="'.get_bloginfo('name').'" />';
+            echo '<meta property="og:description" content="'.get_post_field('post_excerpt',$post->ID).'" />';
+            if(has_post_thumbnail( $post->ID )) {
+                $thumbnail_src = wp_get_attachment_image_src(get_post_thumbnail_id( $post->ID ),'full');
+                echo '<meta property="og:image" content="' . esc_attr( $thumbnail_src[0] ) . '" />';
+            }
+        }
+        add_action('wp_head', 'prk_facebook', 5);
+    }
+
+    //VISUAL COMPOSER STUFF
+    if (PRK_FOUNT_COMPOSER) {
+
+        function prk_vc_disable_update() {
+            if (function_exists('vc_license') && function_exists('vc_updater') && ! vc_license()->isActivated()) {
+                remove_filter( 'upgrader_pre_download', array( vc_updater(), 'preUpgradeFilter' ), 10);
+                remove_filter( 'pre_set_site_transient_update_plugins', array(
+                    vc_updater()->updateManager(),
+                    'check_update'
+                ) );
+            }
+        }
+        add_action( 'admin_init', 'prk_vc_disable_update', 9 );
+
+        add_filter('wpb_widget_title', 'override_widget_title', 10, 2);
+        function override_widget_title($output = '', $params = array('')) {
+          $extraclass = (isset($params['extraclass'])) ? " ".$params['extraclass'] : "";
+          return '<div class="prk_shortcode-title"><div class="header_font sizer_small bd_headings_text_shadow zero_color '.$extraclass.'">'.$params['title'].'</div></div>';
+        }
+        function fount_vcSetAsTheme() {
+            if (function_exists('vc_set_as_theme')) {
+                vc_set_as_theme(true);
+                if (function_exists('vc_editor_set_post_types')) {
+                    vc_editor_set_post_types(array('page','post','pirenko_team_member','pirenko_slides','pirenko_portfolios'));
+                }
+            }
+        }
+        add_action('init','fount_vcSetAsTheme');
+
+        //ENQUEUE THE THEME TWEAKED JS AND CSS FILES
+        function fount_vc_scripts() {
+            global $prk_fount_options;
+            if ( defined('WPB_VC_VERSION')) {
+                wp_deregister_style('js_composer_custom_css');
+                wp_deregister_style('js_composer_front');
+                wp_deregister_style('flexslider');
+                wp_deregister_style('prettyphoto');
+                wp_deregister_script('nivo-slider');
+                wp_deregister_script('isotope');
+                wp_deregister_script('waypoints');
+                wp_deregister_script('vc_accordion_script');
+                wp_deregister_script('vc_tabs_script');
+                wp_deregister_script('vc_tta_autoplay_script');
+                wp_deregister_script('wpb_composer_front_js');
+                wp_deregister_script('jquery_ui_tabs_rotate');
+                
+                wp_register_script('wpb_composer_front_js',get_template_directory_uri().'/js/js_composer_front-min.js', array('jquery'), WPB_VC_VERSION, true );
+                wp_enqueue_script('wpb_composer_front_js');
+
+                add_filter( 'vc_shortcodes_css_class', 'custom_css_classes_for_vc_row_and_vc_column', 10, 2 );
+                function custom_css_classes_for_vc_row_and_vc_column( $class_string, $tag ) {
+                  /*if ( $tag == 'vc_row' || $tag == 'vc_row_inner' ) {
+                    $class_string = str_replace( 'vc_row-fluid', 'my_row-fluid', $class_string ); // This will replace "vc_row-fluid" with "my_row-fluid"
+                  }*/
+                  if ( $tag == 'vc_column' || $tag == 'vc_column_inner' ) {
+                    $class_string = preg_replace( '/vc_col-sm-(\d{1,2})/', 'vc_span$1', $class_string ); // This will replace "vc_col-sm-%" with "my_col-sm-%"
+                  }
+                  return $class_string; // Important: you should always return modified or original $class_string
+                }
+            }
+        }
+        add_action('wp_enqueue_scripts', 'fount_vc_scripts', 10);//WAS 100
+        function vc_remove_wp_admin_bar_button() {
+            remove_action( 'admin_bar_menu', array( vc_frontend_editor(), 'adminBarEditLink' ), 1000 );
+        }
+        add_action( 'vc_after_init', 'vc_remove_wp_admin_bar_button' );
+        /*function vc_remove_frontend_links() {
+            vc_disable_frontend(); // this will disable frontend editor
+        }
+        add_action( 'vc_after_init', 'vc_remove_frontend_links' );*/
+    }
+    if (function_exists('wp_get_theme'))
+        $prk_theme = wp_get_theme();
+    else
+    {
+        $prk_theme->Version="1";
+    }
 
     /**
      * Include the TGM_Plugin_Activation class.
@@ -1069,7 +1164,17 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 'slug'                  => 'fount_framework',
                 'source'                => get_template_directory_uri() . '/external_plugins/fount_framework.zip', 
                 'required'              => true, // If false, the plugin is only 'recommended' instead of required
-                'version'               => '3.1', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
+                'version'               => '4.5', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
+                'force_activation'      => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch
+                'force_deactivation'    => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins
+                'external_url'          => '', // If set, overrides default API URL and points to an external URL
+            ),
+            array(
+                'name'                  => 'WPBakery Visual Composer',
+                'slug'                  => 'js_composer',
+                'source'                => get_template_directory_uri() . '/external_plugins/js_composer.zip', 
+                'required'              => true, // If false, the plugin is only 'recommended' instead of required
+                'version'               => '4.12', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
                 'force_activation'      => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch
                 'force_deactivation'    => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins
                 'external_url'          => '', // If set, overrides default API URL and points to an external URL
@@ -1079,26 +1184,24 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 'slug'                  => 'envato-wordpress-toolkit',
                 'source'                => get_template_directory_uri() . '/external_plugins/envato-wordpress-toolkit.zip', 
                 'required'              => false, // If false, the plugin is only 'recommended' instead of required
-                'version'               => '1.7.0', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
+                'version'               => '1.7.3', // E.g. 1.0.0. If set, the active plugin must be this version or higher, otherwise a notice is presented
                 'force_activation'      => false, // If true, plugin is activated upon theme activation and cannot be deactivated until theme switch
                 'force_deactivation'    => false, // If true, plugin is deactivated upon theme switch, useful for theme-specific plugins
                 'external_url'          => '', // If set, overrides default API URL and points to an external URL
             ),
         );
         $config = array(
-            'domain'            => 'fount_lang',            // Text domain - likely want to be the same as your theme.
+            'domain'            => 'fount',            // Text domain - likely want to be the same as your theme.
             'default_path'      => '',                          // Default absolute path to pre-packaged plugins
-            'parent_menu_slug'  => 'themes.php',                // Default parent menu slug
-            'parent_url_slug'   => 'themes.php',                // Default parent URL slug
             'menu'              => 'install-required-plugins',  // Menu slug
             'has_notices'       => true,                        // Show admin notices or not
             'is_automatic'      => true,                        // Automatically activate plugins after installation or not
             'message'           => '',                         // Message to output right before the plugins table
             'strings'           => array(
-                'page_title'                                => __( 'Install Required Plugins', 'fount_lang' ),
-                'menu_title'                                => __( 'Install Plugins', 'fount_lang' ),
-                'installing'                                => __( 'Installing Plugin: %s', 'fount_lang' ), // %1$s = plugin name
-                'oops'                                      => __( 'Something went wrong with the plugin API.', 'fount_lang' ),
+                'page_title'                                => __( 'Install Required Plugins', 'fount' ),
+                'menu_title'                                => __( 'Install Plugins', 'fount' ),
+                'installing'                                => __( 'Installing Plugin: %s', 'fount' ), // %1$s = plugin name
+                'oops'                                      => __( 'Something went wrong with the plugin API.', 'fount' ),
                 'notice_can_install_required'               => _n_noop( 'This theme requires the following plugin (self-hosted): %1$s.', 'This theme requires the following plugins (self-hosted): %1$s.' ), // %1$s = plugin name(s)
                 'notice_can_install_recommended'            => _n_noop( 'This theme recommends the following plugin (self-hosted): %1$s.', 'This theme recommends the following plugins (self-hosted): %1$s.' ), // %1$s = plugin name(s)
                 'notice_cannot_install'                     => _n_noop( 'Sorry, but you do not have the correct permissions to install the %s plugin. Contact the administrator of this site for help on getting the plugin installed.', 'Sorry, but you do not have the correct permissions to install the %s plugins. Contact the administrator of this site for help on getting the plugins installed.' ), // %1$s = plugin name(s)
@@ -1109,73 +1212,12 @@ include_once locate_template('/inc/custom-shortcodes.php');
                 'notice_cannot_update'                      => _n_noop( 'Sorry, but you do not have the correct permissions to update the %s plugin. Contact the administrator of this site for help on getting the plugin updated.', 'Sorry, but you do not have the correct permissions to update the %s plugins. Contact the administrator of this site for help on getting the plugins updated.' ), // %1$s = plugin name(s)
                 'install_link'                              => _n_noop( 'Begin installing plugin', 'Begin installing plugins' ),
                 'activate_link'                             => _n_noop( 'Activate installed plugin', 'Activate installed plugins' ),
-                'return'                                    => __( 'Return to Required Plugins Installer', 'fount_lang' ),
-                'plugin_activated'                          => __( 'Plugin activated successfully.', 'fount_lang' ),
-                'complete'                                  => __( 'All plugins installed and activated successfully. %s', 'fount_lang' ), // %1$s = dashboard link
+                'return'                                    => __( 'Return to Required Plugins Installer', 'fount' ),
+                'plugin_activated'                          => __( 'Plugin activated successfully.', 'fount' ),
+                'complete'                                  => __( 'All plugins installed and activated successfully. %s', 'fount' ), // %1$s = dashboard link
                 'nag_type'                                  => 'updated' // Determines admin notice type - can only be 'updated' or 'error'
             )
         );
         tgmpa( $plugins, $config );
-    }
-    if(function_exists('vc_set_as_theme')) vc_set_as_theme();
-    if (function_exists('wp_get_theme'))
-        $prk_theme = wp_get_theme();
-    else
-    {
-        $prk_theme->Version="1";
-    }
-    //OUTPUT ERRORS ON BETA VERSIONS
-    if (version_compare( $prk_theme->Version, 1, '<' ))
-    {
-        function admin_alert_errors($errno, $errstr, $errfile, $errline) 
-        {
-            $errorType = array (
-                 E_ERROR                => 'ERROR',
-                 E_CORE_ERROR           => 'CORE ERROR',
-                 E_COMPILE_ERROR        => 'COMPILE ERROR',
-                 E_USER_ERROR           => 'USER ERROR',
-                 E_RECOVERABLE_ERROR  => 'RECOVERABLE ERROR',
-                 E_WARNING              => 'WARNING',
-                 E_CORE_WARNING         => 'CORE WARNING',
-                 E_COMPILE_WARNING      => 'COMPILE WARNING',
-                 E_USER_WARNING         => 'USER WARNING',
-                 E_NOTICE               => 'NOTICE',
-                 E_USER_NOTICE          => 'USER NOTICE',
-                 E_DEPRECATED           => 'DEPRECATED',
-                 E_USER_DEPRECATED      => 'USER_DEPRECATED',
-                 E_PARSE                => 'PARSING ERROR'
-            );
-             
-            if (array_key_exists($errno, $errorType)) {
-                $errname = $errorType[$errno];
-            } else {
-                $errname = 'UNKNOWN ERROR';
-            }
-            ob_start();
-            ?>
-            <div class="error">
-              <p>
-                <strong><?php echo $errname; ?> 
-                    Error: [<?php echo $errno; ?>] 
-                </strong>
-                <?php echo $errstr; ?>
-                <strong> 
-                    <?php echo $errfile; ?>
-                </strong> 
-                on line 
-                <strong>
-                    <?php echo $errline; ?>
-                </strong>
-              <p/>
-            </div>
-            <?php
-            echo ob_get_clean();
-        }
-        set_error_handler("admin_alert_errors", E_ERROR ^ E_CORE_ERROR ^ E_COMPILE_ERROR ^ E_USER_ERROR ^ E_RECOVERABLE_ERROR ^  E_WARNING ^  E_CORE_WARNING ^ E_COMPILE_WARNING ^ E_USER_WARNING ^ E_NOTICE ^  E_USER_NOTICE ^ E_DEPRECATED    ^  E_USER_DEPRECATED    ^  E_PARSE );
-    }
-
-    add_filter( 'gform_submit_button_1', 'form_submit_button', 10, 2 );
-    function form_submit_button( $button, $form ) {
-        return "<button class='button cta' id='gform_submit_button_{$form['id']}'><span>Sign Up!</span></button>";
     }
 ?>

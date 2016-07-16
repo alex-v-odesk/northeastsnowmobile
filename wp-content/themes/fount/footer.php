@@ -19,7 +19,7 @@
                     $footer_sidebar_id='sidebar-footer';
                     if (get_field('footer_sidebar_id')!="")
                         $footer_sidebar_id=get_field('footer_sidebar_id');
-                    if ((is_single() && isset($prk_fount_options['fount_active_skin'])) || (isset($prk_fount_options['fount_active_skin']) && $prk_fount_options['fount_active_skin']=="fount_multipage_skin"))
+                    if (isset($prk_fount_options['fount_active_skin']) && (is_single() || $prk_fount_options['fount_active_skin']=="fount_multipage_skin" || $prk_fount_options['fount_active_skin']=="fount_shop_skin"))
                     {
                         $footer_sidebar_id=$prk_fount_options['fount_current_footer'];
                     }
@@ -36,20 +36,12 @@
                         <div id="prk_footer" class="container<?php echo $extra_class; ?>" data-layout="<?php echo $prk_fount_options['widgets_nr']; ?>">
                             <div id="footer_revealer">
                                 <?php 
-                                    if ($prk_fount_options['footer_extra']=="1")
+                                    if ($prk_fount_options['bottom_page']=="1")
                                     {
                                         ?>
-                                        <div id="before_widgets">
-                                            <div class="columns small-12 prk_inner_block small-centered">
-                                                <?php 
-                                                    if ($prk_fount_options['footer_extra_image']['url']!="")
-                                                    {
-                                                        echo '<div id="footer_extra_image">'.fount_retinize($prk_fount_options['footer_extra_image']).'</div>';
-                                                    }
-                                                    echo '<div id="footer_extra_content">'.do_shortcode($prk_fount_options['footer_extra_content']).'</div>';
-                                                ?>
+                                            <div id="paged_footer">
+                                            <?php echo do_shortcode(get_post_field('post_content', $prk_fount_options['bottom_page_id'], 'raw' )); ?>
                                             </div>
-                                        </div>
                                         <?php
                                     } 
                                     if ($prk_fount_options['bottom_sidebar']=="1" && is_active_sidebar($footer_sidebar_id))
@@ -98,8 +90,7 @@
             <div class="clearfix"></div>
         </div>
         <?php 
-            if (isset($prk_fount_options['ganalytics_text']) && $prk_fount_options['ganalytics_text']!="")
-            {
+            if (isset($prk_fount_options['ganalytics_text']) && $prk_fount_options['ganalytics_text']!="") {
                 echo $prk_fount_options['ganalytics_text'];
             }
             wp_footer(); 

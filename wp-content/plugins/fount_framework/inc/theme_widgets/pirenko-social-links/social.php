@@ -15,14 +15,12 @@
 		register_widget( 'pirenko_social_widget' );
 	}
 	//CREATE CLASS TO CONTROL EVERYTHING
-	class pirenko_social_widget extends WP_Widget 
-	{
+	class pirenko_social_widget extends WP_Widget {
 		//SET UP WIDGET
-		function pirenko_social_widget() 
-		{
+		function __construct() {
 			$widget_ops = array( 'classname' => 'pirenko-social-widget', 'description' => ('A widget to add social network links to your website.') );
 			$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'pirenko-social-widget' );
-			$this->WP_Widget( 'pirenko-social-widget', __('Fount : Social Links ', 'fount_lang'), $widget_ops, $control_ops );
+			parent::__construct( 'pirenko-social-widget', __('Fount : Social Links ', 'fount'), $widget_ops, $control_ops );
 		}
 
 		
@@ -43,124 +41,124 @@
 					'img_title' => __('Behance', 'astro_lang')
 				),
 				'digg' => array(
-					'title' => __('Digg URL', 'fount_lang'),
+					'title' => __('Digg URL', 'fount'),
 					'img' => sprintf( '%sdigg.png', '' ),
 					'img_widget' => sprintf( '%sdigg.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'digg',
 					'img_color' => '#24578e',
-					'img_title' => __('Digg', 'fount_lang')
+					'img_title' => __('Digg', 'fount')
 				),
 				'dribbble' => array(
-					'title' => __('Dribbble URL', 'fount_lang'),
+					'title' => __('Dribbble URL', 'fount'),
 					'img' => sprintf( '%sdribbble.png', '' ),
 					'img_widget' => sprintf( '%sdribbble.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'dribbble',
 					'img_color' => '#ea4c89',
-					'img_title' => __('Dribbble', 'fount_lang')
+					'img_title' => __('Dribbble', 'fount')
 				),
 				'facebook' => array(
-					'title' => __('Facebook URL', 'fount_lang'),
+					'title' => __('Facebook URL', 'fount'),
 					'img' => sprintf( '%sfacebook.png', '' ),
 					'img_widget' => sprintf( '%sfacebook.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'facebook',
 					'img_color' => '#1f69b3',
-					'img_title' => __('Facebook', 'fount_lang')
+					'img_title' => __('Facebook', 'fount')
 				),
 				'flickr' => array(
-					'title' => __('Flickr URL', 'fount_lang'),
+					'title' => __('Flickr URL', 'fount'),
 					'img' => sprintf( '%sflickr.png', '' ),
 					'img_widget' => sprintf( '%sflickr.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'flickr',
 					'img_color' => '#fd0083',
-					'img_title' => __('Flickr', 'fount_lang')
+					'img_title' => __('Flickr', 'fount')
 				),
 				'google_plus' => array(
-					'title' => __('Google Plus URL', 'fount_lang'),
+					'title' => __('Google Plus URL', 'fount'),
 					'img' => sprintf( '%sgoogle_plus.png', '' ),
 					'img_widget' => sprintf( '%sgoogle_plus.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'google-plus',
 					'img_color' => '#333333',
-					'img_title' => __('Google Plus', 'fount_lang')
+					'img_title' => __('Google Plus', 'fount')
 				),
 				'instagram' => array(
-					'title' => __('Instagram URL', 'fount_lang'),
+					'title' => __('Instagram URL', 'fount'),
 					'img' => sprintf( '%sinstagram.png', '' ),
 					'img_widget' => sprintf( '%sinstagram.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'instagram',
 					'img_color' => '#3f729b',
-					'img_title' => __('Instagram', 'fount_lang')
+					'img_title' => __('Instagram', 'fount')
 				),
 				'linkedin' => array(
-					'title' => __('Linkedin URL', 'fount_lang'),
+					'title' => __('Linkedin URL', 'fount'),
 					'img' => sprintf( '%slinkedin.png', '' ),
 					'img_widget' => sprintf( '%slinkedin.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'linkedin',
 					'img_color' => '#1a7696',
-					'img_title' => __('Linkedin', 'fount_lang')
+					'img_title' => __('Linkedin', 'fount')
 				),
 				'pinterest' => array(
-					'title' => __('Pinterest URL', 'fount_lang'),
+					'title' => __('Pinterest URL', 'fount'),
 					'img' => sprintf( '%spinterest.png', '' ),
 					'img_widget' => sprintf( '%spinterest.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'pinterest',
 					'img_color' => '#df2126',
-					'img_title' => __('Pinterest', 'fount_lang')
+					'img_title' => __('Pinterest', 'fount')
 				),
 				'skype' => array(
-					'title' => __('Skype URL', 'fount_lang'),
+					'title' => __('Skype URL', 'fount'),
 					'img' => sprintf( '%sskype.png', '' ),
 					'img_widget' => sprintf( '%sskype.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'skype',
 					'img_color' => '#28a9ed',
-					'img_title' => __('Skype', 'fount_lang')
+					'img_title' => __('Skype', 'fount')
 				),
 				'soundcloud' => array(
-					'title' => __('Soundlcloud URL', 'fount_lang'),
+					'title' => __('Soundlcloud URL', 'fount'),
 					'img' => sprintf( '%ssoundcloud.png', '' ),
 					'img_widget' => sprintf( '%ssoundcloud.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'soundcloud',
 					'img_color' => '#ef4e23',
-					'img_title' => __('Soundlcloud', 'fount_lang')
+					'img_title' => __('Soundlcloud', 'fount')
 				),
 				'tumblr' => array(
-					'title' => __('Tumblr URL', 'fount_lang'),
+					'title' => __('Tumblr URL', 'fount'),
 					'img' => sprintf( '%stumblr.png', '' ),
 					'img_widget' => sprintf( '%stumblr.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'tumblr',
 					'img_color' => '#374a61',
-					'img_title' => __('Tumblr', 'fount_lang')
+					'img_title' => __('Tumblr', 'fount')
 				),
 				'twitter' => array(
-					'title' => __('Twitter URL', 'fount_lang'),
+					'title' => __('Twitter URL', 'fount'),
 					'img' => sprintf( '%stwitter.png', '' ),
 					'img_widget' => sprintf( '%stwitter.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'twitter',
 					'img_color' => '#43b3e5',
-					'img_title' => __('Twitter', 'fount_lang')
+					'img_title' => __('Twitter', 'fount')
 				),
 				'vimeo' => array(
-					'title' => __('Vimeo URL', 'fount_lang'),
+					'title' => __('Vimeo URL', 'fount'),
 					'img' => sprintf( '%svimeo.png', '' ),
 					'img_widget' => sprintf( '%svimeo.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'vimeo-square',
 					'img_color' => '#4ab2d9',
-					'img_title' => __('Vimeo', 'fount_lang')
+					'img_title' => __('Vimeo', 'fount')
 				),
 				'youtube' => array(
-					'title' => __('YouTube URL', 'fount_lang'),
+					'title' => __('YouTube URL', 'fount'),
 					'img' => sprintf( '%syoutube.png', '' ),
 					'img_widget' => sprintf( '%syoutube.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'youtube',
 					'img_color' => '#fb2d39',
-					'img_title' => __('Youtube', 'fount_lang')
+					'img_title' => __('Youtube', 'fount')
 				),
 				'feedburner' => array(
-					'title' => __('RSS/Feedburner URL', 'fount_lang'),
+					'title' => __('RSS/Feedburner URL', 'fount'),
 					'img' => sprintf( '%srss.png', '' ),
 					'img_widget' => sprintf( '%srss.png', $this->imgs_url . esc_attr( $instance['icon_set'] ) ),
 					'img_class' => 'rss',
 					'img_color' => '#ed8333',
-					'img_title' => __('RSS Feed', 'fount_lang')
+					'img_title' => __('RSS Feed', 'fount')
 				),	
 			);
 		}
@@ -275,11 +273,11 @@
 			$instance['tips']=$tips;
 			?>
 			<p>
-				<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'fount_lang'); ?>:</label><br />
+				<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'fount'); ?>:</label><br />
 				<input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $instance['title']; ?>" class="pct_89" />
 			</p>
             <p>
-				<label for="<?php echo $this->get_field_id('pir_icons'); ?>"><?php _e('Icons style', 'fount_lang'); ?>:</label><br />
+				<label for="<?php echo $this->get_field_id('pir_icons'); ?>"><?php _e('Icons style', 'fount'); ?>:</label><br />
 				<select id="<?php echo $this->get_field_id('pir_icons'); ?>" name="<?php echo $this->get_field_name('pir_icons'); ?>" class="pct_69">
 					<?php    
 							if ( $instance['pir_icons'] == 'colored' ) // Make default first in list

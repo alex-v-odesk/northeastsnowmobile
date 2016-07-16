@@ -18,7 +18,7 @@
       </header>
       <div class="comment_floated">
       	<div class="comments_meta_wrapper header_font">
-        <?php printf(__('<div class="zero_color author_name small-12 prk_heavier_700">%s</div>', 'fount_lang'), get_comment_author_link()); ?>
+        <?php printf(__('<div class="zero_color author_name small-12 prk_heavier_700">%s</div>', 'fount'), get_comment_author_link()); ?>
 	        <time datetime="<?php echo comment_date('c'); ?>" class="comment_date left_floated small_headings_color prk_heavier_500">
 					<?php 
 						echo get_comment_date(); 
@@ -34,7 +34,7 @@
       <?php if ($comment->comment_approved == '0') { ?>
         <div class="alert alert-block fade in">
           <a class="close" data-dismiss="alert">&times;</a>
-          <p><?php _e('Your comment is awaiting moderation.', 'fount_lang'); ?></p>
+          <p><?php _e('Your comment is awaiting moderation.', 'fount'); ?></p>
         </div>
       <?php } ?>
       <section class="comment comment_text left_floated">
@@ -49,7 +49,7 @@
   <div id="comments">
     <div class="alert alert-block fade in">
       <a class="close" data-dismiss="alert">&times;</a>
-      <p><?php _e('This post is password protected. Enter the password to view comments.', 'fount_lang'); ?></p>
+      <p><?php _e('This post is password protected. Enter the password to view comments.', 'fount'); ?></p>
     </div>
   </div>
 <?php
@@ -72,8 +72,8 @@
 
     <?php if (get_comment_pages_count() > 1 && get_option('page_comments')) { // are there comments to navigate through ?>
       <nav id="comments-nav" class="pager">
-        <div class="previous"><?php previous_comments_link(__('&larr; Older comments', 'fount_lang')); ?></div>
-        <div class="next"><?php next_comments_link(__('Newer comments &rarr;', 'fount_lang')); ?></div>
+        <div class="previous"><?php previous_comments_link(__('&larr; Older comments', 'fount')); ?></div>
+        <div class="next"><?php next_comments_link(__('Newer comments &rarr;', 'fount')); ?></div>
       </nav>
 
     <?php } // check for comment navigation ?>
@@ -122,7 +122,7 @@
 								?>
 								<p><?php printf(('Logged in as <a href="%s/wp-admin/profile.php" class="not_zero_color">%s</a>.'), get_option('siteurl'), $user_identity); ?> 
 									<a href="<?php echo wp_logout_url(get_permalink()); ?>" title="<?php ('Log out of this account'); ?>" class="not_zero_color">
-										<?php _e('Log out &raquo;', 'fount_lang'); ?>
+										<?php _e('Log out &raquo;', 'fount'); ?>
 									</a>
 								</p>
 								<?php 

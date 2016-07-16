@@ -1,0 +1,43 @@
+{
+    "name": "funkyrabbitmedia",
+    "version": "2.0.0",
+    "description": "Vital's WordPress core - Now with 100% more grunt",
+    "main": "index.js",
+    "scripts": {
+        "test": "grunt test",
+        "grunt": "grunt"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mavedisian/Funky-Rabbit-Media"
+    },
+    "keywords": [
+        "WordPress",
+        "grunt",
+        "vital"
+    ],
+    "author": "Vital Design",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/VitalDevTeam/Skeletor/issues"
+    },
+    "homepage": "https://github.com/VitalDevTeam/Skeletor",
+    "devDependencies": {
+        "autoprefixer": "^6.3.6",
+        "css-mqpacker": "^5.0.1",
+        "grunt": "^1.0.1",
+        "grunt-browser-sync": "^2.2.0",
+        "grunt-contrib-clean": "^1.0.0",
+        "grunt-contrib-concat": "^1.0.1",
+        "grunt-contrib-imagemin": "^1.0.1",
+        "grunt-contrib-jshint": "^1.0.0",
+        "grunt-contrib-sass": "^1.0.0",
+        "grunt-contrib-watch": "^1.0.0",
+        "grunt-modernizr": "^1.0.2",
+        "grunt-newer": "^1.2.0",
+        "grunt-postcss": "^0.8.0",
+        "grunt-shell": "^1.3.0",
+        "grunt-timer": "^0.6.0",
+        "load-grunt-tasks": "^3.5.0"
+    }
+}

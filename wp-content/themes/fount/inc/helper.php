@@ -1,521 +1,539 @@
 <?php
-//FONTS - 89 IS NEXT
+//FONTS - 92 IS NEXT
     $prk_select_font_options = array(
         '9' => array(
             'value' => 'Acme',
             'hosted'=> 'google',
             'css' => 'Acme',
-            'label' => __( 'Acme', 'fount_lang' )
+            'label' => __( 'Acme', 'fount' )
         ),
         '4' => array(
             'value' => 'Alegreya:400italic,700italic,400,700',
             'hosted'=> 'google',
             'css' => 'Alegreya',
-            'label' => __( 'Alegreya', 'fount_lang' )
+            'label' => __( 'Alegreya', 'fount' )
         ),
         '88' => array(
             'value' => 'Alegreya+SC:400,400italic,700,700italic&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Alegreya SC', serif",
-            'label' => __( 'Alegreya SC', 'fount_lang' )
+            'label' => __( 'Alegreya SC', 'fount' )
         ),
         '16' => array(
             'value' => 'Anton',
             'hosted'=> 'google',
             'css' => "'Anton', sans-serif",
-            'label' => __( 'Anton', 'fount_lang' )
+            'label' => __( 'Anton', 'fount' )
         ),
         '14' => array(
             'value' => 'Arial',
             'hosted'=> 'self',
             'css' => 'Arial',
-            'label' => __( 'Arial', 'fount_lang' )
+            'label' => __( 'Arial', 'fount' )
         ),
         '72' => array(
             'value' => 'Arizonia',
             'hosted'=> 'google',
             'css' => "'Arizonia', cursive",
-            'label' => __( 'Arizonia', 'fount_lang' )
+            'label' => __( 'Arizonia', 'fount' )
         ),
         '5' => array(
-            'value' => 'Arvo',
+            'value' => 'Arvo:400,700,400italic,700italic',
             'hosted'=> 'google',
             'css' => 'Arvo',
-            'label' => __( 'Arvo', 'fount_lang' )
+            'label' => __( 'Arvo', 'fount' )
         ),
         '10' => array(
             'value' => 'Asap',
             'hosted'=> 'google',
             'css' => 'Asap',
-            'label' => __( 'Asap', 'fount_lang' )
+            'label' => __( 'Asap', 'fount' )
         ),
         '7' => array(
             'value' => 'Asul:400,700',
             'hosted'=> 'google',
             'css' => 'Asul',
-            'label' => __( 'Asul', 'fount_lang' )
+            'label' => __( 'Asul', 'fount' )
         ),
         '43' => array(
             'value' => 'Average+Sans',
             'hosted'=> 'google',
             'css' => "'Average Sans', sans-serif",
-            'label' => __( 'Average Sans', 'fount_lang' )
+            'label' => __( 'Average Sans', 'fount' )
         ),
         '84' => array(
             'value' => 'Berkshire+Swash',
             'hosted'=> 'google',
             'css' => "'Berkshire Swash', cursive",
-            'label' => __( 'Berkshire Swash', 'fount_lang' )
+            'label' => __( 'Berkshire Swash', 'fount' )
         ),
         '42' => array(
             'value' => 'Bitter:400,700,400italic',
             'hosted'=> 'google',
             'css' => "'Bitter', serif",
-            'label' => __( 'Bitter', 'fount_lang' )
+            'label' => __( 'Bitter', 'fount' )
         ),
         '25' => array(
             'value' => 'Bree+Serif',
             'hosted'=> 'google',
             'css' => "'Bree Serif', serif",
-            'label' => __( 'Bree Serif', 'fount_lang' )
+            'label' => __( 'Bree Serif', 'fount' )
         ),
         '11' => array(
             'value' => 'Cabin:400,600,700',
             'hosted'=> 'google',
             'css' => "'Cabin', sans-serif",
-            'label' => __( 'Cabin', 'fount_lang' )
+            'label' => __( 'Cabin', 'fount' )
         ),
         '70' => array(
             'value' => 'Cabin+Condensed:400,600,700',
             'hosted'=> 'google',
             'css' => "'Cabin Condensed', sans-serif",
-            'label' => __( 'Cabin Condensed', 'fount_lang' )
+            'label' => __( 'Cabin Condensed', 'fount' )
         ),
         '48' => array(
             'value' => 'Changa+One:400,400italic',
             'hosted'=> 'google',
             'css' => "'Changa One', cursive;",
-            'label' => __( 'Changa One', 'fount_lang' )
+            'label' => __( 'Changa One', 'fount' )
         ),
         '83' => array(
             'value' => 'Ceviche+One',
             'hosted'=> 'google',
             'css' => "'Ceviche One', cursive;",
-            'label' => __( 'Ceviche One', 'fount_lang' )
+            'label' => __( 'Ceviche One', 'fount' )
         ),
         '61' => array(
             'value' => 'Cinzel:400,700,900',
             'hosted'=> 'google',
             'css' => "'Cinzel', serif",
-            'label' => __( 'Cinzel', 'fount_lang' )
+            'label' => __( 'Cinzel', 'fount' )
         ),
         '29' => array(
             'value' => 'courier_new',
             'hosted'=> 'self',
             'css' => "'Courier New', Courier, monospace",
-            'label' => __( 'Courier New', 'fount_lang' )
+            'label' => __( 'Courier New', 'fount' )
         ),
         '24' => array(
             'value' => 'Cousine:400,700',
             'hosted'=> 'google',
             'css' => "'Cousine', sans-serif",
-            'label' => __( 'Cousine', 'fount_lang' )
+            'label' => __( 'Cousine', 'fount' )
         ),
         '51' => array(
             'value' => 'Coustard',
             'hosted'=> 'google',
             'css' => "'Coustard', serif",
-            'label' => __( 'Coustard', 'fount_lang' )
+            'label' => __( 'Coustard', 'fount' )
         ),
         '56' => array(
             'value' => 'Crimson+Text:400,400italic,600,600italic',
             'hosted'=> 'google',
             'css' => "'Crimson Text', serif",
-            'label' => __( 'Crimson Text', 'fount_lang' )
+            'label' => __( 'Crimson Text', 'fount' )
         ),
         '81' => array(
             'value' => 'Cutive+Mono&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Cutive Mono', serif",
-            'label' => __( 'Cutive Mono', 'fount_lang' )
+            'label' => __( 'Cutive Mono', 'fount' )
         ),
         '22' => array(
             'value' => 'Dosis:400,500,600,700',
             'hosted'=> 'google',
             'css' => "'Dosis', sans-serif",
-            'label' => __( 'Dosis', 'fount_lang' )
+            'label' => __( 'Dosis', 'fount' )
         ),
         '1' => array(
             'value' => 'Droid+Sans:400,700',
             'css' => 'Droid Sans',
             'hosted'=> 'google',
-            'label' => __( 'Droid Sans', 'fount_lang' )
+            'label' => __( 'Droid Sans', 'fount' )
         ),
         '8' => array(
             'value' => 'Droid+Serif:400,700,400italic,700italic',
             'css' => 'Droid Serif',
             'hosted'=> 'google',
-            'label' => __( 'Droid Serif', 'fount_lang' )
+            'label' => __( 'Droid Serif', 'fount' )
         ),
         '73' => array(
             'value' => 'Dr+Sugiyama',
             'hosted'=> 'google',
             'css' => "'Dr Sugiyama', cursive",
-            'label' => __( 'Dr Sugiyama', 'fount_lang' )
+            'label' => __( 'Dr Sugiyama', 'fount' )
         ),
         '18' => array(
             'value' => 'Economica:700',
             'hosted'=> 'google',
             'css' => "'Economica', sans-serif",
-            'label' => __( 'Economica', 'fount_lang' )
+            'label' => __( 'Economica', 'fount' )
         ),
         '79' => array(
             'value' => 'Engagement',
             'hosted'=> 'google',
             'css' => "'Engagement', cursive",
-            'label' => __( 'Engagement', 'fount_lang' )
+            'label' => __( 'Engagement', 'fount' )
         ),
         '17' => array(
             'value' => 'Exo:400,500,600,700,400italic&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Exo', sans-serif",
-            'label' => __( 'Exo Sans', 'fount_lang' )
+            'label' => __( 'Exo Sans', 'fount' )
         ),
         '65' => array(
             'value' => 'Exo+2:400,600,700,400italic,500&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Exo 2', sans-serif",
-            'label' => __( 'Exo 2', 'fount_lang' )
+            'label' => __( 'Exo 2', 'fount' )
         ),
         '69' => array(
             'value' => 'Expletus+Sans:400,500,600,700',
             'hosted'=> 'google',
             'css' => "'Expletus Sans', cursive",
-            'label' => __( 'Expletus Sans', 'fount_lang' )
+            'label' => __( 'Expletus Sans', 'fount' )
         ),
         '15' => array(
             'value' => 'Francois+One',
             'hosted'=> 'google',
             'css' => "'Francois One', sans-serif",
-            'label' => __( 'Francois One', 'fount_lang' )
+            'label' => __( 'Francois One', 'fount' )
         ),
         '74' => array(
             'value' => 'Great+Vibes&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Great Vibes', cursive;",
-            'label' => __( 'Great Vibes', 'fount_lang' )
+            'label' => __( 'Great Vibes', 'fount' )
         ),
         '30' => array(
             'value' => 'helvetica',
             'hosted'=> 'self',
             'css' => "Helvetica, arial, sans-serif",
-            'label' => __( 'Helvetica', 'fount_lang' )
+            'label' => __( 'Helvetica', 'fount' )
         ),
         '86' => array(
             'value' => 'Imprima',
             'hosted'=> 'self',
             'css' => "'Imprima', sans-serif",
-            'label' => __( 'Helvetica', 'fount_lang' )
+            'label' => __( 'Helvetica', 'fount' )
         ),
         '52' => array(
             'value' => 'Josefin+Sans:400,600,700',
             'hosted'=> 'google',
             'css' => "'Josefin Sans', sans-serif",
-            'label' => __( 'Josefin Sans', 'fount_lang' )
+            'label' => __( 'Josefin Sans', 'fount' )
         ),
         '63' => array(
             'value' => 'Josefin+Slab:400,700,400italic,700italic',
             'hosted'=> 'google',
             'css' => "'Josefin Slab', serif",
-            'label' => __( 'Josefin Slab', 'fount_lang' )
+            'label' => __( 'Josefin Slab', 'fount' )
         ),
         '26' => array(
             'value' => 'Lato:400,700,900,400italic',
             'hosted'=> 'google',
             'css' => "'Lato', sans-serif",
-            'label' => __( 'Lato', 'fount_lang' )
+            'label' => __( 'Lato', 'fount' )
         ),
         '59' => array(
             'value' => 'Lekton:400,700,400italic&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Lekton', sans-serif",
-            'label' => __( 'Lekton', 'fount_lang' )
+            'label' => __( 'Lekton', 'fount' )
         ),
         '32' => array(
             'value' => 'Lora',
             'hosted'=> 'google',
             'css' => "'Lora', serif",
-            'label' => __( 'Lora', 'fount_lang' )
+            'label' => __( 'Lora', 'fount' )
         ),
         '82' => array(
             'value' => 'Love+Ya+Like+A+Sister',
             'hosted'=> 'google',
             'css' => "'Love Ya Like A Sister', cursive",
-            'label' => __( 'Love Ya Like A Sister', 'fount_lang' )
+            'label' => __( 'Love Ya Like A Sister', 'fount' )
         ),
         '46' => array(
             'value' => 'Maven+Pro:400,700',
             'hosted'=> 'google',
             'css' => "'Maven Pro', sans-serif",
-            'label' => __( 'Maven Pro', 'fount_lang' )
+            'label' => __( 'Maven Pro', 'fount' )
+        ),
+        '91' => array(
+            'value' => 'Megrim',
+            'hosted'=> 'google',
+            'css' => "'Megrim', cursive",
+            'label' => __( 'Megrim', 'fount' )
         ),
         '54' => array(
             'value' => 'Merriweather:400,300,700',
             'hosted'=> 'google',
             'css' => "'Merriweather', serif",
-            'label' => __( 'Merriweather', 'fount_lang' )
+            'label' => __( 'Merriweather', 'fount' )
         ),
         '67' => array(
             'value' => 'Merriweather+Sans:400,700italic,700,400italic&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Merriweather Sans', sans-serif",
-            'label' => __( 'Merriweather Sans', 'fount_lang' )
+            'label' => __( 'Merriweather Sans', 'fount' )
+        ),
+        '90' => array(
+            'value' => 'Montaga',
+            'hosted'=> 'google',
+            'css' => "'Montaga', serif",
+            'label' => __( 'Montaga', 'fount' )
         ),
         '31' => array(
             'value' => 'Montserrat:400,700',
             'hosted'=> 'google',
             'css' => "'Montserrat', sans-serif",
-            'label' => __( 'Montserrat', 'fount_lang' )
+            'label' => __( 'Montserrat', 'fount' )
         ),
         '37' => array(
             'value' => 'Muli:400,400italic',
             'hosted'=> 'google',
             'css' => "'Muli', sans-serif",
-            'label' => __( 'Muli', 'fount_lang' )
+            'label' => __( 'Muli', 'fount' )
         ),
         '68' => array(
             'value' => 'Neuton:300,400,700,400italic&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Neuton', serif",
-            'label' => __( 'Neuton', 'fount_lang' )
+            'label' => __( 'Neuton', 'fount' )
         ),
         '50' => array(
             'value' => 'News+Cycle:400,700',
             'hosted'=> 'google',
             'css' => "'News Cycle', sans-serif",
-            'label' => __( 'News Cycle', 'fount_lang' )
+            'label' => __( 'News Cycle', 'fount' )
         ),
         '71' => array(
             'value' => 'Niconne',
             'hosted'=> 'google',
             'css' => "'Niconne', cursive",
-            'label' => __( 'Niconne', 'fount_lang' )
+            'label' => __( 'Niconne', 'fount' )
         ),
         '60' => array(
             'value' => 'Nobile:400,400italic,700,700italic',
             'hosted'=> 'google',
             'css' => "'Nobile', sans-serif",
-            'label' => __( 'Nobile', 'fount_lang' )
+            'label' => __( 'Nobile', 'fount' )
         ),
         '0' => array(
             'value' => 'Open+Sans:400italic,600italic,700italic,400,600,700',
             'css' => 'Open Sans',
             'hosted'=> 'google',
-            'label' => __( 'Open Sans', 'fount_lang' )
+            'label' => __( 'Open Sans', 'fount' )
         ),
         '47' => array(
             'value' => 'Open+Sans+Condensed:300,700,300italic',
             'hosted'=> 'google',
             'css' => "'Open Sans Condensed', sans-serif",
-            'label' => __( 'Open Sans Condensed', 'fount_lang' )
+            'label' => __( 'Open Sans Condensed', 'fount' )
         ),
         '45' => array(
             'value' => 'Orienta',
             'hosted'=> 'google',
             'css' => "'Orienta', sans-serif",
-            'label' => __( 'Orienta', 'fount_lang' )
+            'label' => __( 'Orienta', 'fount' )
         ),
         '13' => array(
             'value' => 'Oswald:700,400,300',
             'hosted'=> 'google',
             'css' => "'Oswald', sans-serif",
-            'label' => __( 'Oswald', 'fount_lang' )
+            'label' => __( 'Oswald', 'fount' )
         ),
         '36' => array(
             'value' => 'Overlock+SC',
             'hosted'=> 'google',
             'css' => "'Overlock SC', cursive",
-            'label' => __( 'Overlock SC', 'fount_lang' )
+            'label' => __( 'Overlock SC', 'fount' )
         ),
         '64' => array(
             'value' => 'Oxygen:300,400,700',
             'hosted'=> 'google',
             'css' => "'Oxygen', sans-serif",
-            'label' => __( 'Oxygen', 'fount_lang' )
+            'label' => __( 'Oxygen', 'fount' )
         ),
         '33' => array(
             'value' => 'Oxygen+Mono',
             'hosted'=> 'google',
             'css' => "'Oxygen Mono', sans-serif",
-            'label' => __( 'Oxygen Mono', 'fount_lang' )
+            'label' => __( 'Oxygen Mono', 'fount' )
         ),
         '75' => array(
             'value' => 'Pacifico',
             'hosted'=> 'google',
             'css' => "'Pacifico', cursive",
-            'label' => __( 'Pacifico', 'fount_lang' )
+            'label' => __( 'Pacifico', 'fount' )
         ),
         '41' => array(
             'value' => 'Patua+One',
             'hosted'=> 'google',
             'css' => "'Patua One', cursive",
-            'label' => __( 'Patua One', 'fount_lang' )
+            'label' => __( 'Patua One', 'fount' )
         ),
         '76' => array(
             'value' => 'Playball&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Playball', cursive",
-            'label' => __( 'Playball', 'fount_lang' )
+            'label' => __( 'Playball', 'fount' )
         ),
         '39' => array(
             'value' => 'Pompiere',
             'hosted'=> 'google',
             'css' => "'Pompiere', cursive",
-            'label' => __( 'Pompiere', 'fount_lang' )
+            'label' => __( 'Pompiere', 'fount' )
         ),
         '2' => array(
             'value' => 'PT+Sans:400,700,400italic,700italic',
             'hosted'=> 'google',
             'css' => "'PT Sans', sans-serif",
-            'label' => __( 'PT Sans', 'fount_lang' )
+            'label' => __( 'PT Sans', 'fount' )
         ),
         '87' => array(
             'value' => 'PT+Serif:400,700&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'PT Serif', serif",
-            'label' => __( 'PT Serif', 'fount_lang' )
+            'label' => __( 'PT Serif', 'fount' )
         ),
         '28' => array(
             'value' => 'PT+Sans+Narrow',
             'hosted'=> 'google',
             'css' => "'PT Sans Narrow', sans-serif",
-            'label' => __( 'PT Sans Narrow', 'fount_lang' )
+            'label' => __( 'PT Sans Narrow', 'fount' )
         ),
         '23' => array(
             'value' => 'Questrial',
             'hosted'=> 'google',
             'css' => "'Questrial', sans-serif",
-            'label' => __( 'Questrial', 'fount_lang' )
+            'label' => __( 'Questrial', 'fount' )
         ),
         '35' => array(
             'value' => 'Quicksand:400,700',
             'hosted'=> 'google',
             'css' => "'Quicksand', sans-serif",
-            'label' => __( 'Quicksand', 'fount_lang' )
+            'label' => __( 'Quicksand', 'fount' )
         ),
         '34' => array(
             'value' => 'Raleway:300,400,500,600,700',
             'hosted'=> 'google',
             'css' => "'Raleway', sans-serif",
-            'label' => __( 'Raleway', 'fount_lang' )
+            'label' => __( 'Raleway', 'fount' )
         ),
         '57' => array(
             'value' => 'Rambla:400,700,400italic,700italic&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Rambla', sans-serif",
-            'label' => __( 'Rambla', 'fount_lang' )
+            'label' => __( 'Rambla', 'fount' )
         ),
         '62' => array(
             'value' => 'Roboto:400,700,400italic,700italic',
             'hosted'=> 'google',
             'css' => "'Roboto', sans-serif",
-            'label' => __( 'Roboto', 'fount_lang' )
+            'label' => __( 'Roboto', 'fount' )
         ),
         '55' => array(
             'value' => 'Roboto+Condensed:400italic,700italic,400,700&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Roboto Condensed', sans-serif",
-            'label' => __( 'Roboto Condensed', 'fount_lang' )
+            'label' => __( 'Roboto Condensed', 'fount' )
         ),
         '66' => array(
             'value' => 'Roboto+Slab:400,700',
             'hosted'=> 'google',
             'css' => "'Roboto Slab', serif",
-            'label' => __( 'Roboto Slab', 'fount_lang' )
+            'label' => __( 'Roboto Slab', 'fount' )
         ),
         '53' => array(
             'value' => 'Rokkitt:400,700',
             'hosted'=> 'google',
             'css' => "'Rokkitt', serif",
-            'label' => __( 'Rokkit', 'fount_lang' )
+            'label' => __( 'Rokkit', 'fount' )
         ),
         '12' => array(
             'value' => 'Ruda:400,700,900',
             'hosted'=> 'google',
             'css' => "'Ruda', sans-serif",
-            'label' => __( 'Ruda', 'fount_lang' )
+            'label' => __( 'Ruda', 'fount' )
         ),
         '38' => array(
             'value' => 'Rye',
             'hosted'=> 'google',
             'css' => "'Rye', cursive",
-            'label' => __( 'Rye', 'fount_lang' )
+            'label' => __( 'Rye', 'fount' )
         ),
         '58' => array(
             'value' => 'Sanchez:400italic,400&subset=latin,latin-ext',
             'hosted'=> 'google',
             'css' => "'Sanchez', serif",
-            'label' => __( 'Sanchez', 'fount_lang' )
+            'label' => __( 'Sanchez', 'fount' )
         ),
         '77' => array(
             'value' => 'Satisfy',
             'hosted'=> 'google',
             'css' => "'Satisfy', cursive",
-            'label' => __( 'Satisfy', 'fount_lang' )
+            'label' => __( 'Satisfy', 'fount' )
         ),
         '44' => array(
             'value' => 'Share+Tech',
             'hosted'=> 'google',
             'css' => "'Share Tech', sans-serif",
-            'label' => __( 'Share Tech', 'fount_lang' )
+            'label' => __( 'Share Tech', 'fount' )
         ),
         '49' => array(
             'value' => 'Source+Sans+Pro:400,600,700,400italic,700italic',
             'hosted'=> 'google',
             'css' => "'Source Sans Pro', sans-serif",
-            'label' => __( 'Source Sans Pro', 'fount_lang' )
+            'label' => __( 'Source Sans Pro', 'fount' )
+        ),
+        '89' => array(
+            'value' => 'Source+Serif+Pro:400,600,700&subset=latin,latin-ext',
+            'hosted'=> 'google',
+            'css' => "'Source Serif Pro', serif",
+            'label' => __( 'Source Serif Pro', 'fount' )
         ),
         '80' => array(
             'value' => 'Special+Elite',
             'hosted'=> 'google',
             'css' => "'Special Elite', cursive",
-            'label' => __( 'Special Elite', 'fount_lang' )
+            'label' => __( 'Special Elite', 'fount' )
         ),
         '40' => array(
             'value' => 'Titillium+Web:400,400italic,600,700,700italic',
             'hosted'=> 'google',
             'css' => "'Titillium Web', sans-serif",
-            'label' => __( 'Titillium Web', 'fount_lang' )
+            'label' => __( 'Titillium Web', 'fount' )
         ),
         '6' => array(
             'value' => 'Ubuntu:400,500,700,400italic,500italic,700italic',
             'hosted'=> 'google',
             'css' => "'Ubuntu', sans-serif",
-            'label' => __( 'Ubuntu', 'fount_lang' )
+            'label' => __( 'Ubuntu', 'fount' )
         ),
         '27' => array(
             'value' => 'Vollkorn:400italic,400',
             'hosted'=> 'google',
             'css' => "'Vollkorn', serif",
-            'label' => __( 'Vollkorn', 'fount_lang' )
+            'label' => __( 'Vollkorn', 'fount' )
         ),
         '3' => array(
             'value' => 'Yanone+Kaffeesatz:400,700',
             'hosted'=> 'google',
             'css' => "'Yanone Kaffeesatz', sans-serif", 
-            'label' => __( 'Yanone Kaffeesatz', 'fount_lang' )
+            'label' => __( 'Yanone Kaffeesatz', 'fount' )
         ),
         '85' => array(
             'value' => 'Yellowtail',
             'hosted'=> 'google',
             'css' => "'Yellowtail', cursive",
-            'label' => __( 'Yellowtail', 'fount_lang' )
+            'label' => __( 'Yellowtail', 'fount' )
         ),
         '78' => array(
             'value' => 'Yesteryear',
             'hosted'=> 'google',
             'css' => "'Yesteryear', cursive",
-            'label' => __( 'Yesteryear', 'fount_lang' )
+            'label' => __( 'Yesteryear', 'fount' )
         ),
     );
 
@@ -580,7 +598,7 @@
     }
 
     function fount_setup() {
-        register_nav_menus(array('prk_main_navigation' => __('Main Navigation', 'fount_lang')));
+        register_nav_menus(array('prk_main_navigation' => __('Main Navigation', 'fount')));
         
         // Add post thumbnails (http://codex.wordpress.org/Post_Thumbnails)
         add_theme_support('post-thumbnails');
@@ -602,74 +620,73 @@
         $prk_translations=$prk_fount_options;
         //TRANSLATE ACCORDING TO THE SELECTED METHOD
         include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-        if ($prk_fount_options['theme_translation']=="1" || PRK_WPML=="true")
-        {
+        if ($prk_fount_options['theme_translation']=="1" || PRK_WPML=="true") {
             // Make theme available for translation
-            load_theme_textdomain('fount_lang', get_template_directory() . '/lang');
-            $prk_translations['404_title_text']=__("Page Not Found", 'fount_lang');
-            $prk_translations['404_body_text']=__("We do not know how you ended up here, but please could you try again by selecting an option on the menu?", 'fount_lang');
-            $prk_translations['search_tip_text']=__("Type and hit ENTER", 'fount_lang');
-            $prk_translations['submit_search_res_title']=__("Search Results For", 'fount_lang');
-            $prk_translations['submit_search_no_results']=__("No Results Found", 'fount_lang');
-            $prk_translations['required_text']=__(" (required)", 'fount_lang');
-            $prk_translations['like_text']=__("I like this!", 'fount_lang');
-            $prk_translations['already_liked_text']=__("You already liked this.", 'fount_lang');
-            $prk_translations['share_text']=__("Share on", 'fount_lang');
-            $prk_translations['in_touch_text']=__("Get In Touch", 'fount_lang');
-            $prk_translations['menu_back_text']=__("BACK", 'fount_lang');
-            $prk_translations['to_portfolio']=__("To Portfolio", 'fount_lang');
-            $prk_translations['launch_text']=__("Launch Project", 'fount_lang');
-            $prk_translations['project_text']=__("Project URL", 'fount_lang');
-            $prk_translations['skills_text']=__("Skills", 'fount_lang');
-            $prk_translations['tags_text']=__("Tags", 'fount_lang');
-            $prk_translations['client_text']=__("Client", 'fount_lang');
-            $prk_translations['load_more']=__("LOAD MORE POSTS", 'fount_lang');
-            $prk_translations['related_prj_teaser_text']=__("Simply delivering amazing stuff. Period.", 'fount_lang');
-            $prk_translations['prj_desc_text']=__("About this project", 'fount_lang');
-            $prk_translations['prj_next_text']=__("Next Project", 'fount_lang');
-            $prk_translations['prj_prev_text']=__("Previous Project", 'fount_lang');
-            $prk_translations['prj_close_info_text']=__("Close Project", 'fount_lang');
-            $prk_translations['related_prj_text']=__("Related Projects", 'fount_lang');
-            $prk_translations['date_text']=__("Date", 'fount_lang');
-            $prk_translations['related_text']=__("Related Projects", 'fount_lang');
-            $prk_translations['all_text']=__("All", 'fount_lang');
-            $prk_translations['sticky_text']=__("Sticky Post", 'fount_lang');
-            $prk_translations['to_blog']=__("To Blog", 'fount_lang');
-            $prk_translations['read_more']=__("READ MORE", 'fount_lang');
-            $prk_translations['posted_by_text']=__("By", 'fount_lang');
-            $prk_translations['about_author_text']=__("About", 'fount_lang');
-            $prk_translations['older']=__("Older posts", 'fount_lang');
-            $prk_translations['newer']=__("Newer posts", 'fount_lang');
-            $prk_translations['comments_label']=__("Comments", 'fount_lang');
-            $prk_translations['comments_no_response']=__("No Comments Yet", 'fount_lang');
-            $prk_translations['comments_one_response']=__("One Comment", 'fount_lang');
-            $prk_translations['comments_oneplus_response']=__("Comments", 'fount_lang');
-            $prk_translations['reply_text']=__("Reply", 'fount_lang');
-            $prk_translations['comments_leave_reply']=__("Leave a Reply", 'fount_lang');
-            $prk_translations['comments_author_text']=__("Name", 'fount_lang');
-            $prk_translations['comments_email_text']=__("Email", 'fount_lang');
-            $prk_translations['comments_url_text']=__("Website", 'fount_lang');
-            $prk_translations['comments_comment_text']=__("Comment", 'fount_lang');
-            $prk_translations['comments_submit']=__("Submit Comment", 'fount_lang');
-            $prk_translations['empty_text_error']=__("Error! Please fill all the required fields.", 'fount_lang');
-            $prk_translations['invalid_email_error']=__("Error! Invalid email.", 'fount_lang');
-            $prk_translations['comment_ok_message']=__("Thank you for your feedback!", 'fount_lang');
-            $prk_translations['contact_subject_text']=__("Subject", 'fount_lang');
-            $prk_translations['contact_message_text']=__("Your Message", 'fount_lang');
-            $prk_translations['contact_submit']=__("Send Message", 'fount_lang');
-            $prk_translations['contact_wait_text']=__("Please Wait...", 'fount_lang');
-            $prk_translations['contact_ok_text']=__("Thank you for contacting us. We will reply soon!", 'fount_lang');
-            $prk_translations['next_text']=__("Next", 'fount_lang');
-            $prk_translations['previous_text']=__("Previous", 'fount_lang');
-            $prk_translations['prj_info_text']=__("Project Info", 'fount_lang');
-            $prk_translations['of_text']=__("of", 'fount_lang');
-            $prk_translations['on_text']=__("on", 'fount_lang');
-            $prk_translations['comments_under_reply']=__("Your feedback is valuable for us. Your email will not be published.", 'fount_lang');
+            load_theme_textdomain('fount', get_template_directory() . '/lang');
+            $prk_translations['404_title_text']=__("Page Not Found", 'fount');
+            $prk_translations['404_body_text']=__("We do not know how you ended up here, but please could you try again by selecting an option on the menu?", 'fount');
+            $prk_translations['search_tip_text']=__("Type and hit ENTER", 'fount');
+            $prk_translations['submit_search_res_title']=__("Search Results For", 'fount');
+            $prk_translations['submit_search_no_results']=__("No Results Found", 'fount');
+            $prk_translations['required_text']=__(" (required)", 'fount');
+            $prk_translations['like_text']=__("I like this!", 'fount');
+            $prk_translations['already_liked_text']=__("You already liked this.", 'fount');
+            $prk_translations['share_text']=__("Share on", 'fount');
+            $prk_translations['in_touch_text']=__("Get In Touch", 'fount');
+            $prk_translations['menu_back_text']=__("BACK", 'fount');
+            $prk_translations['to_portfolio']=__("To Portfolio", 'fount');
+            $prk_translations['launch_text']=__("Launch Project", 'fount');
+            $prk_translations['project_text']=__("Project URL", 'fount');
+            $prk_translations['skills_text']=__("Skills", 'fount');
+            $prk_translations['tags_text']=__("Tags", 'fount');
+            $prk_translations['client_text']=__("Client", 'fount');
+            $prk_translations['load_more']=__("LOAD MORE POSTS", 'fount');
+            $prk_translations['related_prj_teaser_text']=__("Simply delivering amazing stuff. Period.", 'fount');
+            $prk_translations['prj_desc_text']=__("About this project", 'fount');
+            $prk_translations['prj_next_text']=__("Next Project", 'fount');
+            $prk_translations['prj_prev_text']=__("Previous Project", 'fount');
+            $prk_translations['prj_close_info_text']=__("Close Project", 'fount');
+            $prk_translations['related_prj_text']=__("Related Projects", 'fount');
+            $prk_translations['date_text']=__("Date", 'fount');
+            $prk_translations['related_text']=__("Related Projects", 'fount');
+            $prk_translations['all_text']=__("All", 'fount');
+            $prk_translations['sticky_text']=__("Sticky Post", 'fount');
+            $prk_translations['to_blog']=__("To Blog", 'fount');
+            $prk_translations['read_more']=__("READ MORE", 'fount');
+            $prk_translations['posted_by_text']=__("By", 'fount');
+            $prk_translations['about_author_text']=__("About", 'fount');
+            $prk_translations['older']=__("Older posts", 'fount');
+            $prk_translations['newer']=__("Newer posts", 'fount');
+            $prk_translations['comments_label']=__("Comments", 'fount');
+            $prk_translations['comments_no_response']=__("No Comments Yet", 'fount');
+            $prk_translations['comments_one_response']=__("One Comment", 'fount');
+            $prk_translations['comments_oneplus_response']=__("Comments", 'fount');
+            $prk_translations['reply_text']=__("Reply", 'fount');
+            $prk_translations['comments_leave_reply']=__("Leave a Reply", 'fount');
+            $prk_translations['comments_author_text']=__("Name", 'fount');
+            $prk_translations['comments_email_text']=__("Email", 'fount');
+            $prk_translations['comments_url_text']=__("Website", 'fount');
+            $prk_translations['comments_comment_text']=__("Comment", 'fount');
+            $prk_translations['comments_submit']=__("Submit Comment", 'fount');
+            $prk_translations['empty_text_error']=__("Error! Please fill all the required fields.", 'fount');
+            $prk_translations['invalid_email_error']=__("Error! Invalid email.", 'fount');
+            $prk_translations['comment_ok_message']=__("Thank you for your feedback!", 'fount');
+            $prk_translations['contact_subject_text']=__("Subject", 'fount');
+            $prk_translations['contact_message_text']=__("Your Message", 'fount');
+            $prk_translations['contact_submit']=__("Send Message", 'fount');
+            $prk_translations['contact_wait_text']=__("Please Wait...", 'fount');
+            $prk_translations['contact_ok_text']=__("Thank you for contacting us. We will reply soon!", 'fount');
+            $prk_translations['next_text']=__("Next", 'fount');
+            $prk_translations['previous_text']=__("Previous", 'fount');
+            $prk_translations['prj_info_text']=__("Project Info", 'fount');
+            $prk_translations['of_text']=__("of", 'fount');
+            $prk_translations['on_text']=__("on", 'fount');
+            $prk_translations['comments_under_reply']=__("Your feedback is valuable for us. Your email will not be published.", 'fount');
         }
         else
         {
             // Make theme available for translation
-            load_theme_textdomain('fount_lang', get_template_directory() . '/lang');
+            load_theme_textdomain('fount', get_template_directory() . '/lang');
         }
         $prk_retina_device="prk_not_retina";
         if (isset($_COOKIE['fount_retina'])) {
@@ -744,8 +761,7 @@
             $logo_dims=prk_dims($prk_fount_options['logo_retina']['url'],2);
             $out_logo='<div id="fount_logo_before"><img src="'.$prk_fount_options['logo_retina']['url'].'" alt="" data-width="'.$prk_fount_options['logo_retina']['width'].'" '.$logo_dims.' id="prk_logo_image" /></div>';
         }
-        else
-        {
+        else {
             if (isset($prk_fount_options['logo']) && $prk_fount_options['logo']['url']!="")
             {
                 $logo_dims=prk_dims($prk_fount_options['logo']['url'],1);
@@ -865,7 +881,7 @@
                 return "fount_fa-file";
             break;
             default:
-                return "";
+                return "fount_fa-".$network_label;
         }
     }
 
@@ -993,9 +1009,9 @@
         foreach($pages_blog as $page_blog)
         {
             $blog_default=$page_blog->ID;
-            if (get_field('portfolio_filter',$page_blog->ID)!="")
+            if (get_field('cat_filter',$page_blog->ID)!="")
             {
-                $filter=get_field('portfolio_filter',$page_blog->ID);
+                $filter=get_field('cat_filter',$page_blog->ID);
                 foreach ($filter as $child)
                 {
                     if (in_array($child->slug, $cats_arr)) {
@@ -1021,8 +1037,49 @@
         }
         wp_reset_query();
     }
-    function prk_output_title($data)
-    {
+    function output_mini_nets() {
+        global $prk_fount_options;
+        $output= '<div id="mini_social_nets" class="left_floated">';
+        if ($prk_fount_options['network_link_1']!="")
+        {
+            $output.= '<a href="'.$prk_fount_options['network_link_1'].'" target="_blank" data-color="'.prk_social_color($prk_fount_options['network_icon_1']).'">';
+            $output.= '<div class="'.prk_social_icon($prk_fount_options['network_icon_1']).'"></div>';
+            $output.= '</a>';
+        }
+        if ($prk_fount_options['network_link_2']!="")
+        {
+            $output.= '<a href="'.$prk_fount_options['network_link_2'].'" target="_blank" data-color="'.prk_social_color($prk_fount_options['network_icon_2']).'">';
+            $output.= '<div class="'.prk_social_icon($prk_fount_options['network_icon_2']).'"></div>';
+            $output.= '</a>';
+        }
+        if ($prk_fount_options['network_link_3']!="")
+        {
+            $output.= '<a href="'.$prk_fount_options['network_link_3'].'" target="_blank" data-color="'.prk_social_color($prk_fount_options['network_icon_3']).'">';
+            $output.= '<div class="'.prk_social_icon($prk_fount_options['network_icon_3']).'"></div>';
+            $output.= '</a>';
+        }
+        if ($prk_fount_options['network_link_4']!="")
+        {
+            $output.= '<a href="'.$prk_fount_options['network_link_4'].'" target="_blank" data-color="'.prk_social_color($prk_fount_options['network_icon_4']).'">';
+            $output.= '<div class="'.prk_social_icon($prk_fount_options['network_icon_4']).'"></div>';
+            $output.= '</a>';
+        }
+        if ($prk_fount_options['network_link_5']!="")
+        {
+            $output.= '<a href="'.$prk_fount_options['network_link_5'].'" target="_blank" data-color="'.prk_social_color($prk_fount_options['network_icon_5']).'">';
+            $output.= '<div class="'.prk_social_icon($prk_fount_options['network_icon_5']).'"></div>';
+            $output.= '</a>';
+        }
+        if ($prk_fount_options['network_link_6']!="")
+        {
+            $output.= '<a href="'.$prk_fount_options['network_link_6'].'" target="_blank" data-color="'.prk_social_color($prk_fount_options['network_icon_6']).'">';
+            $output.= '<div class="'.prk_social_icon($prk_fount_options['network_icon_6']).'"></div>';
+            $output.= '</a>';
+        }
+        $output.= '</div>';
+        return $output;
+    }
+    function prk_output_title($data) {
         global $post;
         global $prk_fount_options;
         global $prk_retina_device;
@@ -1074,7 +1131,7 @@
                                     <?php echo get_the_title($data); ?>
                                 </h1>
                                 <?php
-                                    $data_blog = get_post_meta( $data, '_custom_meta_blog_template', true );
+                                    $data_blog = get_post_meta($data,'_custom_meta_blog_template', true );
                                     if (isset($data_blog['below_headings_text']) && $data_blog['below_headings_text']!="")
                                     {
                                       ?>
@@ -1092,41 +1149,65 @@
                 </div>
             <?php
         }
-        if (is_archive() && get_post_type()!="pirenko_portfolios") {
-            if (is_category()) 
-            { 
-                $prk_pagettl=single_cat_title('',FALSE);
-            } 
-            elseif( is_tag() ) 
-            { 
-                $prk_pagettl=single_tag_title('',FALSE);
-            } 
-            elseif (is_day()) 
-            { 
-                $prk_pagettl=get_the_time('F jS, Y');
-            } 
-            elseif (is_month()) 
-            { 
-                $prk_pagettl=get_the_time('F, Y');
-            } 
-            elseif (is_year()) 
-            { 
-                $prk_pagettl=get_the_time('Y');
-            } 
-            elseif (is_author()) 
-            { 
-                $prk_pagettl="Author Archive";
-            }
+        if (PRK_WOO=="true" && is_woocommerce()) {
             ?>
             <div id="headings_wrap" <?php echo $extra_styles; ?>>
                 <div id="single_page_title">
                     <h1 class="header_font bd_headings_text_shadow">
-                        <?php echo $prk_pagettl; ?>
+                        <?php echo get_the_title(woocommerce_get_page_id('shop')); ?>
                     </h1>
+                    <?php 
+                        if ($data!="")
+                        {
+                          ?>
+                          <div id="single_page_teaser" class="small_headings_color header_font prk_heavier_500">
+                          <?php echo $data; ?>
+                          </div>
+                          <?php
+                        }
+                    ?>
                 </div>
                 <div class="clearfix"></div>
             </div>
             <?php
+        }
+        else {
+            if (is_archive() && get_post_type()!="pirenko_portfolios") {
+                if (is_category()) 
+                { 
+                    $prk_pagettl=single_cat_title('',FALSE);
+                } 
+                elseif( is_tag() ) 
+                { 
+                    $prk_pagettl=single_tag_title('',FALSE);
+                } 
+                elseif (is_day()) 
+                { 
+                    $prk_pagettl=get_the_time('F jS, Y');
+                } 
+                elseif (is_month()) 
+                { 
+                    $prk_pagettl=get_the_time('F, Y');
+                } 
+                elseif (is_year()) 
+                { 
+                    $prk_pagettl=get_the_time('Y');
+                } 
+                elseif (is_author()) 
+                { 
+                    $prk_pagettl="Author Archive";
+                }
+                ?>
+                <div id="headings_wrap" <?php echo $extra_styles; ?>>
+                    <div id="single_page_title">
+                        <h1 class="header_font bd_headings_text_shadow">
+                            <?php echo $prk_pagettl; ?>
+                        </h1>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <?php
+            }
         }
     }
     function jquery_sender() 
@@ -1258,8 +1339,7 @@
         $temp = $post;
         $post = get_post($post_id);
         setup_postdata($post);
-        if (has_excerpt())
-        {
+        if (has_excerpt()) {
             wp_reset_postdata();
             $post = $temp;
             return '<p>'.get_the_excerpt().'</p>';
@@ -1342,37 +1422,39 @@
         else
             return false;
     }
-    function prk_mail_before_submit() {
-        if (isset($_POST['action']) && $_POST['action']=="mail_before_submit") {
-            check_ajax_referer('ajax-nonce');
-            $params = array();
-            parse_str($_POST['email_wrap'], $params);
-            $name = $params['c_name'];
-            $mail = $params['c_email'];
-            $admin_mail = $params['rec_email'];
-            $msg = $params['c_message'];
-            $subject = $params['full_subject'];
+    if (!function_exists('prk_mail_before_submit')) {
+        function prk_mail_before_submit() {
+            if (isset($_POST['action']) && $_POST['action']=="mail_before_submit") {
+                check_ajax_referer('ajax-nonce');
+                $params = array();
+                parse_str($_POST['email_wrap'], $params);
+                $name = $params['c_name'];
+                $mail = $params['c_email'];
+                $admin_mail = $params['rec_email'];
+                $msg = $params['c_message'];
+                $subject = $params['full_subject'];
 
-            $headers='MIME-Version: 1.0' . "\r\n";
-            $headers.='Content-type: text/html; charset=utf-8' . "\r\n";
-            $headers.='From: '.$name.' <'.$mail.'>' ."\r\n";
-            $headers.='Reply-To: ' . $mail . "\r\n";
-            $headers.='CC: ' . $mail ."\r\n";
-            $headers.='X-Mailer: PHP/' . phpversion();
+                $headers='MIME-Version: 1.0' . "\r\n";
+                $headers.='Content-type: text/html; charset=utf-8' . "\r\n";
+                $headers.='From: '.$name.' <'.$mail.'>' ."\r\n";
+                $headers.='Reply-To: ' . $mail . "\r\n";
+                //$headers.='CC: ' . $mail ."\r\n";
+                $headers.='X-Mailer: PHP/' . phpversion();
 
-            $message="You've received a new message. <br><br>";
-            $message.="Name: ".$name."<br>";
-            $message.="Mail: ".$mail."<br>";
-            $message.="Message: ".$msg."<br>";
-            
-            $mail_result = wp_mail($admin_mail,$subject,$message,$headers);
-            if($mail_result) 
-            {
-                echo "sent";
-            }
-            else
-            {
-                echo "Email failure. Please try again.";
+                $message="You've received a new message. <br><br>";
+                $message.="Name: ".$name."<br>";
+                $message.="Mail: ".$mail."<br>";
+                $message.="Message: ".$msg."<br>";
+                
+                $mail_result = wp_mail($admin_mail,$subject,$message,$headers);
+                if($mail_result) 
+                {
+                    echo "sent";
+                }
+                else
+                {
+                    echo "Email failure. Please try again.";
+                }
             }
         }
     }
@@ -1449,7 +1531,16 @@
                         $out.='<div class="grid_image_wrapper">';
                             $out.='<a href="'.get_permalink().'" class="fount_ajax_anchor">';
                             $out.='<div class="grid_single_title zero_color bd_headings_text_shadow zero_color">';
-                            $out.='<div class="prk_ttl"><h4 class="header_font body_bk_color body_bk_text_shadow">'.the_title("","",false).'</h3></div> ';
+                            $out.='<div class="prk_ttl">';
+                                if (get_field('custom_logo',get_the_ID())!="") {
+                                    $in_image=wp_get_attachment_image_src(get_field('custom_logo',get_the_ID()),'full');
+                                    $vt_image = vt_resize('', $in_image[0] , $forced_w, '', false , true);
+                                    $out.='<img class="stamp_folio_th" src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" />';
+                                }
+                                else {
+                                    $out.='<h4 class="header_font body_bk_color body_bk_text_shadow">'.the_title("","",false).'</h4>';
+                                }
+                            $out.='</div>';
                             if ($skills_output!="" && $prk_fount_options['categoriesby_port']=="1")
                             {
                                 $out.='<div class="inner_skills body_bk_color">';
@@ -1568,15 +1659,15 @@
         $label = 'pwbox-'.( empty( $post->ID ) ? rand() : $post->ID );
         $output='<div id="prk_protected" class="columns twelve centered prk_inner_block">';
         $output.= '<form class="post-password-form" action="' . get_option('siteurl') . '/wp-login.php?action=postpass" method="post">';
-        $output.= __( "This content is password protected. To view it please enter your password below:",'fount_lang' );
+        $output.= __( "This content is password protected. To view it please enter your password below:",'fount' );
         $output.='<div class="clearfix"></div>';
-        $output.='<label for="' . $label . '">' . __( "Password:",'fount_lang' );
+        $output.='<label for="' . $label . '">' . __( "Password:",'fount' );
         $output.='<div class="clearfix"></div>';
         $output.='<input name="post_password" id="' . $label . '" type="password" class="prk_pass pirenko_highlighted" />';
         $output.='</label>';
         $output.='<div class="clearfix"></div>';
         $output.='<div class="theme_button">';
-        $output.='<input type="submit" name="Submit" value="' . __( "Submit",'fount_lang' ) . '" class="prk_submit_pass" />';
+        $output.='<input type="submit" name="Submit" value="' . __( "Submit",'fount' ) . '" class="prk_submit_pass" />';
         $output.='</div>';
         $output.='</form>';
         $output.='</div>';
@@ -2308,6 +2399,20 @@
                 'multiple' => 0,
             ),
             array (
+                'key' => 'field_519c65c30297d',
+                'label' => 'Navigation type?',
+                'name' => 'navigation_type',
+                'instructions' => 'How the page handles loading more posts.',
+                'type' => 'select',
+                'choices' => array (
+                    'ajaxed' => 'Show load more posts button',
+                    'paginated' => 'Show page navigation with arrows',
+                ),
+                'default_value' => 'paginated',
+                'allow_null' => 0,
+                'multiple' => 0,
+            ),
+            array (
                 'key' => 'field_528a436ea4be8',
                 'label' => 'Make page header featured?',
                 'name' => 'featured_header',
@@ -2613,6 +2718,26 @@
                 'default_value' => 0,
             ),
             array (
+                'key' => 'field_528a9tuvlobe8',
+                'label' => 'Append scroll down arrow to slider?',
+                'name' => 'featured_slider_down_arrow',
+                'type' => 'true_false',
+                'instructions' => 'Will scroll to the first row of the page content',
+                'conditional_logic' => array (
+                    'status' => 1,
+                    'rules' => array (
+                        array (
+                            'field' => 'field_5289fd554dc9f',
+                            'operator' => '==',
+                            'value' => 'yes',
+                        ),
+                    ),
+                    'allorany' => 'all',
+                ),
+                'message' => '',
+                'default_value' => 0,
+            ),
+            array (
                 'key' => 'field_528a340ea4be8',
                 'label' => 'Autoplay slider?',
                 'name' => 'featured_slider_autoplay',
@@ -2793,6 +2918,81 @@
                     'param' => 'page_template',
                     'operator' => '==',
                     'value' => 'default',
+                    'order_no' => 0,
+                    'group_no' => 0,
+                ),
+            ),
+        ),
+        'options' => array (
+            'position' => 'normal',
+            'layout' => 'default',
+            'hide_on_screen' => array (
+                0 => 'custom_fields',
+            ),
+        ),
+        'menu_order' => 0,
+    ));
+
+    //COMING SOON PAGE
+    register_field_group(array (
+        'id' => 'acf_theme-coming-soon-options',
+        'title' => 'Coming Soon Page Options',
+        'fields' => array (
+            array (
+                'key' => 'field_5287imazutce8',
+                'label' => 'Background image',
+                'name' => 'image_back',
+                'type' => 'image',
+                'instructions' => '',
+                'save_format' => 'id',
+                'preview_size' => 'thumbnail',
+                'library' => 'all',
+            ),
+            array (
+                'key' => 'field_5287imagasce8',
+                'label' => 'Header image',
+                'name' => 'image_logo',
+                'type' => 'image',
+                'instructions' => 'Will be displayed above the counter',
+                'save_format' => 'id',
+                'preview_size' => 'thumbnail',
+                'library' => 'all',
+            ),
+            array (
+                'key' => 'field_52878acb8text',
+                'label' => 'Text Color',
+                'name' => 'text_color',
+                'type' => 'color_picker',
+                'instructions' => '',
+                'default_value' => '',
+            ),
+            array (
+                'key' => 'field_54d4a0b3fbeze',
+                'label' => 'Launch date',
+                'name' => 'launch_date',
+                'type' => 'date_picker',
+                'date_format' => 'yymmdd',
+                'display_format' => 'dd/mm/yy',
+                'first_day' => 1,
+            ),
+            array (
+                'key' => 'field_528d875aextra',
+                'label' => 'Extra text',
+                'name' => 'below_headings_text',
+                'type' => 'textarea',
+                'instructions' => 'Will be displayed under the counter',
+                'default_value' => '',
+                'placeholder' => '',
+                'maxlength' => '',
+                'formatting' => 'br',
+            ),
+        ),
+        'location' => array (
+            array (
+                array (
+                    'param' => 'page_template',
+                    'operator' => '==',
+                    'value' => 'page-coming-soon.php',
                     'order_no' => 0,
                     'group_no' => 0,
                 ),
@@ -3387,8 +3587,6 @@
         ),
         'menu_order' => 0,
     ));
-
 }
-
 
     

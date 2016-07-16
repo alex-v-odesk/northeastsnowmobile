@@ -14,12 +14,11 @@
 	function load_pirenko_vcard() {
 		register_widget('fount_Vcard_Widget');
 	}
-	class fount_Vcard_Widget extends WP_Widget 
-	{
-	  	function fount_Vcard_Widget() 
-	  	{
-			$widget_ops = array('classname' => 'widget_fount_vcard', 'description' => __('Use this widget to add a vCard', 'fount_lang'));
-			$this->WP_Widget('widget_fount_vcard', __('Fount: vCard', 'fount_lang'), $widget_ops);
+	class fount_Vcard_Widget extends WP_Widget {
+	  	//SET UP WIDGET
+	  	function __construct() {
+			$widget_ops = array('classname' => 'widget_fount_vcard', 'description' => __('Use this widget to add a vCard', 'fount'));
+			parent::__construct('widget_fount_vcard', __('Fount: vCard', 'fount'), $widget_ops);
 			$this->alt_option_name = 'widget_fount_vcard';
 		
 	  	}
@@ -47,15 +46,15 @@
 			$title = apply_filters('widget_title', empty($instance['title']) ? '' : $instance['title'], $instance, $this->id_base);
 			
 			if(function_exists('icl_translate')){
-				if (!isset($instance['description_text'])) { $instance['description_text'] = ''; } else { $instance['description_text'] = icl_translate( 'fount_lang', 'vcard_widget_description_text', $instance['description_text'] ); }
-				if (!isset($instance['company_name'])) { $instance['company_name'] = ''; } else { $instance['company_name'] = icl_translate( 'fount_lang', 'vcard_widget_company_name', $instance['company_name'] ); }
-				if (!isset($instance['street_address'])) { $instance['street_address'] = ''; } else { $instance['street_address'] = icl_translate( 'fount_lang', 'vcard_widget_street_address', $instance['street_address'] ); }
-				if (!isset($instance['locality'])) { $instance['locality'] = ''; } else { $instance['locality'] = icl_translate( 'fount_lang', 'vcard_widget_locality', $instance['locality'] ); }
-				if (!isset($instance['postal_code'])) { $instance['postal_code'] = ''; } else {  $instance['postal_code'] = icl_translate( 'fount_lang', 'vcard_widget_postal_code', $instance['postal_code'] ); }
-				if (!isset($instance['tel'])) { $instance['tel'] = ''; } else {  $instance['tel'] = icl_translate( 'fount_lang', 'vcard_widget_company_tel', $instance['tel'] ); }
-				if (!isset($instance['fax'])) { $instance['fax'] = ''; } else {  $instance['fax'] = icl_translate( 'fount_lang', 'vcard_widget_company_fax', $instance['fax'] ); }
-				if (!isset($instance['hours'])) { $instance['hours'] = ''; } else {  $instance['hours'] = icl_translate( 'fount_lang', 'vcard_widget_company_hours', $instance['hours'] ); }
-				if (!isset($instance['email'])) { $instance['email'] = ''; } else {  $instance['email'] = icl_translate( 'fount_lang', 'vcard_widget_company_email', $instance['email'] ); }
+				if (!isset($instance['description_text'])) { $instance['description_text'] = ''; } else { $instance['description_text'] = icl_translate( 'fount', 'vcard_widget_description_text', $instance['description_text'] ); }
+				if (!isset($instance['company_name'])) { $instance['company_name'] = ''; } else { $instance['company_name'] = icl_translate( 'fount', 'vcard_widget_company_name', $instance['company_name'] ); }
+				if (!isset($instance['street_address'])) { $instance['street_address'] = ''; } else { $instance['street_address'] = icl_translate( 'fount', 'vcard_widget_street_address', $instance['street_address'] ); }
+				if (!isset($instance['locality'])) { $instance['locality'] = ''; } else { $instance['locality'] = icl_translate( 'fount', 'vcard_widget_locality', $instance['locality'] ); }
+				if (!isset($instance['postal_code'])) { $instance['postal_code'] = ''; } else {  $instance['postal_code'] = icl_translate( 'fount', 'vcard_widget_postal_code', $instance['postal_code'] ); }
+				if (!isset($instance['tel'])) { $instance['tel'] = ''; } else {  $instance['tel'] = icl_translate( 'fount', 'vcard_widget_company_tel', $instance['tel'] ); }
+				if (!isset($instance['fax'])) { $instance['fax'] = ''; } else {  $instance['fax'] = icl_translate( 'fount', 'vcard_widget_company_fax', $instance['fax'] ); }
+				if (!isset($instance['hours'])) { $instance['hours'] = ''; } else {  $instance['hours'] = icl_translate( 'fount', 'vcard_widget_company_hours', $instance['hours'] ); }
+				if (!isset($instance['email'])) { $instance['email'] = ''; } else {  $instance['email'] = icl_translate( 'fount', 'vcard_widget_company_email', $instance['email'] ); }
 			
 			} else {
 				if (!isset($instance['description_text'])) { $instance['description_text'] = ''; }
@@ -195,16 +194,16 @@
 	    $instance['email'] = strip_tags($new_instance['email']);
 
 	    if (function_exists('icl_translate')) { 
-			icl_translate('fount_lang', 'widget_title', $instance['title']); 
-		 	icl_translate('fount_lang', 'vcard_widget_description_text', $instance['description_text']);
-		 	icl_translate('fount_lang', 'vcard_widget_company_name', $instance['company_name']);
-		 	icl_translate('fount_lang', 'vcard_widget_street_address', $instance['street_address']);
-		 	icl_translate('fount_lang', 'vcard_widget_locality', $instance['locality']);
-		 	icl_translate('fount_lang', 'vcard_widget_postal_code', $instance['postal_code']);
-		 	icl_translate('fount_lang', 'vcard_widget_company_tel', $instance['tel']);
-		 	icl_translate('fount_lang', 'vcard_widget_company_fax', $instance['fax']);
-		 	icl_translate('fount_lang', 'vcard_widget_company_hours', $instance['hours']);
-		 	icl_translate('fount_lang', 'vcard_widget_company_email', $instance['email']);
+			icl_translate('fount', 'widget_title', $instance['title']); 
+		 	icl_translate('fount', 'vcard_widget_description_text', $instance['description_text']);
+		 	icl_translate('fount', 'vcard_widget_company_name', $instance['company_name']);
+		 	icl_translate('fount', 'vcard_widget_street_address', $instance['street_address']);
+		 	icl_translate('fount', 'vcard_widget_locality', $instance['locality']);
+		 	icl_translate('fount', 'vcard_widget_postal_code', $instance['postal_code']);
+		 	icl_translate('fount', 'vcard_widget_company_tel', $instance['tel']);
+		 	icl_translate('fount', 'vcard_widget_company_fax', $instance['fax']);
+		 	icl_translate('fount', 'vcard_widget_company_hours', $instance['hours']);
+		 	icl_translate('fount', 'vcard_widget_company_email', $instance['email']);
 		}
 
 	    return $instance;
@@ -225,7 +224,7 @@
     	$email = isset($instance['email']) ? esc_attr($instance['email']) : '';
   		?>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title (optional):', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php _e('Title (optional):', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
     	</p>
         <p>
@@ -243,39 +242,39 @@
 				<br />
 			</p>
 		<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('description_text')); ?>"><?php _e('Description text (optional):', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('description_text')); ?>"><?php _e('Description text (optional):', 'fount'); ?></label>
       		<textarea class="widefat" id="<?php echo esc_attr($this->get_field_id('description_text')); ?>" name="<?php echo esc_attr($this->get_field_name('description_text')); ?>" type="text"><?php echo esc_attr($description_text); ?></textarea>
     	</p>
         <p>
-      		<label for="<?php echo esc_attr($this->get_field_id('company_name')); ?>"><?php _e('Company Name:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('company_name')); ?>"><?php _e('Company Name:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('company_name')); ?>" name="<?php echo esc_attr($this->get_field_name('company_name')); ?>" type="text" value="<?php echo esc_attr($company_name); ?>" />
     	</p>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('street_address')); ?>"><?php _e('Street Address:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('street_address')); ?>"><?php _e('Street Address:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('street_address')); ?>" name="<?php echo esc_attr($this->get_field_name('street_address')); ?>" type="text" value="<?php echo esc_attr($street_address); ?>" />
     	</p>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('locality')); ?>"><?php _e('City/Locality:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('locality')); ?>"><?php _e('City/Locality:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('locality')); ?>" name="<?php echo esc_attr($this->get_field_name('locality')); ?>" type="text" value="<?php echo esc_attr($locality); ?>" />
     	</p>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('postal_code')); ?>"><?php _e('Zipcode/Postal Code:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('postal_code')); ?>"><?php _e('Zipcode/Postal Code:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('postal_code')); ?>" name="<?php echo esc_attr($this->get_field_name('postal_code')); ?>" type="text" value="<?php echo esc_attr($postal_code); ?>" />
     	</p>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('tel')); ?>"><?php _e('Telephone:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('tel')); ?>"><?php _e('Telephone:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('tel')); ?>" name="<?php echo esc_attr($this->get_field_name('tel')); ?>" type="text" value="<?php echo esc_attr($tel); ?>" />
     	</p>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('fax')); ?>"><?php _e('Fax:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('fax')); ?>"><?php _e('Fax:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('fax')); ?>" name="<?php echo esc_attr($this->get_field_name('fax')); ?>" type="text" value="<?php echo esc_attr($fax); ?>" />
     	</p>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('hours')); ?>"><?php _e('Opening hours:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('hours')); ?>"><?php _e('Opening hours:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('hours')); ?>" name="<?php echo esc_attr($this->get_field_name('hours')); ?>" type="text" value="<?php echo esc_attr($hours); ?>" />
     	</p>
     	<p>
-      		<label for="<?php echo esc_attr($this->get_field_id('email')); ?>"><?php _e('Email:', 'fount_lang'); ?></label>
+      		<label for="<?php echo esc_attr($this->get_field_id('email')); ?>"><?php _e('Email:', 'fount'); ?></label>
       		<input class="widefat" id="<?php echo esc_attr($this->get_field_id('email')); ?>" name="<?php echo esc_attr($this->get_field_name('email')); ?>" type="text" value="<?php echo esc_attr($email); ?>" />
     	</p>
   		<?php

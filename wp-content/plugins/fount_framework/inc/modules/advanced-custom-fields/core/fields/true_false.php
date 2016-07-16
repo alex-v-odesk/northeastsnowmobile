@@ -46,7 +46,7 @@ class acf_field_true_false extends acf_field
 	{
 		// html
 		echo '<ul class="acf-checkbox-list ' . $field['class'] . '">';
-			echo '<input type="hidden" name="'.$field['name'].'" value="0" />';
+			echo '<input type="hidden" name="'.$field['name'].'-'.rand(1,5000).'" value="0" />';//PIRENKO
 			$selected = ($field['value'] == 1) ? 'checked="yes"' : '';
 			echo '<li><label><input id="' . $field['id'] . '-1"  type="checkbox" name="'.$field['name'].'" value="1" ' . $selected . ' />' . $field['message'] . '</label></li>';
 		

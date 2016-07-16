@@ -15,14 +15,12 @@
 		register_widget( 'pirenko_tags_portfolio_widget' );
 	}
 	//CREATE CLASS TO CONTROL EVERYTHING
-	class pirenko_tags_portfolio_widget extends WP_Widget 
-	{
+	class pirenko_tags_portfolio_widget extends WP_Widget {
 		//SET UP WIDGET
-		function pirenko_tags_portfolio_widget() 
-		{
+		function __construct() {
 			$widget_ops = array( 'classname' => 'pirenko-tags-portfolio-widget', 'description' => ('A widget to add Tag or Categories Links for Portfolio posts.') );
 			$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'pirenko-tags-portfolio-widget' );
-			$this->WP_Widget( 'pirenko-tags-portfolio-widget', __('Fount: Portfolio Tag Links', 'fount_lang'), $widget_ops, $control_ops );
+			parent::__construct( 'pirenko-tags-portfolio-widget', __('Fount: Portfolio Tag Links', 'fount'), $widget_ops, $control_ops );
 		}
 
 		//SET UP WIDGET OUTPUT
@@ -92,11 +90,11 @@
 				$link_type="tags";
 			?>
 			<p>
-				<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'fount_lang'); ?>:</label><br />
+				<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'fount'); ?>:</label><br />
 				<input id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" value="<?php echo $title; ?>" class="pct_89" />
 			</p>
             <p>
-				<label for="<?php echo $this->get_field_id('link_type'); ?>"><?php _e('Use skills or tags?', 'fount_lang'); ?></label><br />
+				<label for="<?php echo $this->get_field_id('link_type'); ?>"><?php _e('Use skills or tags?', 'fount'); ?></label><br />
 				<select id="<?php echo $this->get_field_id('link_type'); ?>" name="<?php echo $this->get_field_name('link_type'); ?>" class="pct_69">
 					<?php   
 						if ( $link_type == 'category' ) // Make default first in list

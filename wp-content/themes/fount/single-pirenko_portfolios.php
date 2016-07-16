@@ -1,6 +1,7 @@
 <?php 
     get_header();
     global $prk_retina_device;
+    $in_cat=true;
     $retina_flag = $prk_retina_device === "prk_retina" ? true : false;
     //OVERRIDE OPTIONS - ONLY FOR PREVIEW MODE
     if (INJECT_STYLE)
@@ -85,7 +86,7 @@
                                                         echo '<div id="slide_1" class="item">';
                                                         $ext_count=1;
                                                         $vt_image = vt_resize( get_post_thumbnail_id( $post->ID ), '' , $imgs_width, '', false , $retina_flag );
-                                                        echo '<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="'.prk_get_img_alt($image[0]).'" />';
+                                                        echo '<img class="lazyOwl" src="#" data-src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="'.prk_get_img_alt($image[0]).'" />';
                                                         echo '</div>';
                                                     }
                                                 }
@@ -100,7 +101,7 @@
                                                             echo '<div id="slide_'.$ext_count.'" class="item">';
                                                             $in_image=wp_get_attachment_image_src(get_field('image_'.$count),'full');
                                                             $vt_image = vt_resize( '', $in_image[0] , $imgs_width, '', false , $retina_flag );
-                                                            echo '<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="'.prk_get_img_alt($in_image[0]).'" />';
+                                                            echo '<img class="lazyOwl" src="#" data-src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="'.prk_get_img_alt($in_image[0]).'" />';
                                                             echo "</div>";
                                                         }
                                                         if (get_field('video_'.$count)!="")
@@ -239,31 +240,27 @@
                                                     }
                                                 }
                                             }
-                                            if (get_the_term_list(get_the_ID(),'portfolio_tag')!="")
-                                            {
-                                                if (get_the_term_list(get_the_ID(),'pirenko_skills')!="")
-                                                {
-                                                    $terms = get_terms("portfolio_tag");
-                                                    $count = count($terms);
-                                                    if ($count>0) {
-                                                        if ($line_counter>0)
-                                                        {
-                                                            echo '<div class="simple_line on_folio"></div>';
-                                                        }
-                                                        $line_counter++;
-                                                        echo '<div id="fount_single_tags" class="fount_info_block clearfix">';
-                                                        echo '<div class="left_floated header_font">';
-                                                        echo '<span class="prk_heavier_700 zero_color">'.$prk_translations['tags_text'].':&nbsp;&nbsp;</span>';
-                                                        echo '<span class="default_color">';
-                                                        $in_count=0;
-                                                        foreach ( $terms as $term ) {
-                                                            if ($in_count>0)
-                                                                echo ", ";
-                                                            echo '' . $term->name . '';
-                                                            $in_count++;
-                                                        }
-                                                        echo '</span></div></div>';
+                                            if (wp_get_object_terms(get_the_ID(),'portfolio_tag')!="") {
+                                                $terms = wp_get_object_terms(get_the_ID(),'portfolio_tag');
+                                                $count = count($terms);
+                                                if ($count>0) {
+                                                    if ($line_counter>0)
+                                                    {
+                                                        echo '<div class="simple_line on_folio"></div>';
                                                     }
+                                                    $line_counter++;
+                                                    echo '<div id="fount_single_tags" class="fount_info_block clearfix">';
+                                                    echo '<div class="left_floated header_font">';
+                                                    echo '<span class="prk_heavier_700 zero_color">'.$prk_translations['tags_text'].':&nbsp;&nbsp;</span>';
+                                                    echo '<span class="default_color">';
+                                                    $in_count=0;
+                                                    foreach ( $terms as $term ) {
+                                                        if ($in_count>0)
+                                                            echo ", ";
+                                                        echo '' . $term->name . '';
+                                                        $in_count++;
+                                                    }
+                                                    echo '</span></div></div>';
                                                 }
                                             }
                                             if (get_field('client_url')!="")
@@ -293,7 +290,11 @@
                                                 echo '<div class="fount_info_block clearfix">';
                                                 echo '<div class="left_floated header_font">';
                                                 echo '<span class="prk_heavier_700 zero_color">'.$prk_translations['project_text'].':&nbsp;&nbsp;</span>';
-                                                echo '<a href="'.$final_url.'" target="_blank" data-color="'.$featured_color.'">';
+                                                $popup="_blank";
+                                                if (get_field('new_window')=="_self") {
+                                                    $popup="_self";
+                                                }
+                                                echo '<a href="'.$final_url.'" target="'.$popup.'" data-color="'.$featured_color.'">';
                                                 if (get_field('ext_url_label')!="") 
                                                 {
                                                     echo get_field('ext_url_label');
@@ -313,7 +314,7 @@
                                     <div class="navigation_previous_portfolio">
                                         <?php next_post_link_plus( array(
                                             'order_by' => 'menu_order',
-                                            'in_same_cat' => true,
+                                            'in_same_cat' => $in_cat,
                                             'format' => '%link',
                                             'link' => '%title',
                                             'loop' => true,
@@ -323,7 +324,7 @@
                                     <div class="navigation_next_portfolio">
                                             <?php previous_post_link_plus( array(
                                                 'order_by' => 'menu_order',
-                                                'in_same_cat' => true,
+                                                'in_same_cat' => $in_cat,
                                                 'format' => '%link',
                                                 'link' => '%title',
                                                 'loop' => true,
@@ -358,18 +359,22 @@
         }
         else
         {
+            $title_class="";
+            if (get_field('title_under')==1) {
+                $title_class=" fount_title_under";
+            }
             ?>
             <div id="centered_block" class="prk_no_change"> 
                 <div id="main_block" class="page-<?php echo get_the_ID(); ?>">
                     <div id="content" class="prk_tucked" data-parent="<?php echo get_page_link(prk_get_parent_portfolio()); ?>">
                     <div id="main" class="main_no_sections">
                         <div id="ajaxed_content">
-                        <div class="row">
+                        <div class="row<?php echo $title_class; ?>">
                         <article id="prk_full_folio" <?php post_class($featured_class); ?> data-color="<?php echo $featured_color; ?>">
                             <h1 id="folio_ttl" class="header_font bd_headings_text_shadow zero_color head_center_text">
                                     <?php the_title(); ?>
-                                </h1>
-                                <div class="clearfix"></div>
+                            </h1>
+                            <div class="clearfix"></div>
                             <div id="single_spinner" class="spinner-icon"></div>
                             <div id="<?php echo $sl_id; ?>" class="prk_inner_block small-centered columns">
                                     <div class="<?php echo $sl_class; ?>" data-autoplay="<?php echo $autoplay; ?>" data-navigation="true" data-delay="<?php echo $prk_fount_options['delay_portfolio']; ?>" data-color="<?php echo $featured_color; ?>">
@@ -465,14 +470,18 @@
                                         echo '<div class="small-12 columns">';
                                     }
                                 ?>
-                                    <h4 class="project_heading header_font bd_headings_text_shadow zero_color prk_heavier_700">
-                                        <?php echo $prk_translations['prj_desc_text']; ?>
-                                    </h4>
+                                <h1 id="folio_ttl_low" class="header_font bd_headings_text_shadow zero_color head_center_text">
+                                    <?php the_title(); ?>
+                                </h1>
+                                <div class="clearfix"></div>
+                                <h4 class="project_heading header_font bd_headings_text_shadow zero_color prk_heavier_700">
+                                    <?php echo $prk_translations['prj_desc_text']; ?>
+                                </h4>
+                                <div class="clearfix"></div>
+                                    <div id="single_entry_content" class="prk_no_composer prk_break_word<?php if(!has_shortcode(get_the_content(),'vc_row')) {echo " prk_composer_extra";} ?>">
+                                        <?php the_content(); ?>
+                                    </div>
                                     <div class="clearfix"></div>
-                                        <div id="single_entry_content" class="prk_no_composer prk_break_word<?php if(!has_shortcode(get_the_content(),'vc_row')) {echo " prk_composer_extra";} ?>">
-                                            <?php the_content(); ?>
-                                        </div>
-                                        <div class="clearfix"></div>
                                 </div>
                                 <?php
                                     if ($main_layout=="wide")
@@ -570,31 +579,27 @@
                                                             }
                                                         }
                                                     }
-                                                    if (get_the_term_list(get_the_ID(),'portfolio_tag')!="")
-                                                    {
-                                                        if (get_the_term_list(get_the_ID(),'pirenko_skills')!="")
-                                                        {
-                                                            $terms = get_terms("portfolio_tag");
-                                                            $count = count($terms);
-                                                            if ($count>0) {
-                                                                if ($line_counter>0)
-                                                                {
-                                                                    echo '<div class="simple_line on_folio"></div>';
-                                                                }
-                                                                $line_counter++;
-                                                                echo '<div id="fount_single_tags" class="fount_info_block clearfix">';
-                                                                echo '<div class="left_floated header_font">';
-                                                                echo '<span class="prk_heavier_700 zero_color">'.$prk_translations['tags_text'].':&nbsp;&nbsp;</span>';
-                                                                echo '<span class="default_color">';
-                                                                $in_count=0;
-                                                                foreach ( $terms as $term ) {
-                                                                    if ($in_count>0)
-                                                                        echo ", ";
-                                                                    echo '' . $term->name . '';
-                                                                    $in_count++;
-                                                                }
-                                                                echo '</span></div></div>';
+                                                    if (wp_get_object_terms(get_the_ID(),'portfolio_tag')!="") {
+                                                        $terms = wp_get_object_terms(get_the_ID(),'portfolio_tag');
+                                                        $count = count($terms);
+                                                        if ($count>0) {
+                                                            if ($line_counter>0)
+                                                            {
+                                                                echo '<div class="simple_line on_folio"></div>';
                                                             }
+                                                            $line_counter++;
+                                                            echo '<div id="fount_single_tags" class="fount_info_block clearfix">';
+                                                            echo '<div class="left_floated header_font">';
+                                                            echo '<span class="prk_heavier_700 zero_color">'.$prk_translations['tags_text'].':&nbsp;&nbsp;</span>';
+                                                            echo '<span class="default_color">';
+                                                            $in_count=0;
+                                                            foreach ( $terms as $term ) {
+                                                                if ($in_count>0)
+                                                                    echo ", ";
+                                                                echo '' . $term->name . '';
+                                                                $in_count++;
+                                                            }
+                                                            echo '</span></div></div>';
                                                         }
                                                     }
                                                     if (get_field('client_url')!="")
@@ -624,7 +629,11 @@
                                                         echo '<div class="fount_info_block clearfix">';
                                                         echo '<div class="left_floated header_font">';
                                                         echo '<span class="prk_heavier_700 zero_color">'.$prk_translations['project_text'].':&nbsp;&nbsp;</span>';
-                                                        echo '<a href="'.$final_url.'" target="_blank" data-color="'.$featured_color.'">';
+                                                        $popup="_blank";
+                                                        if (get_field('new_window')=="_self") {
+                                                            $popup="_self";
+                                                        }
+                                                        echo '<a href="'.$final_url.'" target="'.$popup.'" data-color="'.$featured_color.'">';
                                                         if (get_field('ext_url_label')!="") 
                                                         {
                                                             echo get_field('ext_url_label');
@@ -648,7 +657,7 @@
                                     <div class="navigation_previous_portfolio">
                                         <?php next_post_link_plus( array(
                                             'order_by' => 'menu_order',
-                                            'in_same_cat' => true,
+                                            'in_same_cat' => $in_cat,
                                             'format' => '%link',
                                             'link' => '%title',
                                             'loop' => true,
@@ -658,7 +667,7 @@
                                     <div class="navigation_next_portfolio">
                                             <?php previous_post_link_plus( array(
                                                 'order_by' => 'menu_order',
-                                                'in_same_cat' => true,
+                                                'in_same_cat' => $in_cat,
                                                 'format' => '%link',
                                                 'link' => '%title',
                                                 'loop' => true,

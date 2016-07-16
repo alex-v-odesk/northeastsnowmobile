@@ -50,7 +50,7 @@ define( 'DC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 /**
  * @var string plugin domain
  */
-define( 'DC_PLUGIN_DOMAIN', 'fount_lang' );
+define( 'DC_PLUGIN_DOMAIN', 'fount' );
 
 /** 
  * @var int throbber height
@@ -137,7 +137,7 @@ add_action( 'admin_menu', 'DC_admin_menu' );
  */
 function DC_admin_menu() {
 	//if ( function_exists('add_submenu_page') ) {
-		//add_submenu_page( 'plugins.php', __( 'Pirenko: Better Comments Options', 'fount_lang' ), __( 'Pirenko: Better Comments', 'fount_lang' ), 'manage_options', 'decent-comments-options', 'DC_options');
+		//add_submenu_page( 'plugins.php', __( 'Pirenko: Better Comments Options', 'fount' ), __( 'Pirenko: Better Comments', 'fount' ), 'manage_options', 'decent-comments-options', 'DC_options');
 	//}
 }
 
@@ -147,13 +147,13 @@ function DC_admin_menu() {
 function DC_options() {
 	
 	if ( !current_user_can( "manage_options" ) ) {
-		wp_die( __( 'Access denied.', 'fount_lang' ) );
+		wp_die( __( 'Access denied.', 'fount' ) );
 	}
 	
 	echo
 		'<div>' .
 			'<h2>' .
-				__( 'Pirenko: Better Comments Options', 'fount_lang' ) .
+				__( 'Pirenko: Better Comments Options', 'fount' ) .
 			'</h2>' .
 		'</div>';
 
@@ -176,14 +176,14 @@ function DC_options() {
 	echo
 		'<form action="" name="options" method="post">' .		
 			'<div>' .
-				'<h3>' . __( 'Settings', 'fount_lang' ) . '</h3>' .
+				'<h3>' . __( 'Settings', 'fount' ) . '</h3>' .
 				'<p>' .
 					'<input name="delete-data" type="checkbox" ' . ( $delete_data ? 'checked="checked"' : '' ) . '/>' .
-					'<label for="delete-data">' . __( 'Delete settings when the plugin is deactivated', 'fount_lang' ) . '</label>' .
+					'<label for="delete-data">' . __( 'Delete settings when the plugin is deactivated', 'fount' ) . '</label>' .
 				'</p>' .
 				'<p>' .
 					wp_nonce_field( plugin_basename( __FILE__ ), DC_OPTIONS_NONCE, true, false ) .
-					'<input type="submit" name="submit" value="' . __( 'Save', 'fount_lang' ) . '"/>' .
+					'<input type="submit" name="submit" value="' . __( 'Save', 'fount' ) . '"/>' .
 				'</p>' .
 			'</div>' .
 		'</form>';

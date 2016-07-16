@@ -5,7 +5,7 @@ get_template_part('/inc/modules/ambrosite/ambrosite');
 function fount_widgets_init() {
     global $prk_fount_options;
     register_sidebar(array(
-        'name' => __('Right Sidebar', 'fount_lang'),
+        'name' => __('Right Sidebar', 'fount'),
         'id' => 'sidebar-primary',
         'before_widget' => '<div id="%1$s" class="widget %2$s vertical_widget"><div class="widget_inner">',
         'after_widget' => '</div><div class="clearfix"></div></div>',
@@ -13,7 +13,7 @@ function fount_widgets_init() {
         'after_title' => '</div><div class="clearfix"></div>',
     ));
     register_sidebar(array(
-        'name' => __('Right Hidden Sidebar', 'fount_lang'),
+        'name' => __('Right Hidden Sidebar', 'fount'),
         'id' => 'sidebar-hidden',
         'before_widget' => '<div id="%1$s" class="widget %2$s vertical_widget"><div class="widget_inner">',
         'after_widget' => '</div><div class="clearfix"></div></div>',
@@ -21,7 +21,7 @@ function fount_widgets_init() {
         'after_title' => '</div><div class="clearfix"></div>',
     ));
     register_sidebar(array(
-        'name' => __('Footer Sidebar', 'fount_lang'),
+        'name' => __('Footer Sidebar', 'fount'),
         'id' => 'sidebar-footer',
         'before_widget' => '<div id="%1$s" class="widget %2$s columns"><div class="widget_inner">',
         'after_widget' => '</div><div class="clearfix"></div></div>',
@@ -31,10 +31,10 @@ function fount_widgets_init() {
     //PLACE WOOCOMMERCE IF NEEDED
     if (PRK_WOO=="true") {
             register_sidebar(array(
-            'name' => __('WooCommerce Sidebar', 'fount_lang'),
+            'name' => __('WooCommerce Sidebar', 'fount'),
             'id' => 'prk-woo-sidebar',
             'before_widget' => '<div id="%1$s" class="widget %2$s vertical_widget"><div class="widget_inner">',
-            'after_widget' => '</div></div>',
+            'after_widget' => '</div><div class="clearfix"></div></div>',
             'before_title' => '<div class="widget-title header_font bd_headings_text_shadow zero_color prk_heavier_700">',
             'after_title' => '</div>',
         ));

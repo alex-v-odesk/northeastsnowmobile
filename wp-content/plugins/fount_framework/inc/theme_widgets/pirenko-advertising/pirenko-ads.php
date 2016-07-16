@@ -1,9 +1,9 @@
 <?php
 	/*
-		Plugin Name: Pirenko Advertising
+		Plugin Name: Pirenko Advertising Widget
 		Plugin URI: http://www.pirenko.com
 		Description: A widget to diplay one advertisement
-		Version: 1.1
+		Version: 1.2
 		Author: Pirenko
 		Author URI: http://www.pirenko.com
 	*/
@@ -12,15 +12,12 @@
 	add_action( 'widgets_init', create_function( '', 'return register_widget( "Pirenko_Advertising_Widget" );' ) );
 	
 	//CREATE CLASS TO CONTROL EVERYTHING
-	class pirenko_advertising_widget extends WP_Widget 
-	{
-	
+	class pirenko_advertising_widget extends WP_Widget {
 		//SET UP WIDGET
-		function pirenko_advertising_widget() 
-		{
+		function __construct() {
 			$widget_ops = array( 'classname' => 'pirenko-advertising-widget', 'description' => ('A widget to diplay one advertisement.') );
 			$control_ops = array( 'width' => 255, 'height' => 460, 'id_base' => 'pirenko-advertising-widget' );
-			$this->WP_Widget( 'pirenko-advertising-widget', __('Fount: Advertising Widget ', 'fount_lang'), $widget_ops, $control_ops );
+			parent::__construct( 'pirenko-advertising-widget', __('Stamp: Advertising Widget ', 'stamp_lang'), $widget_ops, $control_ops );
 		}
 		function update($new_instance, $old_instance) 
 		{
@@ -31,10 +28,10 @@
 			$instance['advert_body'] = strip_tags($new_instance['advert_body']);
 
 		    if (function_exists('icl_translate')) { 
-				icl_translate('fount_lang', 'widget_title', $instance['title']); 
-			 	icl_translate('fount_lang', 'ads_advert_url', $instance['advert_url']);
-			 	icl_translate('fount_lang', 'ads_widget_image_path', $instance['image_path']);
-			 	icl_translate('fount_lang', 'ads_widget_advert_body', $instance['advert_body']);
+				icl_translate('stamp_lang', 'widget_title', $instance['title']); 
+			 	icl_translate('stamp_lang', 'ads_advert_url', $instance['advert_url']);
+			 	icl_translate('stamp_lang', 'ads_widget_image_path', $instance['image_path']);
+			 	icl_translate('stamp_lang', 'ads_widget_advert_body', $instance['advert_body']);
 			}
 		    return $instance;
 		}
@@ -90,8 +87,8 @@
 			<?php
 		}
 		//RENDER WIDGET IN THE SIDEBAR
-		function widget( $args, $instance ) 
-		{
+		function widget( $args, $instance ) {
+			extract($args);
 			echo $args['before_widget'];
 			echo ("<div id='pirenko_ads'>");
 			//DISPLAY TITLE IF NECESSARY
@@ -104,19 +101,19 @@
 					$instance['advert_url'] = ''; 
 				} 
 				else { 
-					$instance['advert_url'] = icl_translate( 'fount_lang', 'ads_advert_url', $instance['advert_url'] ); 
+					$instance['advert_url'] = icl_translate( 'stamp_lang', 'ads_advert_url', $instance['advert_url'] ); 
 				}
 				if (!isset($instance['image_path'])) { 
 					$instance['image_path'] = ''; 
 				} 
 				else { 
-					$instance['image_path'] = icl_translate( 'fount_lang', 'ads_widget_image_path', $instance['image_path'] ); 
+					$instance['image_path'] = icl_translate( 'stamp_lang', 'ads_widget_image_path', $instance['image_path'] ); 
 				}
 				if (!isset($instance['advert_body'])) { 
 					$instance['advert_body'] = ''; 
 				} 
 				else { 
-					$instance['advert_body'] = icl_translate( 'fount_lang', 'ads_widget_advert_body', $instance['follow_text'] ); 
+					$instance['advert_body'] = icl_translate( 'stamp_lang', 'ads_widget_advert_body', $instance['follow_text'] ); 
 				}
 			} else {
 				if (!isset($instance['advert_url'])) { 
@@ -135,7 +132,7 @@
 				
 				if( function_exists('icl_translate')){
 					echo "<p>";
-					echo icl_translate( 'fount_lang', 'advertising_widget_body', $instance['advert_body'] );
+					echo icl_translate( 'stamp_lang', 'advertising_widget_body', $instance['advert_body'] );
 					echo "</p>";
 				} else {
 					echo "<p>".$instance['advert_body']."</p>";
@@ -143,11 +140,11 @@
 			}
 			else
 			{
-				echo "<p>". __('No image was specified!', 'fount_lang') ."</p>";
+				echo "<p>". __('No image was specified!', 'stamp_lang') ."</p>";
 				
 				if( function_exists('icl_translate')){
 					echo "<p>";
-					echo icl_translate( 'fount_lang', 'advertising_widget_body', $instance['advert_body'] );
+					echo icl_translate( 'stamp_lang', 'advertising_widget_body', $instance['advert_body'] );
 					echo "</p>";
 				} else {
 					echo "<p>".$instance['advert_body']."</p>";

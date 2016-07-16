@@ -53,8 +53,8 @@ class Decent_Comments_Widget extends WP_Widget {
 	/**
 	 * Creates a Decent Comments widget.
 	 */
-	function Decent_Comments_Widget() {
-		parent::WP_Widget( false, $name = 'Fount: Better Comments' );
+	function __construct() {
+		parent::__construct( false, $name = 'Fount: Better Comments' );
 	}
 	
 	/**
@@ -235,21 +235,21 @@ class Decent_Comments_Widget extends WP_Widget {
 		// title
 		$title = isset( $instance['title'] ) ? $instance['title'] : "";
 		echo "<p>";
-		echo '<label for="' .$this->get_field_id( 'title' ) . '">' . __( 'Title', 'fount_lang' ) . '</label>'; 
+		echo '<label for="' .$this->get_field_id( 'title' ) . '">' . __( 'Title', 'fount' ) . '</label>'; 
 		echo '<input class="widefat" id="' . $this->get_field_id( 'title' ) . '" name="' . $this->get_field_name( 'title' ) . '" type="text" value="' . esc_attr( $title ) . '" />';
 		echo '</p>';
 		
 		// number
 		$number = isset( $instance['number'] ) ? intval( $instance['number'] ) : '';
 		echo "<p>";
-		echo '<label class="title" title="' . __( "The number of comments to show.", 'fount_lang' ) .'" for="' .$this->get_field_id( 'number' ) . '">' . __( 'Number of comments', 'fount_lang' ) . '</label>'; 
+		echo '<label class="title" title="' . __( "The number of comments to show.", 'fount' ) .'" for="' .$this->get_field_id( 'number' ) . '">' . __( 'Number of comments', 'fount' ) . '</label>'; 
 		echo '<input class="widefat" id="' . $this->get_field_id( 'number' ) . '" name="' . $this->get_field_name( 'number' ) . '" type="text" value="' . esc_attr( $number ) . '" />';
 		echo '</p>';
 		
 		// orderby
 		$orderby = isset( $instance['orderby'] ) ? $instance['orderby'] : '';
 		echo '<p>';
-		echo '<label class="title" title="' . __( "Sorting criteria.", 'fount_lang' ) .'" for="' .$this->get_field_id( 'orderby' ) . '">' . __( 'Order by ...', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "Sorting criteria.", 'fount' ) .'" for="' .$this->get_field_id( 'orderby' ) . '">' . __( 'Order by ...', 'fount' ) . '</label>';
 		echo '<select class="widefat" name="' . $this->get_field_name( 'orderby' ) . '">';
 		foreach ( Decent_Comments_Renderer::$orderby_options as $orderby_option_key => $orderby_option_name ) {
 			$selected = ( $orderby_option_key == $orderby ? ' selected="selected" ' : "" );
@@ -261,7 +261,7 @@ class Decent_Comments_Widget extends WP_Widget {
 		// order
 		$order = isset( $instance['order'] ) ? $instance['order'] : '';
 		echo '<p>';
-		echo '<label class="title" title="' . __( "Sort order.", 'fount_lang' ) .'" for="' .$this->get_field_id( 'order' ) . '">' . __( 'Sort order', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "Sort order.", 'fount' ) .'" for="' .$this->get_field_id( 'order' ) . '">' . __( 'Sort order', 'fount' ) . '</label>';
 		echo '<select class="widefat" name="' . $this->get_field_name( 'order' ) . '">';
 		foreach ( Decent_Comments_Renderer::$order_options as $order_option_key => $order_option_name ) {
 			$selected = ( $order_option_key == $order ? ' selected="selected" ' : "" );
@@ -280,13 +280,13 @@ class Decent_Comments_Widget extends WP_Widget {
 			}
 		}
 		echo "<p>";
-		echo '<label class="title" title="' . __( "Leave empty to show comments for all posts. To show comments for a specific post only, indicate either part of the title or the post ID. To show posts for the current post, indicate: [current]", 'fount_lang' ) . '" for="' .$this->get_field_id( 'post_id' ) . '">' . __( 'Post ID', 'fount_lang' ) . '</label>'; 
+		echo '<label class="title" title="' . __( "Leave empty to show comments for all posts. To show comments for a specific post only, indicate either part of the title or the post ID. To show posts for the current post, indicate: [current]", 'fount' ) . '" for="' .$this->get_field_id( 'post_id' ) . '">' . __( 'Post ID', 'fount' ) . '</label>'; 
 		echo '<input class="widefat" id="' . $this->get_field_id( 'post_id' ) . '" name="' . $this->get_field_name( 'post_id' ) . '" type="text" value="' . esc_attr( $post_id ) . '" />';
 		echo '<br/>';
-		echo '<span class="description">' . __( "Title, empty, post ID or [current]", 'fount_lang' ) . '</span>';
+		echo '<span class="description">' . __( "Title, empty, post ID or [current]", 'fount' ) . '</span>';
 		if ( !empty( $post_id ) && ( $post_title = get_the_title( $post_id ) ) ) {
 			echo '<br/>';
-			echo '<span class="description"> ' . sprintf( __("Selected post: <em>%s</em>", 'fount_lang' ) , $post_title ) . '</span>';
+			echo '<span class="description"> ' . sprintf( __("Selected post: <em>%s</em>", 'fount' ) , $post_title ) . '</span>';
 		}
 		echo '</p>';
         
@@ -294,20 +294,20 @@ class Decent_Comments_Widget extends WP_Widget {
 		$checked = ( ( ( !isset( $instance['excerpt'] ) && Decent_Comments_Renderer::$defaults['excerpt'] ) || ( $instance['excerpt'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<p>';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $this->get_field_name( 'excerpt' ) . '" />';
-		echo '<label class="title" title="' . __( "If checked, shows an excerpt of the comment. Otherwise the full text of the comment is displayed.", 'fount_lang' ) .'" for="' . $this->get_field_id( 'excerpt' ) . '">' . __( 'Show comment excerpt', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "If checked, shows an excerpt of the comment. Otherwise the full text of the comment is displayed.", 'fount' ) .'" for="' . $this->get_field_id( 'excerpt' ) . '">' . __( 'Show comment excerpt', 'fount' ) . '</label>';
 		echo '</p>';
 		
 		// max_excerpt_words
 		$max_excerpt_words = isset( $instance['max_excerpt_words'] ) ? intval( $instance['max_excerpt_words'] ) : '';
 		echo "<p>";
-		echo '<label class="title" title="' . __( "The maximum number of words shown in excerpts.", 'fount_lang' ) .'" for="' .$this->get_field_id( 'max_excerpt_words' ) . '">' . __( 'Number of words in excerpts', 'fount_lang' ) . '</label>'; 
+		echo '<label class="title" title="' . __( "The maximum number of words shown in excerpts.", 'fount' ) .'" for="' .$this->get_field_id( 'max_excerpt_words' ) . '">' . __( 'Number of words in excerpts', 'fount' ) . '</label>'; 
 		echo '<input class="widefat" id="' . $this->get_field_id( 'max_excerpt_words' ) . '" name="' . $this->get_field_name( 'max_excerpt_words' ) . '" type="text" value="' . esc_attr( $max_excerpt_words ) . '" />';
 		echo '</p>';
 		
 		// ellipsis
 		$ellipsis = isset( $instance['ellipsis'] ) ? $instance['ellipsis'] : '';
 		echo "<p>";
-		echo '<label class="title" title="' . __( "The ellipsis is shown after the excerpt when there is more content.", 'fount_lang' ) . '" for="' .$this->get_field_id( 'ellipsis' ) . '">' . __( 'Ellipsis', 'fount_lang' ) . '</label>'; 
+		echo '<label class="title" title="' . __( "The ellipsis is shown after the excerpt when there is more content.", 'fount' ) . '" for="' .$this->get_field_id( 'ellipsis' ) . '">' . __( 'Ellipsis', 'fount' ) . '</label>'; 
 		echo '<input class="widefat" id="' . $this->get_field_id( 'ellipsis' ) . '" name="' . $this->get_field_name( 'ellipsis' ) . '" type="text" value="' . esc_attr( $ellipsis ) . '" />';
 		echo '<span class="description">The ellipsis is shown after the excerpt when there is more content.</span>';
 		echo '</p>';
@@ -316,20 +316,20 @@ class Decent_Comments_Widget extends WP_Widget {
 		$checked = ( ( ( !isset( $instance['show_author'] ) && Decent_Comments_Renderer::$defaults['show_author'] ) || ( $instance['show_author'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<p>';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $this->get_field_name( 'show_author' ) . '" />';
-		echo '<label class="title" title="' . __( "Whether to show the author of each comment.", 'fount_lang' ) .'" for="' . $this->get_field_id( 'show_author' ) . '">' . __( 'Show author', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "Whether to show the author of each comment.", 'fount' ) .'" for="' . $this->get_field_id( 'show_author' ) . '">' . __( 'Show author', 'fount' ) . '</label>';
 		echo '</p>';
 		
 		// show_avatar
 		$checked = ( ( ( !isset( $instance['show_avatar'] ) && Decent_Comments_Renderer::$defaults['show_avatar'] ) || ( $instance['show_avatar'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<p>';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $this->get_field_name( 'show_avatar' ) . '" />';
-		echo '<label class="title" title="' . __( "Show the avatar of the author.", 'fount_lang' ) .'" for="' . $this->get_field_id( 'show_avatar' ) . '">' . __( 'Show avatar', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "Show the avatar of the author.", 'fount' ) .'" for="' . $this->get_field_id( 'show_avatar' ) . '">' . __( 'Show avatar', 'fount' ) . '</label>';
 		echo '</p>';
 
 		// avatar size
 		$avatar_size = isset( $instance['avatar_size'] ) ? intval( $instance['avatar_size'] ) : '';
 		echo "<p>";
-		echo '<label class="title" title="' . __( "The size of the avatar in pixels.", 'fount_lang' ) .'" for="' .$this->get_field_id( 'avatar_size' ) . '">' . __( 'Avatar size', 'fount_lang' ) . '</label>'; 
+		echo '<label class="title" title="' . __( "The size of the avatar in pixels.", 'fount' ) .'" for="' .$this->get_field_id( 'avatar_size' ) . '">' . __( 'Avatar size', 'fount' ) . '</label>'; 
 		echo '<input class="widefat" id="' . $this->get_field_id( 'avatar_size' ) . '" name="' . $this->get_field_name( 'avatar_size' ) . '" type="text" value="' . esc_attr( $avatar_size ) . '" />';
 		echo '</p>';
 		
@@ -337,23 +337,23 @@ class Decent_Comments_Widget extends WP_Widget {
 		$checked = ( ( ( !isset( $instance['show_link'] ) && Decent_Comments_Renderer::$defaults['show_link'] ) || ( $instance['show_link'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<p>';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $this->get_field_name( 'show_link' ) . '" />';
-		echo '<label class="title" title="' . __( "Show a link to the post that the comment applies to.", 'fount_lang' ) .'" for="' . $this->get_field_id( 'show_link' ) . '">' . __( 'Show link to post', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "Show a link to the post that the comment applies to.", 'fount' ) .'" for="' . $this->get_field_id( 'show_link' ) . '">' . __( 'Show link to post', 'fount' ) . '</label>';
 		echo '</p>';
 
 		// show_comment
 		$checked = ( ( ( !isset( $instance['show_comment'] ) && Decent_Comments_Renderer::$defaults['show_comment'] ) || ( $instance['show_comment'] === true ) ) ? 'checked="checked"' : '' );
 		echo '<p>';
 		echo '<input type="checkbox" ' . $checked . ' value="1" name="' . $this->get_field_name( 'show_comment' ) . '" />';
-		echo '<label class="title" title="' . __( "Show an excerpt of the comment or the full comment.", 'fount_lang' ) .'" for="' . $this->get_field_id( 'show_comment' ) . '">' . __( 'Show the comment', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "Show an excerpt of the comment or the full comment.", 'fount' ) .'" for="' . $this->get_field_id( 'show_comment' ) . '">' . __( 'Show the comment', 'fount' ) . '</label>';
 		echo '</p>';
 		
 		// taxonomy & terms
 		$taxonomy = isset( $instance['taxonomy'] ) ? $instance['taxonomy'] : '';
 		echo "<p>";
-		echo '<label class="title" title="' . __( "A taxonomy, e.g. category or post_tag", 'fount_lang' ) .'" for="' .$this->get_field_id( 'taxonomy' ) . '">' . __( 'Taxonomy', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "A taxonomy, e.g. category or post_tag", 'fount' ) .'" for="' .$this->get_field_id( 'taxonomy' ) . '">' . __( 'Taxonomy', 'fount' ) . '</label>';
 		echo '<input class="widefat" id="' . $this->get_field_id( 'taxonomy' ) . '" name="' . $this->get_field_name( 'taxonomy' ) . '" type="text" value="' . esc_attr( $taxonomy ) . '" />';
 		echo '<br/>';
-		echo '<span class="description">' . __( "Indicate <strong>category</strong> if you would like to show comments on posts in certain categories. Give the desired categories' slugs in <strong>Terms</strong>. For tags use <strong>post_tag</strong> and give the tags' slugs in <strong>Terms</strong>.", 'fount_lang' ) . '</span>';
+		echo '<span class="description">' . __( "Indicate <strong>category</strong> if you would like to show comments on posts in certain categories. Give the desired categories' slugs in <strong>Terms</strong>. For tags use <strong>post_tag</strong> and give the tags' slugs in <strong>Terms</strong>.", 'fount' ) . '</span>';
 		echo '</p>';
 		
 		$terms = '';
@@ -365,10 +365,10 @@ class Decent_Comments_Widget extends WP_Widget {
 			}
 		}
 		echo "<p>";
-		echo '<label class="title" title="' . __( "If a taxonomy is given , indicate terms in that taxonomy separated by comma to show comments for all posts related to these terms. To show comments on posts related to the same terms as the current post, indicate: {current}. If a taxonomy is given and terms is empty, no comments will be shown.", 'fount_lang' ) . '" for="' .$this->get_field_id( 'terms' ) . '">' . __( 'Terms', 'fount_lang' ) . '</label>';
+		echo '<label class="title" title="' . __( "If a taxonomy is given , indicate terms in that taxonomy separated by comma to show comments for all posts related to these terms. To show comments on posts related to the same terms as the current post, indicate: {current}. If a taxonomy is given and terms is empty, no comments will be shown.", 'fount' ) . '" for="' .$this->get_field_id( 'terms' ) . '">' . __( 'Terms', 'fount' ) . '</label>';
 		echo '<input class="widefat" id="' . $this->get_field_id( 'terms' ) . '" name="' . $this->get_field_name( 'terms' ) . '" type="text" value="' . esc_attr( $terms ) . '" />';
 		echo '<br/>';
-		echo '<span class="description">' . __( "Terms or {current}. A <strong>Taxonomy</strong> must be given.", 'fount_lang' ) . '</span>';
+		echo '<span class="description">' . __( "Terms or {current}. A <strong>Taxonomy</strong> must be given.", 'fount' ) . '</span>';
 		echo '</p>';
 		echo "<p>";
 		echo '<span class="description"><strong>Important Notice:</strong> This widget was built and tweaked over the <a href="http://wordpress.org/extend/plugins/decent-comments/" target="_blank">Decent Comments Plugin</a> by itthinx.</span>';

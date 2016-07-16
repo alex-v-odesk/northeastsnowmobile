@@ -12,15 +12,12 @@
 	add_action( 'widgets_init', create_function( '', 'return register_widget( "Pirenko_Video_Widget" );' ) );
 	
 	//CREATE CLASS TO CONTROL EVERYTHING
-	class pirenko_video_widget extends WP_Widget 
-	{
-	
+	class pirenko_video_widget extends WP_Widget {
 		//SET UP WIDGET
-		function pirenko_video_widget() 
-		{
+		function __construct() {
 			$widget_ops = array( 'classname' => 'pirenko-video-widget', 'description' => ('A widget to diplay one video.') );
 			$control_ops = array( 'width' => 255, 'height' => 460, 'id_base' => 'pirenko-video-widget' );
-			$this->WP_Widget( 'pirenko-video-widget', __('Fount: Video Widget ', 'fount_lang'), $widget_ops, $control_ops );
+			parent::__construct( 'pirenko-video-widget', __('Fount: Video Widget ', 'fount'), $widget_ops, $control_ops );
 		}
 		function update($new_instance, $old_instance) {
 			$instance = $old_instance;
@@ -28,8 +25,8 @@
 			$instance['video_html'] = strip_tags($new_instance['video_html']);
 
 		    if (function_exists('icl_translate')) { 
-				icl_translate('fount_lang', 'widget_title', $instance['title']); 
-			 	icl_translate('fount_lang', 'video_widget_html_text', $instance['video_html']);
+				icl_translate('fount', 'widget_title', $instance['title']); 
+			 	icl_translate('fount', 'video_widget_html_text', $instance['video_html']);
 			}
 
 		    return $instance;
@@ -72,7 +69,7 @@
 					$instance['video_html'] = ''; 
 				} 
 				else { 
-					$instance['video_html'] = icl_translate( 'fount_lang', 'video_widget_html_text', $instance['video_html'] ); 
+					$instance['video_html'] = icl_translate( 'fount', 'video_widget_html_text', $instance['video_html'] ); 
 				}
 			
 			} else {

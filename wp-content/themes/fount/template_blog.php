@@ -39,6 +39,7 @@
             $featured_style=' forced_menu';
         $iso_images_max_w=390;
         $iso_images_min_w=340;
+        $nav_type=get_field('navigation_type');
     ?>
     <div id="centered_block" class="page-prk-blog-masonry<?php echo $featured_style; ?>"> 
     <div id="main_block" class="page-<?php echo get_the_ID(); ?>">
@@ -53,9 +54,11 @@
             {
                 wp_reset_query();
                 if (get_the_content()!=="") {
+                    echo '<div class="row">';
                     while (have_posts()) : the_post();
                         the_content();
                     endwhile;
+                    echo '</div>';
                 }
                 echo '<div class="clearfix bt_15gutter"></div>';
             }
@@ -150,7 +153,7 @@
                             { 
                                 echo $test->slug;echo " ";
                             }  ?>" data-id="id-<?php echo $post_counter; ?>" data-color="<?php echo $featured_color; ?>">
-                            <div class="masonry_inner boxed_shadow">
+                            <div class="masonry_inner">
                                 <?php 
                                     $less_size="";
                                     if (has_post_thumbnail( $post->ID ) ):
@@ -222,7 +225,7 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="entry_title">
-                                    <h4 class="bd_headings_text_shadow prk_heavier_700 big">
+                                    <h4 class="bd_headings_text_shadow prk_heavier_700 big header_font">
                                         <a href="<?php the_permalink(); ?>" class="fade_anchor zero_color prk_break_word" data-color="<?php echo $featured_color; ?>">
                                             <?php the_title(); ?>
                                         </a>
@@ -238,7 +241,7 @@
                                             <div class="clearfix"></div>
                                         </div>
                                     </div>
-                                    <div class="blog_lower header_font row prk_heavier_500">
+                                    <div class="blog_lower header_font prk_heavier_500">
                                         <div class="small-12 columns">
                                             <?php 
                                                 if ($prk_fount_options['categoriesby_blog']=="1")
@@ -266,10 +269,26 @@
                         endwhile;
                         ?>  
                     </div>
-                    <?php endif; 
-                    //SHOW NAVIGATION
-                    if ($my_query->max_num_pages>1)
-                    {
+                    <?php endif;
+                    //SHOW BUTTON TO SHOW MORE POSTS ONLY IF NEEDED
+                    if ($paged!=$my_query->max_num_pages && $nav_type=='ajaxed') {
+                        ?>
+                        <div class="clearfix"></div>
+                        <div id="nbr_helper" data-pir_curr="<?php echo $paged; ?>" data-pir_max="<?php echo $my_query->max_num_pages; ?>">
+                            <div class="multi_spinner spinner-icon"></div>
+                            <div id="load_more_blog" class="theme_button small" data-holder="masonry_blog">
+                                <a href="#">
+                                <?php echo($prk_translations['load_more']); ?> 
+                                </a>
+                                <i class="fount_button_arrow fount_fa-chevron-down"></i>
+                            </div>
+                            <div class="nx_lnk_wp">
+                                <?php next_posts_link('',$my_query->max_num_pages); ?>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    else if ($my_query->max_num_pages>1) {
                         ?>
                         <div id="entries_navigation_blog" class="row">
                             <div class="navigation fade_anchor columns small-12 prk_inner_block small-centered">
@@ -455,7 +474,7 @@
                                         <?php 
                                             $vt_image = vt_resize( get_post_thumbnail_id( $post->ID ), '' , $imgs_width, 0, false , $retina_flag );
                                         ?>
-                                        <img src="<?php echo $vt_image['url']; ?>" width="<?php echo $vt_image['width']; ?>" height="<?php echo $vt_image['height']; ?>" id="home_fader-<?php the_ID(); ?>" class="custom-img grid_image boxed_shadow" alt="" />
+                                        <img class="lazyOwl" src="#" data-src="<?php echo $vt_image['url']; ?>" width="<?php echo $vt_image['width']; ?>" height="<?php echo $vt_image['height']; ?>" id="home_fader-<?php the_ID(); ?>" class="custom-img grid_image boxed_shadow" alt="" />
                                     </div>
                                 </div>
                                 <?php
@@ -469,7 +488,7 @@
                                     echo "<div class='item'>";
                                             $in_image=wp_get_attachment_image_src(get_field('image_'.$count),'full');
                                             $vt_image = vt_resize( '', $in_image[0] , $imgs_width, 0, false , $retina_flag);
-                                            echo '<img src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" />';
+                                            echo '<img class="lazyOwl" src="#" data-src="'.$vt_image['url'].'" width="'. $vt_image['width'] .'" height="'. $vt_image['height'] .'" alt="" />';
                                     echo "</div>";
                                 }
                                 //OTHER MEDIA SUPPORT

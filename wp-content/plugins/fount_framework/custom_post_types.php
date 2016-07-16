@@ -10,20 +10,20 @@
 		if (!isset($prk_fount_slug_options['portfolio_slug']) || $prk_fount_slug_options['portfolio_slug']=="")
 			$prk_fount_slug_options['portfolio_slug']="portfolios";
 		$labels = array(
-			'add_new_item' => __('Add Portfolio Item', 'fount_lang'),
-			'edit_item' => __('Edit Portfolio Item', 'fount_lang'),
-			'new_item' => __('New Portfolio Item', 'fount_lang'),
-			'view_item' => __('Preview Portfolio Item', 'fount_lang'),
-			'search_items' => __('Search Portfolio Items', 'fount_lang'),
-			'not_found' => __('No Portfolio items found.', 'fount_lang'),
-			'not_found_in_trash' => __('No Portfolio items found in Trash.', 'fount_lang')
+			'add_new_item' => __('Add Portfolio Item', 'fount'),
+			'edit_item' => __('Edit Portfolio Item', 'fount'),
+			'new_item' => __('New Portfolio Item', 'fount'),
+			'view_item' => __('Preview Portfolio Item', 'fount'),
+			'search_items' => __('Search Portfolio Items', 'fount'),
+			'not_found' => __('No Portfolio items found.', 'fount'),
+			'not_found_in_trash' => __('No Portfolio items found in Trash.', 'fount')
 		);	
 		if ( get_bloginfo('version')>='3.8' ) 
 		{
 			register_post_type('pirenko_portfolios', array(
-			'label' => __('Portfolio Items', 'fount_lang'),
-			'labels' => array('all_items' => __('All Portfolios', 'fount_lang')),
-			'singular_label' => __('Portfolio Item', 'fount_lang'),
+			'label' => __('Portfolio Items', 'fount'),
+			'labels' => array('all_items' => __('All Portfolios', 'fount')),
+			'singular_label' => __('Portfolio Item', 'fount'),
 			'public' => true,
 			'show_ui' => true, 
 			'_builtin' => false,
@@ -37,9 +37,9 @@
 		else
 		{
 			register_post_type('pirenko_portfolios', array(
-				'label' => __('Portfolio Items', 'fount_lang'),
-				'labels' => array('all_items' => __('All Portfolios', 'fount_lang')),
-				'singular_label' => __('Portfolio Item', 'fount_lang'),
+				'label' => __('Portfolio Items', 'fount'),
+				'labels' => array('all_items' => __('All Portfolios', 'fount')),
+				'singular_label' => __('Portfolio Item', 'fount'),
 				'public' => true,
 				'show_ui' => true, 
 				'_builtin' => false,
@@ -47,17 +47,17 @@
 				'hierarchical' => false,
 				'rewrite' => array('slug' => $prk_fount_slug_options['portfolio_slug']),
 				'supports' => array('title', 'excerpt', 'editor', 'thumbnail', 'comments','custom-fields'), // Let's use custom fields for debugging purposes only
-				'menu_icon' => FOUNT_PLUGIN_URL . 'images/admin/portfolio.png',
+				'menu_icon' => PLUGIN_URL . 'images/admin/portfolio.png',
 			));
 		}
 
 		//ADD TAXONOMIES SIMILAR TO A CATEGORY
 		$labels_pir_categories = array(
-			'name' => __('Skills', 'post type general name', 'fount_lang'),
-			'all_items' => __('All Skills', 'all items', 'fount_lang'),
-			'add_new_item' => __('Add New Skill', 'adding a new item', 'fount_lang'),
-			'new_item_name' => __('New Skill Name', 'adding a new item', 'fount_lang'),
-			'edit_item' => __("Edit Skill", "fount_lang")
+			'name' => __('Skills', 'post type general name', 'fount'),
+			'all_items' => __('All Skills', 'all items', 'fount'),
+			'add_new_item' => __('Add New Skill', 'adding a new item', 'fount'),
+			'new_item_name' => __('New Skill Name', 'adding a new item', 'fount'),
+			'edit_item' => __("Edit Skill", 'fount')
 		);
 
 		if (!isset($prk_fount_slug_options['skills_slug']) || $prk_fount_slug_options['skills_slug']=="")
@@ -71,21 +71,21 @@
 
 		//ADD TAXONOMIES SIMILAR TO TAGS
 		  $labels = array(
-			'name' => __( 'Tags', 'taxonomy general name', 'fount_lang' ),
-			'singular_name' => __( 'Tag', 'taxonomy singular name', 'fount_lang' ),
-			'search_items' =>  __( 'Search Tags', 'fount_lang' ),
-			'popular_items' => __( 'Popular Tags', 'fount_lang' ),
-			'all_items' => __( 'All Tags', 'fount_lang' ),
+			'name' => __( 'Tags', 'taxonomy general name', 'fount' ),
+			'singular_name' => __( 'Tag', 'taxonomy singular name', 'fount' ),
+			'search_items' =>  __( 'Search Tags', 'fount' ),
+			'popular_items' => __( 'Popular Tags', 'fount' ),
+			'all_items' => __( 'All Tags', 'fount' ),
 			'parent_item' => null,
 			'parent_item_colon' => null,
-			'edit_item' => __( 'Edit Tag', 'fount_lang' ), 
-			'update_item' => __( 'Update Tag', 'fount_lang' ),
-			'add_new_item' => __( 'Add New Tag', 'fount_lang' ),
-			'new_item_name' => __( 'New Tag Name', 'fount_lang' ),
-			'separate_items_with_commas' => __( 'Separate Tags with commas', 'fount_lang' ),
-			'add_or_remove_items' => __( 'Add or remove Tags', 'fount_lang' ),
-			'choose_from_most_used' => __( 'Choose from the most used Tags', 'fount_lang' ),
-			'menu_name' => __( 'Tags', 'fount_lang' ),
+			'edit_item' => __( 'Edit Tag', 'fount' ), 
+			'update_item' => __( 'Update Tag', 'fount' ),
+			'add_new_item' => __( 'Add New Tag', 'fount' ),
+			'new_item_name' => __( 'New Tag Name', 'fount' ),
+			'separate_items_with_commas' => __( 'Separate Tags with commas', 'fount' ),
+			'add_or_remove_items' => __( 'Add or remove Tags', 'fount' ),
+			'choose_from_most_used' => __( 'Choose from the most used Tags', 'fount' ),
+			'menu_name' => __( 'Tags', 'fount' ),
 		  ); 
 		
 		if (!isset($prk_fount_slug_options['folio_tags_slug']) || $prk_fount_slug_options['folio_tags_slug']=="")
@@ -101,7 +101,7 @@
 			'rewrite' => array( 'slug' => $prk_fount_slug_options['folio_tags_slug'] ),
 		));
 	}
-	add_action('init', 'portfolio_register');
+	add_action('init', 'portfolio_register',5);
 	//PORTFOLIO ADD MORE COLUMNS FOR THE DASHBOARD VIEW
 	//ADD HOOKS
 	add_filter('manage_pirenko_portfolios_posts_columns', 'pirenko_columns_head_only_portfolios', 10);
@@ -160,7 +160,7 @@
 		}
 	}
 	//MAKE SURE THAT PORTFOLIO HAVE A FEATURED IMAGE
-	add_action('save_post', 'pu_validate_thumbnail');
+	/*add_action('save_post', 'pu_validate_thumbnail');
 	function pu_validate_thumbnail($post_id)
 	{
 	    // Only validate post type of post
@@ -190,7 +190,7 @@
 			</div>";
 	        delete_transient( "pu_validate_thumbnail_failed" );
 	    }
-	}
+	}*/
 	
 	//-------------------------
 	//CREATE SLIDES CUSTOM TYPE
@@ -202,17 +202,17 @@
  		if (!isset($prk_fount_slug_options['slides_slug']) || $prk_fount_slug_options['slides_slug']=="")
  			$prk_fount_slug_options['slides_slug']="slides";
 		$labels = array(
-			'name' => __('Slides', 'post type general name', 'fount_lang'),
-			'all_items' => __('All Slides', 'fount_lang'),
-			'singular_name' => __('Slide', 'fount_lang'),
-			'add_new' => __('Add New Slide', 'fount_lang'),
-			'add_new_item' => __('Add New Slide', 'fount_lang'),
-			'edit_item' => __('Edit Slide', 'fount_lang'),
-			'new_item' => __('New Slide', 'fount_lang'),
-			'view_item' => __('View Slide', 'fount_lang'),
-			'search_items' => __('Search Slides', 'fount_lang'),
-			'not_found' =>  __('Nothing found', 'fount_lang'),
-			'not_found_in_trash' => __('Nothing found in Trash', 'fount_lang'),
+			'name' => __('Slides', 'post type general name', 'fount'),
+			'all_items' => __('All Slides', 'fount'),
+			'singular_name' => __('Slide', 'fount'),
+			'add_new' => __('Add New Slide', 'fount'),
+			'add_new_item' => __('Add New Slide', 'fount'),
+			'edit_item' => __('Edit Slide', 'fount'),
+			'new_item' => __('New Slide', 'fount'),
+			'view_item' => __('View Slide', 'fount'),
+			'search_items' => __('Search Slides', 'fount'),
+			'not_found' =>  __('Nothing found', 'fount'),
+			'not_found_in_trash' => __('Nothing found in Trash', 'fount'),
 			'parent_item_colon' => ''
 		);
  		if ( get_bloginfo('version')>='3.8' ) {
@@ -238,7 +238,7 @@
 				'publicly_queryable' => true,
 				'show_ui' => true,
 				'query_var' => true,
-				'menu_icon' => FOUNT_PLUGIN_URL . 'images/admin/menu.png',
+				'menu_icon' => PLUGIN_URL . 'images/admin/menu.png',
 				'rewrite' => array('slug' => $prk_fount_slug_options['slides_slug']),
 				'capability_type' => 'post',
 				'hierarchical' => false,
@@ -249,10 +249,10 @@
 		register_post_type( 'pirenko_slides' , $args );
 		//ADD TAXONOMIES FOR SLIDES
 		$labels_pir_categories = array(
-			'name' => __('Groups', 'post type general name', 'fount_lang'),
-			'all_items' => __('All Groups', 'all items', 'fount_lang'),
-			'add_new_item' => __('Add New Group', 'adding a new item', 'fount_lang'),
-			'new_item_name' => __('New Group Name', 'adding a new item', 'fount_lang'),
+			'name' => __('Groups', 'post type general name', 'fount'),
+			'all_items' => __('All Groups', 'all items', 'fount'),
+			'add_new_item' => __('Add New Group', 'adding a new item', 'fount'),
+			'new_item_name' => __('New Group Name', 'adding a new item', 'fount'),
 			'edit_item' => __("Edit Group", "founttheme")
 		);
 
@@ -319,7 +319,7 @@
 	}
 
 	//CREATE SLIDER ITEMS POST TYPE
-	add_action('init', 'slides_register');
+	add_action('init', 'slides_register',5);
 
 
 	//-------------------------
@@ -332,20 +332,20 @@
 		if (!isset($prk_fount_slug_options['members_slug']) || $prk_fount_slug_options['members_slug']=="")
 			$prk_fount_slug_options['members_slug']="member";
 		$labels = array(
-			'add_new_item' => __('Add Team Member', 'fount_lang'),
-			'edit_item' => __('Edit Team Member', 'fount_lang'),
-			'new_item' => __('New Team Member', 'fount_lang'),
-			'view_item' => __('Preview Team Member', 'fount_lang'),
-			'search_items' => __('Search Team Members', 'fount_lang'),
-			'not_found' => __('No Team Members found.', 'fount_lang'),
-			'not_found_in_trash' => __('No Team Members found in Trash.', 'fount_lang')
+			'add_new_item' => __('Add Team Member', 'fount'),
+			'edit_item' => __('Edit Team Member', 'fount'),
+			'new_item' => __('New Team Member', 'fount'),
+			'view_item' => __('Preview Team Member', 'fount'),
+			'search_items' => __('Search Team Members', 'fount'),
+			'not_found' => __('No Team Members found.', 'fount'),
+			'not_found_in_trash' => __('No Team Members found in Trash.', 'fount')
 		);	
 		if ( get_bloginfo('version')>='3.8' )
 		{
 			register_post_type('pirenko_team_member', array(
-				'label' => __('Team Members', 'fount_lang'),
-				'labels' => array('all_items' => __('All Members', 'fount_lang')),
-				'singular_label' => __('Team Member', 'fount_lang'),
+				'label' => __('Team Members', 'fount'),
+				'labels' => array('all_items' => __('All Members', 'fount')),
+				'singular_label' => __('Team Member', 'fount'),
 				'public' => true,
 				'show_ui' => true, 
 				'_builtin' => false,
@@ -359,9 +359,9 @@
 		else 
 		{
 			register_post_type('pirenko_team_member', array(
-				'label' => __('Team Members', 'fount_lang'),
-				'labels' => array('all_items' => __('All Members', 'fount_lang')),
-				'singular_label' => __('Team Member', 'fount_lang'),
+				'label' => __('Team Members', 'fount'),
+				'labels' => array('all_items' => __('All Members', 'fount')),
+				'singular_label' => __('Team Member', 'fount'),
 				'public' => true,
 				'show_ui' => true, 
 				'_builtin' => false,
@@ -369,16 +369,16 @@
 				'hierarchical' => false,
 				'rewrite' => array('slug' => $prk_fount_slug_options['members_slug']),
 				'supports' => array('title', 'excerpt', 'editor', 'thumbnail', 'comments','custom-fields'), // Let's use custom fields for debugging purposes only
-				'menu_icon' => FOUNT_PLUGIN_URL . 'images/admin/user.png',
+				'menu_icon' => PLUGIN_URL . 'images/admin/user.png',
 			));
 		}
 		//ADD TAXONOMIES SIMILAR TO A CATEGORY
 		$labels_pir_categories = array(
-			'name' => __('Teams', 'post type general name', 'fount_lang'),
-			'all_items' => __('All Teams', 'all items', 'fount_lang'),
-			'add_new_item' => __('Add New Team', 'adding a new item', 'fount_lang'),
-			'new_item_name' => __('New Team Name', 'adding a new item', 'fount_lang'),
-			'edit_item' => __("Edit Team", "fount_lang")
+			'name' => __('Teams', 'post type general name', 'fount'),
+			'all_items' => __('All Teams', 'all items', 'fount'),
+			'add_new_item' => __('Add New Team', 'adding a new item', 'fount'),
+			'new_item_name' => __('New Team Name', 'adding a new item', 'fount'),
+			'edit_item' => __("Edit Team", 'fount')
 		);
 
 		if (!isset($prk_fount_slug_options['team_slug']) || $prk_fount_slug_options['team_slug']=="")
@@ -390,7 +390,7 @@
 		);
 		register_taxonomy('pirenko_member_group', 'pirenko_team_member', $args_pir_categories );
 	}
-	add_action('init', 'members_register');
+	add_action('init', 'members_register',5);
 
 	//-------------------------
 	//CREATE TESTIMONIALS CUSTOM TYPE
@@ -402,17 +402,17 @@
  		if (!isset($prk_fount_slug_options['testimonials_slug']) || $prk_fount_slug_options['testimonials_slug']=="")
  			$prk_fount_slug_options['testimonials_slug']="testimonials";
 		$labels = array(
-			'name' => __('Testimonials', 'fount_lang'),
-			'all_items' => __('All Testimonials', 'fount_lang'),
-			'singular_name' => __('Testimonial', 'fount_lang'),
-			'add_new' => __('Add New Testimonial', 'fount_lang'),
-			'add_new_item' => __('Add New Testimonial', 'fount_lang'),
-			'edit_item' => __('Edit Testimonial', 'fount_lang'),
-			'new_item' => __('New Testimonial', 'fount_lang'),
-			'view_item' => __('View Testimonial', 'fount_lang'),
-			'search_items' => __('Search Testimonials', 'fount_lang'),
-			'not_found' =>  __('Nothing found', 'fount_lang'),
-			'not_found_in_trash' => __('Nothing found in Trash', 'fount_lang'),
+			'name' => __('Testimonials', 'fount'),
+			'all_items' => __('All Testimonials', 'fount'),
+			'singular_name' => __('Testimonial', 'fount'),
+			'add_new' => __('Add New Testimonial', 'fount'),
+			'add_new_item' => __('Add New Testimonial', 'fount'),
+			'edit_item' => __('Edit Testimonial', 'fount'),
+			'new_item' => __('New Testimonial', 'fount'),
+			'view_item' => __('View Testimonial', 'fount'),
+			'search_items' => __('Search Testimonials', 'fount'),
+			'not_found' =>  __('Nothing found', 'fount'),
+			'not_found_in_trash' => __('Nothing found in Trash', 'fount'),
 			'parent_item_colon' => ''
 		);
  		if ( get_bloginfo('version')>='3.8' ) {
@@ -438,7 +438,7 @@
 				'publicly_queryable' => true,
 				'show_ui' => true,
 				'query_var' => true,
-				'menu_icon' => FOUNT_PLUGIN_URL . 'images/admin/menu.png',
+				'menu_icon' => PLUGIN_URL . 'images/admin/menu.png',
 				'rewrite' => array('slug' => $prk_fount_slug_options['testimonials_slug']),
 				'capability_type' => 'post',
 				'hierarchical' => false,
@@ -449,10 +449,10 @@
 		register_post_type( 'pirenko_testimonials' , $args );
 		//ADD TAXONOMIES FOR SLIDES
 		$labels_pir_categories = array(
-			'name' => __('Groups', 'post type general name', 'fount_lang'),
-			'all_items' => __('All Groups', 'all items', 'fount_lang'),
-			'add_new_item' => __('Add New Group', 'adding a new item', 'fount_lang'),
-			'new_item_name' => __('New Group Name', 'adding a new item', 'fount_lang'),
+			'name' => __('Groups', 'post type general name', 'fount'),
+			'all_items' => __('All Groups', 'all items', 'fount'),
+			'add_new_item' => __('Add New Group', 'adding a new item', 'fount'),
+			'new_item_name' => __('New Group Name', 'adding a new item', 'fount'),
 			'edit_item' => __("Edit Group", "founttheme")
 		);
 
@@ -468,7 +468,7 @@
 	}
 
 	//CREATE POST TYPE
-	add_action('init', 'fount_testimonials_register');
+	add_action('init', 'fount_testimonials_register',5);
 	
 
 	//EXECUTE THIS ONLY WHEN THE THEME IS ACTIVATED
@@ -546,6 +546,35 @@
 					'formatting' => 'none',
 					'maxlength' => '',
 				),
+				array (
+	                'key' => 'field_528a44c48star',
+	                'label' => 'Star rating',
+	                'instructions' => 'Optional',
+	                'name' => 'rating',
+	                'type' => 'select',
+	                'choices' => array (
+	                    'none' => 'Do not display',
+	                    //'0' => 'Zero',
+	                    '1' => 'One',
+	                    '2' => 'Two',
+	                    '3' => 'Three',
+	                    '4' => 'Four',
+	                    '5' => 'Five',
+	                	),
+                ),
+                array (
+                	'key' => 'field_5286cdc09link',
+                	'label' => 'Link',
+                	'name' => 'testimonial_link',
+                	'instructions' => 'Will be conneceted to the testimonial title (optional)',
+                	'type' => 'text',
+                	'default_value' => '',
+                	'placeholder' => '',
+                	'prepend' => '',
+                	'append' => '',
+                	'formatting' => 'none',
+                	'maxlength' => '',
+                ),
 			),
 			'location' => array (
 				array (
@@ -1233,6 +1262,16 @@
 			'title' => 'Theme Portfolio Options',
 			'fields' => array (
 				array (
+					'key' => 'field_5286a3dcustom',
+					'label' => 'Custom Logo (for portfolio feeds)',
+					'name' => 'custom_logo',
+					'type' => 'image',
+					'instructions' => 'Optional. Will be shown inside thumbnails and will be scaled to 50% of the original size (retina support)',
+					'save_format' => 'id',
+					'preview_size' => 'thumbnail',
+					'library' => 'all',
+				),
+				array (
 					'key' => 'field_528664954175a',
 					'label' => 'Featured Color',
 					'name' => 'featured_color',
@@ -1255,6 +1294,30 @@
 	                'allow_null' => 0,
 	                'multiple' => 0,
 	            ),
+	            array (
+					'key' => 'field_5286bgatinho',
+					'label' => 'Show title under featured media?',
+					'name' => 'title_under',
+					'type' => 'true_false',
+					'message' => '',
+					'default_value' => 0,
+					'conditional_logic' => array (
+						'status' => 1,
+						'rules' => array (
+							array (
+								'field' => 'field_528a5fc30297d',
+								'operator' => '!=',
+								'value' => 'default',
+							),
+							array (
+								'field' => 'field_528a5fc30297d',
+								'operator' => '!=',
+								'value' => 'half',
+							),
+						),
+						'allorany' => 'all',
+					),
+				),
 				array (
 					'key' => 'field_5286b34b1e739',
 					'label' => 'Skip featured image on single page and lightbox?',
@@ -1333,6 +1396,19 @@
 					'message' => '',
 					'default_value' => 0,
 				),
+				array (
+	                'key' => 'field_528a5fc45neue',
+	                'label' => 'Open link in a new window?',
+	                'name' => 'new_window',
+	                'type' => 'select',
+	                'choices' => array (
+	                    '_blank' => 'Yes',
+	                    '_self' => 'No',
+	                ),
+	                'default_value' => '_blank',
+	                'allow_null' => 0,
+	                'multiple' => 0,
+	            ),
 				array (
 	                'key' => 'field_528a5fc45683d',
 	                'label' => 'Use images and videos (maximum 20 entries) or just images with no entries number limitation?',
@@ -2872,6 +2948,24 @@
 					'placeholder' => '',
 					'maxlength' => '',
 					'formatting' => 'html',
+				),
+				array (
+					'key' => 'field_6969jd2867a62',
+					'label' => 'Text rotator effect',
+					'name' => 'pirenko_rotating_effect',
+					'type' => 'select',
+					'choices' => array (
+						'old_timey' => 'Smooth shift',
+						'rotate-1' => '3D effect',
+						'rotate-2 letters' => 'Fast character rotation',
+						'slide' => 'Slide',
+						'zoom' => 'Zoom',
+						'rotate-3 letters' => 'Character shift',
+						'scale letters' => 'Scale',
+					),
+					'default_value' => '',
+					'allow_null' => 0,
+					'multiple' => 0,
 				),
 				array (
 					'key' => 'field_528a92ab22728',

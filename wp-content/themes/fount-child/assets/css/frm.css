@@ -1,0 +1,115 @@
+/* Legacy Fount embedded styles */
+
+.white_bg {
+background-color: #fff;
+}
+
+.snowmobile_offset {
+float: right;
+position: relative; 
+left: 50px;
+}
+
+.make-white-text, .make-white-text h4 {
+color: #fff !important;
+}
+
+.prk_price {
+display: none;
+}
+
+.underp {
+display: none;
+}
+
+.vc_responsive .pricing_box_wrap.wpb_row .vc_span2 {
+float: left;
+width: 18.8%;
+padding: 0;
+margin-right: 1.5%;
+min-height: 0;
+}
+
+.pricing_box_wrap .pricing_box_last {
+margin: 0 !important;
+}
+
+.small h3 {
+font-size: 1.5em;
+padding: 4px;
+}
+
+/* Custom Funky Rabbit Media Styles */
+
+.pricing-table {
+	width: 100%;
+	margin: 15px 0;
+	border-spacing: 0;
+}
+
+.pricing-table th, .pricing-table td {
+	text-align: center;
+	border: 0px solid #ccc;
+	padding: 5px;
+	margin: 0;
+}
+
+.table-heading {
+	color: #fff;
+}
+
+.pricing-table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+.pricing-table tr:nth-child(odd) {
+	background-color: #ccc;
+}
+
+.special {
+	font-weight: bold;
+}
+
+.btn-large a {
+	font-size: 1.25em !important;
+	padding: 1em !important;
+}
+
+.text-widget .theme_button a:hover {
+	font-color: #fff !important;
+}
+
+.white-text .zero_color h1 {
+	color: white !important; 
+}
+
+#footer_in .widget_inner {
+	text-align: center;
+}
+
+#footer_in .social_img_wrp {
+	margin-right: 15px;
+}
+
+/*-- Bottom Callout --*/
+
+.bottom-callout-card {
+	color: white;
+	font-size: 1.25em;
+	line-height: 1.5;
+	font-weight: 300;
+}
+
+.bottom-callout-card .theme_button {
+	margin-top: 25px;
+}
+
+
+/*-- Fix warning box icon --*/
+
+.wpb_alert [class^="fount_fa-"] {
+    position: absolute;
+    margin: 3px 0px 0px -5px;
+    font-size: 20px;
+    left: 40px;
+}

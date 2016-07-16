@@ -77,7 +77,7 @@ Template Name: Page - Contact
                         <div id="contact_description" class="small-9 columns">
                             <div id="contact_form">
                                 <?php
-                                    if (get_field('contact-form-teaser')!="")
+                                    if (get_field('info_title_form')!="")
                                     {
                                         ?>
                                         <h3 class="header_font bd_headings_text_shadow zero_color small prk_heavier_600">
@@ -158,32 +158,46 @@ Template Name: Page - Contact
                                             <?php
                                         }
                                         ?>
-                                        <div class="contact_info">
+                                        <div class="contact_info prk_heavier_600">
                                             <?php
                                                 if (get_field('contact-teaser')!="")
                                                 {
                                                     ?>
-                                                    <div class="small-12 fount_extra_description">
+                                                    <div class="small-12 fount_extra_description zero_color prk_heavier_400 default_color">
                                                         <?php echo get_field('contact-teaser'); ?>
                                                     </div>
                                                     <?php
                                                 }
-                                                if (get_field('contact-company')!="")
-                                                {
+                                                if (get_field('contact-company')!="") {
                                                     ?>
                                                         <div class="fount_company_name">
-                                                            <h4 class="header_font bd_headings_text_shadow zero_color prk_heavier_600">
+                                                            <h4 class="header_font bd_headings_text_shadow prk_heavier_600 zero_color">
                                                                 <?php echo get_field('contact-company'); ?>
                                                             </h4>
                                                         </div>
                                                     <?php
                                                 }
-                                                if (get_field('contact-address')!="")
+                                                if (get_field('contact-address')!="") {
+                                                    ?>
+                                                    <div class="ctt_address header_font zero_color">
+                                                        <?php echo get_field('contact-address'); ?>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                if (get_field('contact-company')!="" || get_field('contact-address')!="") {
+                                                    ?>
+                                                        <div class="simple_line thick membered"></div>
+                                                    <?php
+                                                }
+                                                if (get_field('contact-info_email')!="")
                                                 {
                                                     ?>
-                                                    <i class="zero_color prk_less_opacity fount_fa-map-marker left_floated"></i>
-                                                    <div class="ctt_address prk_heavier_600 default_color header_font">
-                                                        <?php echo get_field('contact-address'); ?>
+                                                    <div class="fount_info_block">
+                                                        <div class="block_description header_font">
+                                                            <a href="mailto:<?php echo antispambot(get_field('contact-info_email')); ?>" class="not_zero_color">
+                                                            <?php echo antispambot(get_field('contact-info_email')); ?>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                     <?php
                                                 }
@@ -191,8 +205,7 @@ Template Name: Page - Contact
                                                 {
                                                     ?>
                                                     <div class="fount_info_block">
-                                                        <i class="zero_color prk_less_opacity fount_fa-phone left_floated"></i>
-                                                        <div class="block_description prk_heavier_600 default_color header_font">
+                                                        <div class="block_description header_font zero_color">
                                                             <?php echo get_field('contact-info_tel'); ?>
                                                         </div>
                                                     </div>
@@ -202,23 +215,9 @@ Template Name: Page - Contact
                                                 {
                                                     ?>
                                                     <div class="fount_info_block">
-                                                        <i class="zero_color prk_less_opacity fount_fa-print left_floated"></i>
-                                                        <div class="block_description prk_heavier_600 default_color header_font">
+                                                        <div class="block_description header_font zero_color">
                                                             <?php echo get_field('contact-info_fax'); ?>
                                                         
-                                                        </div>
-                                                    </div>
-                                                    <?php
-                                                }
-                                                if (get_field('contact-info_email')!="")
-                                                {
-                                                    ?>
-                                                    <div class="fount_info_block">
-                                                        <i class="zero_color prk_less_opacity fount_fa-envelope left_floated"></i>
-                                                        <div class="block_description prk_heavier_600 header_font">
-                                                            <a href="mailto:<?php echo antispambot(get_field('contact-info_email')); ?>" class="default_color">
-                                                            <?php echo antispambot(get_field('contact-info_email')); ?>
-                                                            </a>
                                                         </div>
                                                     </div>
                                                     <?php

@@ -53,7 +53,13 @@
     {
     	define('PRK_FOUNT_FRAMEWORK',"false");
 	}
-    if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active('woocommerce-fount/woocommerce.php')) 
+	if (is_plugin_active('js_composer/js_composer.php') || is_plugin_active('js_composer-410/js_composer.php') || is_plugin_active('js_composer-4111/js_composer.php')) {
+    	define('PRK_FOUNT_COMPOSER',true);
+    }
+    else {
+    	define('PRK_FOUNT_COMPOSER',false);
+	}
+    if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active('woocommerce-fount/woocommerce.php') || is_plugin_active('woocommerce-beta/woocommerce.php')) 
     {
     	define('PRK_WOO',"true");
     }

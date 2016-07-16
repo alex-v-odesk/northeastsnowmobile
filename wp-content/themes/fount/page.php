@@ -78,6 +78,9 @@
                 {
                   echo '<div class="featured_owl '.$parallax.'">'; 
                   echo do_shortcode('[prk_slider id="fount_slider-'.get_the_ID().'" category="'.$inside_filter.'" autoplay="'.$autoplay.'" delay="'.$delay.'" sl_size="'.$fill_height.'" pagination="'.$pagination.'" navigation="'.$navigation.'" parallax_effect="'.$parallax.'"]');
+                  if (get_field('featured_slider_down_arrow')=="1") {
+                    echo '<a href="" class="site_background_colored regular_anchor_menu"><div class="fount_next_arrow fount_sp_arrow"><i class="fount_fa-chevron-down"></i></div></a>';
+                  }
                   echo '</div>';
                 }
                 if ($show_slider=="revolution")
@@ -99,22 +102,37 @@
                 }
                 echo '<div id="fount-fake-anchor"></div>';
                 while (have_posts()) : the_post();
-                  if(has_shortcode(get_the_content(),'vc_row')) 
-                  {
+                  if(has_shortcode(get_the_content(),'vc_row')) {
                     the_content();
                   }
                   else
                   {
                     if (has_shortcode(get_the_content(),'woocommerce_cart') || has_shortcode(get_the_content(),'woocommerce_checkout') || has_shortcode(get_the_content(),'woocommerce_pay') || has_shortcode(get_the_content(),'woocommerce_thankyou') || has_shortcode(get_the_content(),'woocommerce_order_tracking') || has_shortcode(get_the_content(),'woocommerce_my_account') || has_shortcode(get_the_content(),'woocommerce_edit_address') || has_shortcode(get_the_content(),'woocommerce_view_order') || has_shortcode(get_the_content(),'woocommerce_change_password') || has_shortcode(get_the_content(),'woocommerce_lost_password') || has_shortcode(get_the_content(),'woocommerce_logout'))
                       {
-                        echo do_shortcode('[vc_row][vc_column][vc_column_text]'.get_the_content().'[/vc_column_text][/vc_column][/vc_row]');
+                        ?>
+                          <div id="gen_fount-<?php echo rand(1,1000); ?>" class="wpb_row vc_row-fluid prk_full_width prk_section fount_row">
+                            <div class="small-12">
+                              <div class="extra_pad prk_inner_block columns small-centered clearfix">
+                                <div class="row">
+                                <div class="vc_span12 wpb_column column_container">
+                                  <div class="wpb_wrapper">
+                                   <div class="wpb_text_column wpb_content_element ">
+                                    <div class="wpb_wrapper">
+                                      <?php the_content(); ?>
+                                    </div>
+                                  </div>
+                                  </div> 
+                                </div> 
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <?php
                       }
                       else
                       {
                         echo '<div class="prk_composer_extra prk_inner_block small-12 small-centered columns">';
-                        echo '<div class="small-12 columns">';
                         the_content();
-                        echo '</div>';
                         echo '<div class="clearfix"></div>';
                         echo '</div>';
                       }

@@ -74,16 +74,16 @@ class Decent_Comments_Renderer {
 	 */
 	static function init() {
 		self::$orderby_options = array(
-			'comment_author_email' => __( 'Author Email', 'fount_lang' ),
-			'comment_author_url'   => __( 'Author URL', 'fount_lang' ),
-			'comment_content'      => __( 'Content', 'fount_lang' ),
-			'comment_date_gmt'     => __( 'Date', 'fount_lang' ),
-			'comment_karma'        => __( 'Karma', 'fount_lang' ),
-			'comment_post_ID'      => __( 'Post', 'fount_lang' )
+			'comment_author_email' => __( 'Author Email', 'fount' ),
+			'comment_author_url'   => __( 'Author URL', 'fount' ),
+			'comment_content'      => __( 'Content', 'fount' ),
+			'comment_date_gmt'     => __( 'Date', 'fount' ),
+			'comment_karma'        => __( 'Karma', 'fount' ),
+			'comment_post_ID'      => __( 'Post', 'fount' )
 		);
 		self::$order_options = array(
-			'ASC'  => __( 'Ascending', 'fount_lang' ),
-			'DESC' => __( 'Descending', 'fount_lang' )
+			'ASC'  => __( 'Ascending', 'fount' ),
+			'DESC' => __( 'Descending', 'fount' )
 		);
 	}
 	
@@ -298,7 +298,7 @@ class Decent_Comments_Renderer {
 				if ( $show_link ) {				
 					$output .= '<span class="comment-link default_color fade_anchor prk_heavier_600 header_font">';
 					$output .= sprintf(
-						_x( ' on %s', 'comment-link', 'fount_lang' ),
+						_x( ' on %s', 'comment-link', 'fount' ),
 						'<a href="' . esc_url( get_comment_link( $comment->comment_ID ) ) . '">' . get_the_title( $comment->comment_post_ID ) . '</a>'
 					);
 					$output .= '</span>';
