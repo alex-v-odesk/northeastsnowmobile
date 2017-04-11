@@ -66,8 +66,9 @@ padding: 4px;
 	background-color: #ccc;
 }
 
-.special {
+.pricing-table tr.special {
 	font-weight: bold;
+	background-color: yellow;
 }
 
 .btn-large a {

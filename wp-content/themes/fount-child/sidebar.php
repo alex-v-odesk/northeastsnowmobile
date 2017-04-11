@@ -1,5 +1,3 @@
-SIDEBARRRRR
-
 <?php
   	//ENSURE CORRECT SIDEBAR IS DISPLAYED
   	wp_reset_query();
