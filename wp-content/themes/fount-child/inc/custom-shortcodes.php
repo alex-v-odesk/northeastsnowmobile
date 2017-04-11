@@ -122,6 +122,7 @@ return <<<HTML
         <td>$50</td>
     </tr>
 </table>
+<p class="special-pricing"><span class="yellow-circle"></span> Special pricing!</p>
 </div>
 
 HTML;
@@ -185,6 +186,7 @@ return <<<HTML
 </div>
 <div style="overflow-x:auto;">
 </table>
+
 <h2 class="table-heading">Saturday and Holiday Rates</h2>
 <table class="pricing-table">
     <tr>
@@ -237,6 +239,8 @@ return <<<HTML
     </tr>
 </table>
 </div>
+
+<p class="special-pricing"><span class="yellow-circle"></span> Special pricing!</p>
 
 HTML;
 	}

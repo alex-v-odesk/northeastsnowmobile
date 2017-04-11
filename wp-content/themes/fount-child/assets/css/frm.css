@@ -92,6 +92,24 @@ padding: 4px;
 	margin-right: 15px;
 }
 
+p.special-pricing {
+	padding: 15px 0;
+	color: white;
+	font-weight: bold;
+}
+
+p.special-pricing span.yellow-circle {
+	border-radius: 50%;
+	width: 15px;
+	height: 15px; 
+	background-color: yellow;
+	display: block;
+	float: left;
+	position: relative;
+	top: 5px;
+	margin-right: 10px;
+}
+
 /*-- Bottom Callout --*/
 
 .bottom-callout-card {
