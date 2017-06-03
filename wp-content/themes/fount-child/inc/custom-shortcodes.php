@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 // Side By Side Pricing Table
 
@@ -213,7 +213,7 @@ return <<<HTML
         <td>$250</td>
         <td>$15</td>
     </tr>
-    <tr class="special">
+    <tr>
         <td>4 Hours</td>
         <td>$160</td>
         <td>$190</td>
