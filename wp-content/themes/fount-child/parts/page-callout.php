@@ -18,8 +18,7 @@ $winter_callout_image = get_field('summer_callout_card_image', 'options'); ?>
 	                            <div class="wpb_wrapper">
 	                                <p><strong>North East Snowmobile &amp; ATV Rentals</strong></p>
 	                                <p>Self-Guided
-	                                    <br> Daily – 9AM to 5PM
-	                                    <br> Saturday - 9AM to 7PM
+	                                    <br> Open 7 Days a Week – 9AM to 7PM
 	                                    <br> Half Day – 9AM to 1PM; 1PM to 5PM
 	                                    <br> Doors open at 8:30AM, for registration</p>
 	                                <p><strong>Requirements</strong></p>
