@@ -36,6 +36,15 @@ return <<<HTML
         <td>$15</td>
     </tr>
     <tr>
+        <td>3 Hours</td>
+        <td>$149</td>
+        <td>$179</td>
+        <td>$229</td>
+        <td>$239</td>
+        <td>$229</td>
+        <td>$17</td>
+    </tr>
+    <tr>
         <td>4 Hours</td>
         <td>$200</td>
         <td>$230</td>
@@ -45,6 +54,15 @@ return <<<HTML
         <td>$19</td>
     </tr>
     <tr>
+        <td>6 Hours</td>
+        <td>$249</td>
+        <td>$279</td>
+        <td>$369</td>
+        <td>$379</td>
+        <td>$369</td>
+        <td>$29</td>
+    </tr>
+    <tr>
         <td>8 Hours</td>
         <td>$310</td>
         <td>$350</td>
@@ -52,6 +70,15 @@ return <<<HTML
         <td>$460</td>
         <td>$430</td>
         <td>$39</td>
+    </tr>
+    <tr>
+        <td>10 Hours</td>
+        <td>$330</td>
+        <td>$370</td>
+        <td>$470</td>
+        <td>$480</td>
+        <td>$450</td>
+        <td>$42</td>
     </tr>
     <tr>
         <td>24 Hours</td>
@@ -95,6 +122,15 @@ return <<<HTML
         <td>$15</td>
     </tr>
     <tr>
+        <td>3 Hours</td>
+        <td>$159</td>
+        <td>$189</td>
+        <td>$239</td>
+        <td>$249</td>
+        <td>$239</td>
+        <td>$17</td>
+    </tr>
+    <tr>
         <td>4 Hours</td>
         <td>$220</td>
         <td>$250</td>
@@ -104,6 +140,15 @@ return <<<HTML
         <td>$19</td>
     </tr>
     <tr>
+        <td>6 Hours</td>
+        <td>$259</td>
+        <td>$289</td>
+        <td>$379</td>
+        <td>$389</td>
+        <td>$379</td>
+        <td>$29</td>
+    </tr>
+    <tr>
         <td>8 Hours</td>
         <td>$330</td>
         <td>$370</td>
@@ -111,6 +156,15 @@ return <<<HTML
         <td>$480</td>
         <td>$450</td>
         <td>$39</td>
+    </tr>
+    <tr>
+        <td>10 Hours</td>
+        <td>$360</td>
+        <td>$400</td>
+        <td>$480</td>
+        <td>$520</td>
+        <td>$480</td>
+        <td>$42</td>
     </tr>
     <tr>
         <td>24 Hours</td>
