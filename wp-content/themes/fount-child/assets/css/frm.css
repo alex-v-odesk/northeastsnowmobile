@@ -6,7 +6,7 @@ background-color: #fff;
 
 .snowmobile_offset {
 float: right;
-position: relative; 
+position: relative;
 left: 50px;
 }
 
@@ -81,7 +81,7 @@ padding: 4px;
 }
 
 .white-text .zero_color h1 {
-	color: white !important; 
+	color: white !important;
 }
 
 #footer_in .widget_inner {
@@ -101,7 +101,7 @@ p.special-pricing {
 p.special-pricing span.yellow-circle {
 	border-radius: 50%;
 	width: 15px;
-	height: 15px; 
+	height: 15px;
 	background-color: yellow;
 	display: block;
 	float: left;
@@ -131,4 +131,114 @@ p.special-pricing span.yellow-circle {
     margin: 3px 0px 0px -5px;
     font-size: 20px;
     left: 40px;
+}
+
+/*-- Full Screen Video Background Home Hero --*/
+
+.video-row {
+	position: relative;
+}
+
+.video-background {
+  background: #000;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: -99;
+}
+
+.video-foreground,
+.video-background iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.video-hero-embed {
+	position:relative;
+	padding-bottom:56.25%;
+	padding-top:30px;
+	height:0;
+	overflow:hidden;
+}
+
+.video-hero-embed iframe, .video-container object, .video-container embed {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+
+.hero-slide {
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.row_pattern_overlay {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	z-index: 2;
+}
+
+.wpb_wrapper {
+	position: relative;
+	text-align: center;
+	z-index: 3;
+}
+
+/*-- Test --*/
+#menu_section {
+	position: relative;
+}
+
+#menu_section .sf-menu>li {
+    height: 96px;
+    line-height: 45px !important;
+}
+
+.utility-nav {
+	text-align: right;
+	position: absolute;
+	right: 0;
+	top: 45px;
+}
+
+.menu_at_top .utility-nav {
+	position: relative;
+}
+
+.utility-nav li.cta a {
+	padding: 0 10px !important;
+	background: #00b400;
+}
+
+.sf-menu ul {
+	top: 45px !important;
+}
+
+.utility-nav li {
+	line-height: 0px !important;
+	height: 0px !important;
+}
+
+li.cta a span {
+	color: white;
+}
+
+li.cta a::after {
+	display: none;
+}
+
+.menu_at_top .utility-nav {
+
+#menu_section .sf-menu>.utility-menu li {
+	line-height: 0px !important;
 }
