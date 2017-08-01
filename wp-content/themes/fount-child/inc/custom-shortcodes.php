@@ -297,9 +297,33 @@ return <<<HTML
 <p class="special-pricing"><span class="yellow-circle"></span> Special pricing!</p>
 
 HTML;
-	}
+}
 
-	add_shortcode( 'snowmobile_pricing', 'snowmobile_pricing' );
-	add_shortcode( 'side_by_side_pricing', 'side_by_side_pricing' );
+// Side-by-Side Tour Info
 
-?>
+function tour_pricing(){
+return <<<HTML
+<div style="overflow-x:auto;">
+<h2 class="table-heading">Passenger Tours</h2>
+<table class="pricing-table">
+    <tr>
+        <th>Ace</th>
+        <th>Child 3 Hour</th>
+        <th>Three Hour Upgrade to 900</th>
+        <th>Adult 3 Hour</th>
+    </tr>
+    <tr>
+        <td>$199</td>
+        <td>$99</td>
+        <td>$50</td>
+        <td>$129</td>
+    </tr>
+</table>
+</div>
+
+HTML;
+}
+
+add_shortcode( 'snowmobile_pricing', 'snowmobile_pricing' );
+add_shortcode( 'side_by_side_pricing', 'side_by_side_pricing' );
+add_shortcode( 'tour_pricing', 'tour_pricing' );
