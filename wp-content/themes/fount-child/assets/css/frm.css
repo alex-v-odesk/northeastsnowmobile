@@ -251,3 +251,8 @@ li.cta a::after {
 #menu_section .sf-menu>.utility-menu li {
 	line-height: 0px !important;
 }
+
+.phone-cta {
+	padding: 0 10px;
+    background: #00b400;
+}

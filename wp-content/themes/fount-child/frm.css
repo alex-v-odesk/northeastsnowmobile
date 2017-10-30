@@ -49,3 +49,8 @@
 #footer_in .social_img_wrp {
 	margin-right: 15px;
 }
+
+.phone-cta {
+	padding: 0 10px;
+    background: #00b400;
+}
