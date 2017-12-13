@@ -175,6 +175,10 @@ p.special-pricing span.yellow-circle {
 	overflow:hidden;
 }
 
+.video-hero-embed .theme_button {
+	margin: auto;
+}
+
 .video-hero-embed iframe, .video-container object, .video-container embed {
 	position:absolute;
 	top:0;
@@ -197,10 +201,10 @@ p.special-pricing span.yellow-circle {
 	z-index: 2;
 }
 
-.wpb_wrapper {
+.hero-slide .wpb_wrapper {
 	position: relative;
-	text-align: center;
 	z-index: 3;
+	text-align: center;
 }
 
 /*-- Test --*/
