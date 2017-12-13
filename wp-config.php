@@ -7,7 +7,7 @@ define('WP_CACHE', true); // Added by W3 Total Cache
 /**
  * SET UP ENVIRONMENTS
  */
-if ($_SERVER["HTTP_HOST"] === 'northeast.dev') {
+if ($_SERVER["HTTP_HOST"] === 'northeast.local') {
 
     define('WP_ENV', 'development');
 
