@@ -3,7 +3,7 @@
 
 $season_select 		  = get_field('what_season_is_it', 'options');
 $summer_callout_image = get_field('summer_callout_card_image', 'options');
-$winter_callout_image = get_field('summer_callout_card_image', 'options'); ?>
+$winter_callout_image = get_field('winter_callout_card_image', 'options'); ?>
 
 <div style="background: url('<?php if ( $season_select == 'summer') { echo $summer_callout_image; } else { echo $winter_callout_image; } ?>') bottom center no-repeat; background-size: cover; width: 100%;">
 

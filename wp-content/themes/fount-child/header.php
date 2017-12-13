@@ -207,9 +207,7 @@
 												'link_after' => '',
 												'walker' => new rc_scm_walker));
 											?></div>
-										<div class="phone-cta">
-											(800) 458-1838
-										</div>
+
 								   </div>
 								</nav>
 								<?php
