@@ -1,6 +1,7 @@
 # WordPress
 /license.txt
 /readme.html
+/wp-config.php
 /wp-config-sample.php
 /wp-content/*
 !/wp-content/mu-plugins

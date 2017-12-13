@@ -6,7 +6,7 @@ function side_by_side_pricing(){
 return <<<HTML
 <div style="overflow-x:auto;">
 <h2 class="table-heading">Sunday - Friday</h2>
-<strong>Price is per side-by-side</strong>
+<strong style="color: #fff;">Price is per side-by-side</strong>
 <table class="pricing-table">
     <tr>
         <th>Time</th>
@@ -112,7 +112,7 @@ return <<<HTML
         <td>$159</td>
         <td>$9</td>
     </tr>
-    <tr class="special">
+    <tr>
         <td>2 Hours</td>
         <td>$130</td>
         <td>$150</td>
@@ -188,13 +188,13 @@ function snowmobile_pricing(){
 return <<<HTML
 <div style="overflow-x:auto;">
 <h2 class="table-heading">Sunday - Friday</h2>
+<strong style="color: #fff;">Price is per snowmobile</strong>
 <table class="pricing-table">
     <tr>
         <th>Time</th>
         <th>Single</th>
         <th>Double</th>
         <th>Triple</th>
-        <th>RZR4</th>
         <th>*Damage Waiver</th>
     </tr>
     <tr>
@@ -202,7 +202,6 @@ return <<<HTML
         <td>$55</td>
         <td>$75</td>
         <td>$85</td>
-        <td>$125</td>
         <td>$9</td>
     </tr>
     <tr>
@@ -210,32 +209,42 @@ return <<<HTML
         <td>$95</td>
         <td>$115</td>
         <td>$125</td>
-        <td>$200</td>
         <td>$15</td>
     </tr>
     <tr class="special">
-        <td>4 Hours</td>
+        <td>3 Hours</td>
         <td>$99</td>
         <td>$129</td>
         <td>$149</td>
-        <td>$325</td>
         <td>$19</td>
     </tr>
     <tr>
+        <td>4 Hours</td>
+        <td>$159</td>
+        <td>$169</td>
+        <td>$179</td>
+        <td>$26</td>
+    </tr>
+    <tr>
+        <td>6 Hours</td>
+        <td>$179</td>
+        <td>$189</td>
+        <td>$199</td>
+        <td>$33</td>
+    </tr>
+    <tr>
         <td>8 Hours</td>
-        <td>$185</td>
-        <td>$205</td>
-        <td>$225</td>
-        <td>N/A</td>
+        <td>$209</td>
+        <td>$259</td>
+        <td>$269</td>
         <td>$39</td>
     </tr>
     <tr>
         <td>24 Hours</td>
-        <td>$260</td>
-        <td>$280</td>
-        <td>$300</td>
-        <td>N/A</td>
-        <td>$50</td>
+        <td>$289</td>
+        <td>$339</td>
+        <td>$349</td>
+        <td>$49</td>
     </tr>
 </div>
 <div style="overflow-x:auto;">
@@ -248,7 +257,6 @@ return <<<HTML
         <th>Single</th>
         <th>Double</th>
         <th>Triple</th>
-        <th>RZR4</th>
         <th>*Damage Waiver</th>
     </tr>
     <tr>
@@ -256,7 +264,6 @@ return <<<HTML
         <td>$65</td>
         <td>$95</td>
         <td>$105</td>
-        <td>$145</td>
         <td>$9</td>
     </tr>
     <tr>
@@ -264,37 +271,49 @@ return <<<HTML
         <td>$105</td>
         <td>$135</td>
         <td>$145</td>
-        <td>$250</td>
         <td>$15</td>
     </tr>
     <tr>
-        <td>4 Hours</td>
-        <td>$160</td>
-        <td>$190</td>
-        <td>$200</td>
-        <td>$375</td>
+        <td>3 Hours</td>
+        <td>$159</td>
+        <td>$169</td>
+        <td>$179</td>
         <td>$19</td>
     </tr>
     <tr>
+        <td>4 Hours</td>
+        <td>$179</td>
+        <td>$189</td>
+        <td>$199</td>
+        <td>$26</td>
+    </tr>
+    <tr>
+        <td>6 Hours</td>
+        <td>$199</td>
+        <td>$234</td>
+        <td>$259</td>
+        <td>$33</td>
+    </tr>
+    <tr>
         <td>8 Hours</td>
-        <td>$205</td>
-        <td>$250</td>
-        <td>N/A</td>
-        <td>N/A</td>
+        <td>$229</td>
+        <td>$279</td>
+        <td>$299</td>
         <td>$39</td>
     </tr>
     <tr>
         <td>24 Hours</td>
-        <td>$280</td>
-        <td>$300</td>
-        <td>N/A</td>
-        <td>N/A</td>
-        <td>$50</td>
+        <td>$309</td>
+        <td>$359</td>
+        <td>379</td>
+        <td>$49</td>
     </tr>
 </table>
 </div>
 
 <p class="special-pricing"><span class="yellow-circle"></span> Special pricing!</p>
+<p>20% Off Early Bird Special: 8:30am to 10:30am</p>
+<p>20% Off Sunset Special: 3:00pm to 5:00pm</p>
 
 HTML;
 }
@@ -307,15 +326,11 @@ return <<<HTML
 <h2 class="table-heading">Passenger Tours</h2>
 <table class="pricing-table">
     <tr>
-        <th>Ace</th>
         <th>Child 3 Hour</th>
-        <th>Three Hour Upgrade to 900</th>
         <th>Adult 3 Hour</th>
     </tr>
     <tr>
-        <td>$199</td>
         <td>$99</td>
-        <td>$50</td>
         <td>$129</td>
     </tr>
 </table>

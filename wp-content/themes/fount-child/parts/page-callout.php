@@ -16,14 +16,15 @@ $winter_callout_image = get_field('summer_callout_card_image', 'options'); ?>
 	                        <div class="clearfix" style="height:25px;"></div>
 	                        <div class="wpb_text_column wpb_content_element ">
 	                            <div class="wpb_wrapper">
-	                                <p><strong>North East Snowmobile &amp; ATV Rentals</strong></p>
-	                                <p>Self-Guided
+	                                <p><strong>Norteast Snowmobile &amp; ATV Rentals</strong></p>
+	                                	<br> Self-Guided
+	                                	<br> <a href="/atv-utv-rentals/side-by-side-tours/">Guided - Noon and 4PM</a>
 	                                    <br> Open 7 Days a Week – 9AM to 7PM
 	                                    <br> Half Day – 9AM to 1PM; 1PM to 5PM
+
 	                                    <br> Doors open at 8:30AM, for registration</p>
 	                                <p><strong>Requirements</strong></p>
-	                                <p>We ask that our guests please arrive half an hour early for orientation and registration. Renter must have valid driver’s license and a credit card or take optional insurance. Legal guardian must accompany Drivers under 18.
-	                                    <br> All Snowmobiles include reverse and hand warmers.</p>
+	                                <p>We ask that our guests please arrive half an hour early for orientation and registration. Renter must have valid driver’s license and a credit card or take optional insurance. Legal guardian must accompany Drivers under 18.</p>
 	                            </div>
 	                        </div>
 	                    </div>
